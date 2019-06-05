@@ -91,36 +91,37 @@ The computer will guess at random from the set of spaces it has not attempted ye
 If time permits, I may extend the program to allow hotseat or even eventually network play.
 
 This project involves several classes:
-    * Player
-        * Board : Board
-        * unassignedShips : std::vector<Ship>
-        * Default : default board and one of each ship in unassignedShips
-    * Computer inherits from Player
-        * Searching: bool
-        * Neighborhoord: std::vector(int, int)
-        * std::tuple(int, int) getRandomShot(void)
-        * Default constructor will include randomly placing ships
-    * Board
-        * Ships: std::vector<Ship>
-        * Bool occupied(std::tuple(int, int))
-        * Void addShip(Ship, origin: int, enum {Left, Down})
-        * Default constructor will start empty
-    * Ship
-        * Origin: std::tuple(int, int) // D2 = (4,2)
-        * Direction: enum {Left, Down}
-        * Hits: int
-        * Type: enum { AircraftCarrier, Battleship, Destroyer, U-Boat, Cruiser }
-        * Int getLength(void) // lengths are hardcoded for each type
-        * Char getShortName(void)
-        * String getLongName(void)
-        * Bool isSunk(void)
-        * Child classes (?) will be provided for each type with a deault constructor - are these just plain functions, not classes?
-    * Game
-        * player : Player
-        * computer : Computer
-        * State : enum { Placement, Firing, GameOver }
-        * void startGame(void)
-        * string displayGame(void)
-        * Default constructor starts in Placement, with default players for Player and Computer
+
+* Player
+  * `board : Board`
+  * `unassignedShips : std::vector<Ship>`
+  * Default : default board and one of each ship in unassignedShips
+* Computer inherits from Player
+  * `searching: bool`
+  * `neighborhoord: std::vector(int, int)`
+  * `std::tuple(int, int) getRandomShot(void)`
+  * Default constructor will include randomly placing ships
+* Board
+  * `ships: std::vector<Ship>`
+  * `bool occupied(std::tuple(int, int))`
+  * `void addShip(Ship, origin: int, enum {Left, Down})`
+  * Default constructor will start empty
+* Ship
+  * `origin: std::tuple(int, int)` // D2 = (4,2)`
+  * `direction: enum {Left, Down}`
+  * `hits: int`
+  * `type: enum { AircraftCarrier, Battleship, Destroyer, U-Boat, Cruiser }`
+  * `int getLength(void) // lengths are hardcoded for each type`
+  * `char getShortName(void)`
+  * `string getLongName(void)`
+  * `bool isSunk(void)`
+  * Child classes (?) will be provided for each type with a deault constructor - are these just  plainfunctions, not classes?
+* Game
+  * `player : Player`
+  * `computer : Computer`
+  * `state : enum { Placement, Firing, GameOver }`
+  * `void startGame(void)`
+  * `string displayGame(void)`
+  * Default constructor starts in Placement, with default players for Player and Computer
 
 I’ve never been formally introduced to inheritance, so I may have that idea not quite right, but I think that’s the general idea.
