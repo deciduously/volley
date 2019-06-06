@@ -41,6 +41,10 @@ Placing Left instead:
 Confirm placement (y/n): y // will always display and confirm before placing
 ```
 
+First ship should just prompt to place, future ships should prompt to place or change an already placed ship, if all five are placed, prompt to change or finish.
+
+Also, don't pick by length, obviously.  They have unique letters, use those.
+
 After all ships have been place the game begins:
 
 ```
@@ -98,7 +102,7 @@ This project involves several classes:
   * Default : default board and one of each ship in unassignedShips
 * Computer inherits from Player
   * `searching: bool`
-  * `neighborhoord: std::vector(int, int)`
+  * `neighborhood: std::vector(int, int)`
   * `std::tuple(int, int) getRandomShot(void)`
   * Default constructor will include randomly placing ships
 * Board
@@ -115,7 +119,7 @@ This project involves several classes:
   * `char getShortName(void)`
   * `string getLongName(void)`
   * `bool isSunk(void)`
-  * Child classes (?) will be provided for each type with a deault constructor - are these just  plainfunctions, not classes?
+  * Child classes (?) will be provided for each type with a default constructor - are these just  plain functions, not classes?
 * Game
   * `player : Player`
   * `computer : Computer`
