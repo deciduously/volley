@@ -1,3 +1,8 @@
+/*
+* ship.h
+* Represents a single ship on the battleship game board
+* Benjamin Lovy
+ */
 #ifndef __SHIP_H_INCLUDED
 #define __SHIP_H_INCLUDED
 

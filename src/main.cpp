@@ -1,3 +1,8 @@
+/* 
+* main.cpp
+* Entrypoint for the Battleship game
+* Benjamin Lovy
+*/
 #include <iostream>
 
 #include "game.h"
