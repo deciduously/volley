@@ -3,4 +3,4 @@
 Computer::Computer()
 {
     neighborhood = {};
-};
+}

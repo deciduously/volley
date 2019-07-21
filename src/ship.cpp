@@ -10,4 +10,4 @@ Ship::Ship(int row, int col, Direction dir, ShipClass sc)
     direction = dir;
     shipClass = sc;
     hits = shipClass;
-};
+}

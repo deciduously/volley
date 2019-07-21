@@ -13,12 +13,11 @@
 
 class Board
 {
-    int size;
     std::vector<Ship> ships;
     public:
+        int size;
         Board();
-        std::string toString();
-
+        std::vector<std::string> toLineStrings();
 };
 
 #endif

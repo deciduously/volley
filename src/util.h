@@ -10,13 +10,15 @@
 
 #include <string>
 
+// A Ship can be either horizontal or vertical
+// The occupied cells are extrapolated from an origin and a Direction
 enum Direction {Left, Right};
 enum GameState {Firing, GameOver, Placement};
 enum ShipClass {AircraftCarrier = 5, Battleship = 4, Cruiser = 3, Destroyer = 2, UBoat = 3};
 
-std::string shipClassLongName(ShipClass sc);
 
-// TODO should this return a character instead?
-std::string shipClassLetter(ShipClass sc);
+// human-displaying the ShipClass enum
+std::string shipClassString(ShipClass sc);
+char shipClassChar(ShipClass sc);
 
 #endif

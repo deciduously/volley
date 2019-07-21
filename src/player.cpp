@@ -4,7 +4,7 @@ Player::Player()
 {
     unassignedShips = {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
 }
-std::string Player::toString()
+std::vector<std::string> Player::toLineStrings()
 {
-    return "Player\n" + board.toString();
+    return board.toLineStrings();
 }

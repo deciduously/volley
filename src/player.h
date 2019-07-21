@@ -17,6 +17,6 @@ class Player
     std::vector<ShipClass> unassignedShips;
     public:
         Player();
-        std::string toString();
+        std::vector<std::string> toLineStrings();
 };
 #endif
