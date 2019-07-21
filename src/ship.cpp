@@ -1,7 +1,4 @@
-#include <tuple>
-
 #include "ship.h"
-#include "util.h"
 
 // Ship constructor
 Ship::Ship(int row, int col, Direction dir, ShipClass sc)

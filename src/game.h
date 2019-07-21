@@ -8,13 +8,18 @@
 
 #include "computer.h"
 #include "player.h"
+#include "util.h"
 
 class Game
 {
     Player player;
     Computer computer;
+    GameState gameState;
+    std::string toStringFiring();
+    void runFiring();
+    void runPlacement();
     public:
         Game();
-        std::string toString();
+        void run();
 };
 #endif

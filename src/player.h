@@ -10,13 +10,17 @@
 #include <vector>
 
 #include "board.h"
+#include "util.h"
 
 class Player
 {
     Board board;
     std::vector<ShipClass> unassignedShips;
+    std::string unassignedShipLetters();
     public:
         Player();
-        std::vector<std::string> toLineStrings();
+        lines toLineStrings();
+        std::string toString();
+        void runPlacement();
 };
 #endif

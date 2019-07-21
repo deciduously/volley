@@ -9,9 +9,9 @@
 
 int main()
 {
-    std::cout << "Battleship" << std::endl;
+    std::cout << "               Battleship!!!" << std::endl << std::endl;
     Game game = Game();
-    std::cout << game.toString() << std::endl;
+    game.run();
 
     return 0;
 }

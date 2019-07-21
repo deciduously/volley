@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "ship.h"
+#include "util.h"
 
 class Board
 {
@@ -17,7 +18,7 @@ class Board
     public:
         int size;
         Board();
-        std::vector<std::string> toLineStrings();
+        lines toLineStrings();
 };
 
 #endif

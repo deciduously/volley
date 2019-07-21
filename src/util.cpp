@@ -1,5 +1,3 @@
-#include <string>
-
 #include "util.h"
 
 std::string shipClassLongName(ShipClass sc)
@@ -13,17 +11,13 @@ std::string shipClassLongName(ShipClass sc)
             return "Battleship";
             break;
         case Cruiser:
-            // We have to catch UBoat here too because it's the same integer value
-            // the else block is unreachable
-            if (sc == ShipClass::Cruiser)
-                return "Cruiser";
-            else if (sc == ShipClass::UBoat)
-                return "U-Boat";
-            else
-                return "ERROR: UNKNOWN SHIP CLASS";
+            return "Cruiser";
             break;
         case Destroyer:
             return "Destroyer";
+            break;
+        case UBoat:
+            return "U-Boat";
             break;
 
     }
@@ -43,20 +37,41 @@ char shipClassChar(ShipClass sc)
             return 'B';
             break;
         case Cruiser:
-            // We have to catch UBoat here too because it's the same integer value
-            // the else block is unreachable
-            if (sc == ShipClass::Cruiser)
-                return 'C';
-            else if (sc == ShipClass::UBoat)
-                return 'U';
-            else
-                return 'E';
+            return 'C';
             break;
         case Destroyer:
             return 'D';
+            break;
+        case UBoat:
+            return 'U';
             break;
     }
     // if we got past the switch, something bad happened because it's exhaustive for that enum
     // Unreachable
     return 'E';
+}
+
+int shipLength(ShipClass sc)
+{
+    switch (sc)
+    {
+        case AircraftCarrier:
+            return 5;
+            break;
+        case Battleship:
+            return 4;
+            break;
+        case Cruiser:
+            return 3;
+            break;
+        case Destroyer:
+            return 2;
+            break;
+        case UBoat:
+            return 3;
+            break;
+    }
+    // if we got past the switch, something bad happened because it's exhaustive for that enum
+    // Unreachable
+    return -1;
 }

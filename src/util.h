@@ -9,16 +9,21 @@
 #define __UTIL_H_INCLUDED
 
 #include <string>
+#include <vector>
 
 // A Ship can be either horizontal or vertical
 // The occupied cells are extrapolated from an origin and a Direction
 enum Direction {Left, Right};
 enum GameState {Firing, GameOver, Placement};
-enum ShipClass {AircraftCarrier = 5, Battleship = 4, Cruiser = 3, Destroyer = 2, UBoat = 3};
+enum ShipClass {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
 
 
 // human-displaying the ShipClass enum
 std::string shipClassString(ShipClass sc);
 char shipClassChar(ShipClass sc);
+int shipLength(ShipClass sc);
+
+// string vector alias
+typedef std::vector<std::string> lines;
 
 #endif
