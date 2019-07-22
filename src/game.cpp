@@ -9,8 +9,9 @@ Game::Game()
 
 std::string Game::toStringFiring()
 {
+    using std::string;
     // The return string
-    std::string ret = "";
+    string ret = "";
 
     // The player board output lines
     lines playerLines = player.toLineStrings();
@@ -24,7 +25,7 @@ std::string Game::toStringFiring()
     // Each line, mash together the player and computer board side by side
     for (int i = 0; i < playerLinesSize; i++)
     {
-        std::string rowString = "";
+        string rowString = "";
         rowString.append(playerLines[i]);
         rowString.append("          ");
         rowString.append(computerLines[i]);

@@ -3,13 +3,19 @@
 * Entrypoint for the Battleship game
 * Benjamin Lovy
 */
+#include <iomanip>
 #include <iostream>
 
 #include "game.h"
 
 int main()
 {
-    std::cout << "               Battleship!!!" << std::endl << std::endl;
+    using std::cout;
+    using std::endl;
+    using std::setw;
+    using std::right;
+    
+    cout << endl << setw(20) << right << "Battleship!!!" << endl << endl;
     Game game = Game();
     game.run();
 

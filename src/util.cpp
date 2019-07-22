@@ -1,5 +1,6 @@
 #include "util.h"
 
+// Pretty-print the ShipClass enum in long-form text
 std::string shipClassLongName(ShipClass sc)
 {
     switch (sc)
@@ -26,6 +27,7 @@ std::string shipClassLongName(ShipClass sc)
     return "ERROR: UNKNOWN SHIP CLASS";
 }
 
+// Get the corresponding char for each ShipClass variant
 char shipClassChar(ShipClass sc)
 {
     switch (sc)
@@ -51,6 +53,7 @@ char shipClassChar(ShipClass sc)
     return 'E';
 }
 
+// Get the corresponding length for each ShipClass variant
 int shipLength(ShipClass sc)
 {
     switch (sc)
