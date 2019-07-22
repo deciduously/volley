@@ -18,6 +18,9 @@ Board::Board()
 // Returns a vector of strings, one for each line of this board
 lines Board::toLineStrings()
 {
+    using std::string;
+    using std::to_string;
+
     // Return vector
     lines ret = {};
 
@@ -38,16 +41,33 @@ lines Board::toLineStrings()
     ret.push_back("");
 
     // then, write the grid
-    // first cell of each row is the row number
     for (int row = 1; row <= size; row++)
     {
-        std::string rowString = "";
-        for (int col = 0; col < size; col++)
+        string rowString = "";
+        for (int col = 0; col <= size; col++)
         {
             if (col == 0)
-                pushCharCell(rowString, std::to_string(row)[0]);
+            {
+                // the first cell of each grid is the row number
+                string strOfInt = to_string(row);
+                int strLen = strOfInt.size();
+                if (strLen == 1)
+                {
+                    // single-digit numbers can just use pushCharCell
+                    pushCharCell(rowString, strOfInt[0]);
+                } else if (strLen == 2)
+                {
+                    // by default this branch handles the 10 only
+                    // doesn't need opening padding, just closing
+                    rowString.append(strOfInt);
+                    rowString.push_back(' ');
+                } else {
+                    // THIS SHOULDNT HAPPEN - an E signifies a problem
+                    pushCharCell(rowString, 'E');
+                }
+            }
             else
-                pushCharCell(rowString, '_'); // TODO get actual character based on ships
+                pushCharCell(rowString, '.'); // TODO get actual character based on ships
         }
         ret.push_back(rowString);
         // add a blank line
