@@ -7,10 +7,7 @@
 #ifndef __PLAYER_H_INCLUDED
 #define __PLAYER_H_INCLUDED
 
-#include <vector>
-
 #include "board.h"
-#include "util.h"
 
 class Player
 {

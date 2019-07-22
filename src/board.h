@@ -6,11 +6,7 @@
 #ifndef __BOARD_H_INCLUDED
 #define __BOARD_H_INCLUDED
 
-#include <string>
-#include <vector>
-
 #include "ship.h"
-#include "util.h"
 
 class Board
 {
