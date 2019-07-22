@@ -25,7 +25,7 @@ lines Board::toLineStrings()
     lines ret = {};
 
     // Write the header column labels
-    std::string headerLine = "";
+    string headerLine = "";
     for (int i = 0; i <= size; i++)
     {
         // first one should be blank
@@ -48,7 +48,7 @@ lines Board::toLineStrings()
         {
             if (col == 0)
             {
-                // the first cell of each grid is the row number
+                // the first column of each row is the row number
                 string strOfInt = to_string(row);
                 int strLen = strOfInt.size();
                 if (strLen == 1)

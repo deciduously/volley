@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 
 #include "player.h"
 
@@ -57,6 +58,9 @@ void Player::runPlacement()
 {
     using std::cout;
     using std::cin;
+    using std::endl;
+    using std::numeric_limits;
+    using std::streamsize;
 
     // Continually prompt to place ships until there are none left
     while (unassignedShips.size() > 0)
@@ -66,11 +70,23 @@ void Player::runPlacement()
 
         // get ship type
         char shipTypeInput;
-        cout << "\n\nWhich ship do you want to add? " << unassignedShipLetters() << ": ";
-        cin >> shipTypeInput;
 
-        // validate input.
-        // needs to be a character
-        // then needs to be one of the options
+        // Loop until valid input collected
+        for (;;)
+        {
+            cout << "\n\nWhich ship do you want to add? Select letter: " << unassignedShipLetters() << "> ";
+        
+            if (cin >> shipTypeInput)
+                break;
+                // it was a character, check if it was valid
+            else
+            {
+                // wasn't a character
+                cout << "Please enter a valid character!" << endl;
+                cin.clear();
+                // ignore rest of current line, up to newline
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            }
+        }
     }
 }
