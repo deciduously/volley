@@ -15,18 +15,21 @@ int main()
     using std::endl;
 
     // <iomanip>
-    using std::setw;
     using std::right;
+    using std::setw;
 
     // Instantiate game object
-    Game game = Game();
-    
+    Game game = Game(BOARD_SIZE);
+
     // Output header
     // We want it halfway across the board
     // Each board column is 3 spaces, and there's an inital one for the labels
-    int headerWidth = (game.getSize() * 3 + 3) / 2;
-    cout << endl << setw(20) << right << "Battleship!!!" << endl << endl;
-    
+    // (10 * 3 + 3) / 2-ish
+    int headerWidth = 16;
+    cout << endl
+         << setw(headerWidth) << right << "Battleship!!!" << endl
+         << endl;
+
     // run game loop
     game.run();
 

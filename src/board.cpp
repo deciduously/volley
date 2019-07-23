@@ -33,8 +33,7 @@ lines Board::toLineStrings()
         if (i == 0)
             pushCharCell(headerLine, ' ');
         else
-            pushCharCell(headerLine, i + 64);  // get the proper ASCII char
-        
+            pushCharCell(headerLine, i + 64); // get the proper ASCII char
     }
     ret.push_back(headerLine);
 
@@ -56,13 +55,16 @@ lines Board::toLineStrings()
                 {
                     // single-digit numbers can just use pushCharCell
                     pushCharCell(rowString, strOfInt[0]);
-                } else if (strLen == 2)
+                }
+                else if (strLen == 2)
                 {
                     // by default this branch handles the 10 only
                     // doesn't need opening padding, just closing
                     rowString.append(strOfInt);
                     rowString.push_back(' ');
-                } else {
+                }
+                else
+                {
                     // THIS SHOULDNT HAPPEN - an E signifies a problem
                     pushCharCell(rowString, 'E');
                 }

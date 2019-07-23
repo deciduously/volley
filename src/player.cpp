@@ -59,10 +59,10 @@ std::string Player::toString()
 void Player::runPlacement()
 {
     // <iostream>
-    using std::cout;
     using std::cin;
+    using std::cout;
     using std::endl;
-    
+
     // <algorithm>
     using std::find;
 
@@ -86,7 +86,7 @@ void Player::runPlacement()
         for (;;)
         {
             cout << "\n\nWhich ship do you want to add? Select letter: " << unassignedShipLetters() << "> ";
-        
+
             if (cin >> shipTypeInput)
             {
                 // it was a character, check if it was an option

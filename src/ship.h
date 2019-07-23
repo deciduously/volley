@@ -16,7 +16,8 @@ class Ship
     Direction direction;
     int hits;
     ShipClass shipClass;
-    public:
-        Ship(int row, int col, Direction dir, ShipClass sc);
+
+public:
+    Ship(int row, int col, Direction dir, ShipClass sc);
 };
 #endif

@@ -11,8 +11,9 @@
 class Computer : public Player
 {
     std::vector<std::tuple<int, int>> neighborhood;
-    public:
-        Computer(int boardSize) : Player(boardSize) {};
+
+public:
+    Computer(int boardSize = BOARD_SIZE) : Player(boardSize){};
 };
 
 #endif

@@ -14,10 +14,11 @@ class Player
     Board board;
     std::vector<ShipClass> unassignedShips;
     std::string unassignedShipLetters();
-    public:
-        Player(int boardSize);
-        lines toLineStrings();
-        std::string toString();
-        void runPlacement();
+
+public:
+    Player(int boardSize = BOARD_SIZE);
+    lines toLineStrings();
+    std::string toString();
+    void runPlacement();
 };
 #endif

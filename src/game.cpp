@@ -1,10 +1,9 @@
 #include "game.h"
 
-Game::Game()
+Game::Game(int boardSize)
 {
-    int size = getSize();
-    player = Player(size);
-    computer = Computer(size);
+    Game::player = Player(boardSize);
+    Game::computer = Computer(boardSize);
     gameState = GameState::Placement;
 }
 
@@ -39,7 +38,6 @@ std::string Game::toStringFiring()
 // Run the fire loop until someone wins
 void Game::runFiring()
 {
-
 }
 
 // Run the placement loop until all unplaced ships are placed
@@ -57,10 +55,4 @@ void Game::run()
     runPlacement();
     gameState = GameState::Firing;
     runFiring();
-}
-
-// Getter for the board size - currently hardcoded to 10 in player.cpp
-int Game::getSize()
-{
-    return size;
 }

@@ -11,12 +11,30 @@
 #include <string>
 #include <vector>
 
+// Board size is fixed
+const int BOARD_SIZE = 10;
+
 // A Ship can be either horizontal or vertical
 // The occupied cells are extrapolated from an origin and a Direction
-enum Direction {Left, Right};
-enum GameState {Firing, GameOver, Placement};
-enum ShipClass {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
-
+enum Direction
+{
+    Left,
+    Right
+};
+enum GameState
+{
+    Firing,
+    GameOver,
+    Placement
+};
+enum ShipClass
+{
+    AircraftCarrier,
+    Battleship,
+    Cruiser,
+    Destroyer,
+    UBoat
+};
 
 // human-displaying the ShipClass enum
 std::string shipClassString(ShipClass sc);

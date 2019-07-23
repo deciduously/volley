@@ -8,20 +8,17 @@
 
 #include "computer.h"
 
-const int BOARD_SIZE = 10;
-
 class Game
 {
-    int size = BOARD_SIZE;
     Player player;
     Computer computer;
     GameState gameState;
     std::string toStringFiring();
     void runFiring();
     void runPlacement();
-    public:
-        Game();
-        void run();
-        int getSize();
+
+public:
+    Game(int boardSize = BOARD_SIZE);
+    void run();
 };
 #endif
