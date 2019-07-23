@@ -9,9 +9,10 @@ void pushCharCell(std::string &s, char contents)
 }
 
 // Board constructor
-Board::Board()
+Board::Board(int boardSize)
 {
-    size = 10; // All boards are 10 (A-J)
+    size = boardSize; // All boards are 10, hardcoded in "game.h" (A-J)
+    ships = {};
 }
 
 // TODO use sprintf for all of it instead of homebrew helpers?

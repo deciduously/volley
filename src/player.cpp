@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <limits>
 
@@ -29,8 +30,9 @@ std::string Player::unassignedShipLetters()
 
 // PUBLIC
 
-Player::Player()
+Player::Player(int boardSize)
 {
+    board = Board(boardSize);
     unassignedShips = {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
 }
 lines Player::toLineStrings()
@@ -56,11 +58,20 @@ std::string Player::toString()
 
 void Player::runPlacement()
 {
+    // <iostream>
     using std::cout;
     using std::cin;
     using std::endl;
+    
+    // <algorithm>
+    using std::find;
+
+    // <limits>
     using std::numeric_limits;
     using std::streamsize;
+
+    // <vector> (via util.h)
+    using std::vector;
 
     // Continually prompt to place ships until there are none left
     while (unassignedShips.size() > 0)
@@ -77,8 +88,21 @@ void Player::runPlacement()
             cout << "\n\nWhich ship do you want to add? Select letter: " << unassignedShipLetters() << "> ";
         
             if (cin >> shipTypeInput)
-                break;
-                // it was a character, check if it was valid
+            {
+                // it was a character, check if it was an option
+                // First, build a std::vector of the char representations of the ships available
+                vector<char> unassignedShipLettersVec = {};
+                int unassignedShipsLen = unassignedShips.size();
+                for (int i = 0; i < unassignedShipsLen; i++)
+                    unassignedShipLettersVec.push_back(shipClassChar(unassignedShips[i]));
+
+                if (find(unassignedShipLettersVec.begin(), unassignedShipLettersVec.end(), shipTypeInput) != unassignedShipLettersVec.end())
+                    // if the input can be found inside the vector of all of them, break
+                    break;
+                else
+                    // They picked something not in the list, try again
+                    cout << "Not an available ship!";
+            }
             else
             {
                 // wasn't a character

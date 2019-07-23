@@ -10,10 +10,10 @@
 
 class Board
 {
+    int size;
     std::vector<Ship> ships;
     public:
-        int size;
-        Board();
+        Board(int boardSize);
         lines toLineStrings();
 };
 

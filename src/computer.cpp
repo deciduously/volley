@@ -1,6 +1,6 @@
 #include "computer.h"
 
-Computer::Computer()
+Computer::Computer(int boardSize) : Player(boardSize)
 {
     neighborhood = {};
 }

@@ -15,7 +15,7 @@ class Player
     std::vector<ShipClass> unassignedShips;
     std::string unassignedShipLetters();
     public:
-        Player();
+        Player(int boardSize);
         lines toLineStrings();
         std::string toString();
         void runPlacement();

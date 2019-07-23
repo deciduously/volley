@@ -12,7 +12,7 @@ class Computer : public Player
 {
     std::vector<std::tuple<int, int>> neighborhood;
     public:
-        Computer();
+        Computer(int boardSize) : Player(boardSize) {};
 };
 
 #endif

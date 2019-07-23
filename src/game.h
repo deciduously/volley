@@ -8,8 +8,11 @@
 
 #include "computer.h"
 
+const int BOARD_SIZE = 10;
+
 class Game
 {
+    int size = BOARD_SIZE;
     Player player;
     Computer computer;
     GameState gameState;
@@ -19,5 +22,6 @@ class Game
     public:
         Game();
         void run();
+        int getSize();
 };
 #endif

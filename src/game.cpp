@@ -2,8 +2,9 @@
 
 Game::Game()
 {
-    player = Player();
-    computer = Computer();
+    int size = getSize();
+    player = Player(size);
+    computer = Computer(size);
     gameState = GameState::Placement;
 }
 
@@ -56,4 +57,10 @@ void Game::run()
     runPlacement();
     gameState = GameState::Firing;
     runFiring();
+}
+
+// Getter for the board size - currently hardcoded to 10 in player.cpp
+int Game::getSize()
+{
+    return size;
 }
