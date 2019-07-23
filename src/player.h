@@ -13,7 +13,6 @@ class Player
 {
     Board board;
     std::vector<ShipClass> unassignedShips;
-    std::string unassignedShipLetters();
 
 public:
     Player(int boardSize = BOARD_SIZE);
