@@ -12,6 +12,12 @@ void clearCin()
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
+// Helper function to determine if a char is a letter
+bool isLetter(char c)
+{
+    return (c >= 65 && c <= 90);
+}
+
 // Helper function to pretty-print the vector of shipclasses
 std::string shipClassString(std::vector<ShipClass> scs)
 {
@@ -136,8 +142,8 @@ origin Player::getOrigin(ShipClass sc)
 
         // try to get a tuple from the input
         // if we fail - it's not an int and a char in either order - loop again
-        int row;
-        char col;
+        int row = 0;
+        char col = 'Z';
         if (originStr.size() != 2)
         {
             cout << "Please only enter two characters, an int row and a letter column" << endl;
@@ -145,32 +151,35 @@ origin Player::getOrigin(ShipClass sc)
             continue;
         }
 
-        origin o = {row, col};
-        if (validateOrigin(o, sc))
+        // TODO store the input
+        // What you had last night broke for row 10.
+        // what you need to do is search for a letter and extract it
+        // and try to save the rest as the number
+        // check if the first one is a letter
+
+        // ensure it's a valid spot on the board
+        if (row < 1 || row > 10)
         {
-            // If the ship fits, return it
-            return o;
-        }
-        else
-        {
-            // Otherwise, we'll loop again.  Tell the user why.
-            cout << "Unable to place " << shipClassString(sc) << " there." << endl;
+            cout << "Invalid row!" << endl;
             clearCin();
+            continue;
         }
+        if (col < 65 || col > 74) // A < col < J
+        {
+            cout << "Invalid column!" << endl;
+            clearCin();
+            continue;
+        }
+
+        // Return the result as a literal
+        return {row, col};
     }
 }
 
-// Validates an origin string against the board
-bool Player::validateOrigin(origin o, ShipClass sc)
-{
-    o = {1, 2};
-    std::cout << shipClassString(sc);
-    return false;
-}
-
 // Places a ship
-void Player::placeShip(origin o, ShipClass sc)
+void Player::placeShip(origin o, ShipClass sc, Direction d)
 {
+    d = Direction::Left;
     o = {1, 3};
     std::cout << shipClassString(sc);
     // This function does not validate whether it can first!
@@ -199,7 +208,9 @@ void Player::runPlacement()
         // Prompt user for origin
         origin origin = getOrigin(shipChoice);
 
+        // Prompt user for direction
+
         // Place ship
-        placeShip(origin, shipChoice);
+        placeShip(origin, shipChoice, Direction::Left);
     }
 }
