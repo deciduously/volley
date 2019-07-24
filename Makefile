@@ -1,11 +1,13 @@
+.PHONY: all clean help
+
 CXX=clang++ -std=c++11
 FLAGS=-Wall -Wextra -Werror -pedantic -c -g
 
 BUILDDIR=build
 SOURCEDIR=src
 EXEC=volley
-SOURCES=$(wildcard $(SOURCEDIR)/*.cpp)
-OBJ=$(patsubst $(SOURCEDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
+SOURCES:=$(wildcard $(SOURCEDIR)/*.cpp)
+OBJ:=$(patsubst $(SOURCEDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 
 all: dir $(BUILDDIR)/$(EXEC)
 
@@ -21,4 +23,5 @@ $(OBJ): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.cpp
 clean:
 		rm -rf $(BUILDDIR)/*.o $(BUILDDIR)/$(EXEC)
  
-.PHONY: all clean
+help:
+		@echo "Usage: make {all|clean|help}" 1>&2 && false

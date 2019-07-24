@@ -1,7 +1,10 @@
+#include <cstdlib>
+#include <iostream>
+
 #include "util.h"
 
 // Pretty-print the ShipClass enum in long-form text
-std::string shipClassLongName(ShipClass sc)
+std::string shipClassString(ShipClass sc)
 {
     switch (sc)
     {
@@ -76,4 +79,31 @@ int shipLength(ShipClass sc)
     // if we got past the switch, something bad happened because it's exhaustive for that enum
     // Unreachable
     return -1;
+}
+
+// Get a ShipClass from a char
+ShipClass charToShipClass(char c)
+{
+    switch (toupper(c))
+    {
+    case 'A':
+        return ShipClass::AircraftCarrier;
+        break;
+    case 'B':
+        return ShipClass::Battleship;
+        break;
+    case 'C':
+        return ShipClass::Cruiser;
+        break;
+    case 'D':
+        return ShipClass::Destroyer;
+        break;
+    case 'U':
+        return ShipClass::UBoat;
+        break;
+    }
+    // Panic if something unexpected comes through here
+    // TODO maybe not panic?  I don't think anything unexpected will come through here
+    std::cout << "Invalid chip class" << std::endl;
+    exit(1);
 }

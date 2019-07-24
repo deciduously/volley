@@ -9,6 +9,7 @@
 #define __UTIL_H_INCLUDED
 
 #include <string>
+#include <tuple>
 #include <vector>
 
 // Board size is fixed
@@ -39,9 +40,13 @@ enum ShipClass
 // human-displaying the ShipClass enum
 std::string shipClassString(ShipClass sc);
 char shipClassChar(ShipClass sc);
+ShipClass charToShipClass(char c);
 int shipLength(ShipClass sc);
 
 // string vector alias
 typedef std::vector<std::string> lines;
+
+// origin tuple alias {row, col}
+typedef std::tuple<int, char> origin;
 
 #endif

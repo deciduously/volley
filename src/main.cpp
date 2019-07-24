@@ -21,11 +21,7 @@ int main()
     // Instantiate game object
     Game game = Game(BOARD_SIZE);
 
-    // Output header
-    // We want it halfway across the board
-    // Each board column is 3 spaces, and there's an inital one for the labels
-    // (10 * 3 + 3) / 2-ish
-    int headerWidth = 16;
+    int headerWidth = 25;
     cout << endl
          << setw(headerWidth) << right << "Battleship!!!" << endl
          << endl;
