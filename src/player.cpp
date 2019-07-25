@@ -15,6 +15,7 @@ void clearCin()
 // Helper function to determine if a char is a letter
 bool isLetter(char c)
 {
+    // 65 = 'A', 90 = 'z'
     return (c >= 65 && c <= 90);
 }
 
@@ -32,9 +33,9 @@ std::string shipClassString(std::vector<ShipClass> scs)
     for (int i = 0; i < unassignedShipsSize; i++)
     {
         ShipClass sc = scs[i];
-        ret.push_back(shipClassChar(sc));
+        ret.push_back(sc.toChar());
         ret.push_back(':');
-        ret.push_back(to_string(shipLength(sc))[0]);
+        ret.push_back(to_string(sc.size())[0]);
         ret.push_back(' ');
     }
 
@@ -106,13 +107,13 @@ ShipClass Player::getShipClass()
         vector<char> unassignedShipLettersVec = {};
         int unassignedShipsLen = unassignedShips.size();
         for (int i = 0; i < unassignedShipsLen; i++)
-            unassignedShipLettersVec.push_back(shipClassChar(unassignedShips[i]));
+            unassignedShipLettersVec.push_back(unassignedShips[i].toChar());
 
         ret = toupper(shipTypeInput[0]);
 
         if (find(unassignedShipLettersVec.begin(), unassignedShipLettersVec.end(), ret) != unassignedShipLettersVec.end())
             // if the input can be found inside the vector of all of them, return it
-            return charToShipClass(ret);
+            return ShipClass(ret);
         else
         // They picked something not in the list, try again
         {
@@ -136,8 +137,9 @@ origin Player::getOrigin(ShipClass sc)
     for (;;)
     {
         //prompt for input
+        // TODO accept either RowCol or ColRow - trickier because of 10
         string originStr;
-        cout << "Origin (e.g \"A1\" or \"1A\")> ";
+        cout << "Origin, as RowCol (e.g \"A1\")> ";
         cin >> originStr;
 
         // try to get a tuple from the input
@@ -146,16 +148,23 @@ origin Player::getOrigin(ShipClass sc)
         char col = 'Z';
         if (originStr.size() != 2)
         {
-            cout << "Please only enter two characters, an int row and a letter column" << endl;
+            cout << "Please only enter two characters, a letter column and an integer row" << endl;
             clearCin();
             continue;
         }
 
-        // TODO store the input
-        // What you had last night broke for row 10.
-        // what you need to do is search for a letter and extract it
-        // and try to save the rest as the number
         // check if the first one is a letter
+        if (isLetter(originStr[0]))
+            col = originStr[0];
+        else
+        {
+            cout << "Please enter a letter as the first character" << endl;
+            clearCin();
+            continue;
+        }
+
+        // store the rest as the number
+        row = stoi(originStr.substr(1, originStr.size() - 1));
 
         // ensure it's a valid spot on the board
         if (row < 1 || row > 10)
@@ -176,12 +185,35 @@ origin Player::getOrigin(ShipClass sc)
     }
 }
 
-// Places a ship
-void Player::placeShip(origin o, ShipClass sc, Direction d)
+bool Player::doesFit(shipPlacement osd)
 {
-    d = Direction::Left;
-    o = {1, 3};
-    std::cout << shipClassString(sc);
+    // Unpack the placement
+    origin o;
+    ShipClass sc;
+    Direction d;
+    std::tie(o, sc, d) = osd;
+
+    // unpack the origin
+    int row;
+    char col;
+    std::tie(row, col) = o;
+
+    // check each cell the ship would occupy
+    //for (int i = 0; i < sc.size() - 1; i++)
+    //{
+    //    if (board.getCharAt() != '.') // TODO WRITE BOARD::GETCHARAT
+    //}
+}
+
+// Places a ship
+void Player::placeShip(shipPlacement osd)
+{
+    // Unpack the placement
+    origin o;
+    ShipClass sc;
+    Direction d;
+    std::tie(o, sc, d) = osd;
+
     // This function does not validate whether it can first!
     // The input function should have done that.
 }
@@ -191,6 +223,7 @@ void Player::runPlacement()
     // <iostream>
     using std::cout;
     using std::endl;
+    using std::get;
 
     // <string>
     using std::string;
@@ -201,16 +234,20 @@ void Player::runPlacement()
         // display board
         std::cout << toString();
 
+        // TODO - confirm each with a loop - generalize that.
+
         // Prompt user for which ship to place
         ShipClass shipChoice = getShipClass();
-        cout << shipChoice << endl;
+        cout << "Placing " << shipChoice.toString() << "." << endl;
 
         // Prompt user for origin
         origin origin = getOrigin(shipChoice);
+        cout << "Row: " << get<1>(origin) << " Col: " << get<0>(origin) << endl;
 
         // Prompt user for direction
+        // TODO THIS ONE IS EASY KNOCK IT OUT
 
         // Place ship
-        placeShip(origin, shipChoice, Direction::Left);
+        placeShip({origin, shipChoice, Direction::Left});
     }
 }

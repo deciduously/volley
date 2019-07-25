@@ -28,20 +28,6 @@ enum GameState
     GameOver,
     Placement
 };
-enum ShipClass
-{
-    AircraftCarrier,
-    Battleship,
-    Cruiser,
-    Destroyer,
-    UBoat
-};
-
-// human-displaying the ShipClass enum
-std::string shipClassString(ShipClass sc);
-char shipClassChar(ShipClass sc);
-ShipClass charToShipClass(char c);
-int shipLength(ShipClass sc);
 
 // string vector alias
 typedef std::vector<std::string> lines;

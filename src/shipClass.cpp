@@ -1,12 +1,49 @@
 #include <cstdlib>
 #include <iostream>
 
-#include "util.h"
+#include "shipClass.h"
+
+// Default constructor
+ShipClass::ShipClass()
+{
+    type = ShipClassType::Unknown;
+}
+
+// ShipClass from ShipClassType
+ShipClass::ShipClass(ShipClassType sc)
+{
+    type = sc;
+}
+
+// Get a ShipClass from a char
+ShipClass::ShipClass(char c)
+{
+    switch (toupper(c))
+    {
+    case 'A':
+        type = ShipClassType::AircraftCarrier;
+        break;
+    case 'B':
+        type = ShipClassType::Battleship;
+        break;
+    case 'C':
+        type = ShipClassType::Cruiser;
+        break;
+    case 'D':
+        type = ShipClassType::Destroyer;
+        break;
+    case 'U':
+        type = ShipClassType::UBoat;
+        break;
+    default:
+        type = ShipClassType::Unknown;
+    }
+}
 
 // Pretty-print the ShipClass enum in long-form text
-std::string shipClassString(ShipClass sc)
+std::string ShipClass::toString()
 {
-    switch (sc)
+    switch (type)
     {
     case AircraftCarrier:
         return "Carrier";
@@ -23,6 +60,9 @@ std::string shipClassString(ShipClass sc)
     case UBoat:
         return "U-Boat";
         break;
+    case Unknown:
+        return "Unknown Ship Class";
+        break;
     }
     // if we got past the switch, something bad happened because it's exhaustive for that enum
     // Unreachable
@@ -30,9 +70,9 @@ std::string shipClassString(ShipClass sc)
 }
 
 // Get the corresponding char for each ShipClass variant
-char shipClassChar(ShipClass sc)
+char ShipClass::toChar()
 {
-    switch (sc)
+    switch (type)
     {
     case AircraftCarrier:
         return 'A';
@@ -49,6 +89,8 @@ char shipClassChar(ShipClass sc)
     case UBoat:
         return 'U';
         break;
+    case Unknown:
+        return 'E';
     }
     // if we got past the switch, something bad happened because it's exhaustive for that enum
     // Unreachable
@@ -56,9 +98,9 @@ char shipClassChar(ShipClass sc)
 }
 
 // Get the corresponding length for each ShipClass variant
-int shipLength(ShipClass sc)
+int ShipClass::size()
 {
-    switch (sc)
+    switch (type)
     {
     case AircraftCarrier:
         return 5;
@@ -75,35 +117,11 @@ int shipLength(ShipClass sc)
     case UBoat:
         return 3;
         break;
+    case Unknown:
+        return 0;
+        break;
     }
     // if we got past the switch, something bad happened because it's exhaustive for that enum
     // Unreachable
     return -1;
-}
-
-// Get a ShipClass from a char
-ShipClass charToShipClass(char c)
-{
-    switch (toupper(c))
-    {
-    case 'A':
-        return ShipClass::AircraftCarrier;
-        break;
-    case 'B':
-        return ShipClass::Battleship;
-        break;
-    case 'C':
-        return ShipClass::Cruiser;
-        break;
-    case 'D':
-        return ShipClass::Destroyer;
-        break;
-    case 'U':
-        return ShipClass::UBoat;
-        break;
-    }
-    // Panic if something unexpected comes through here
-    // TODO maybe not panic?  I don't think anything unexpected will come through here
-    std::cout << "Invalid chip class" << std::endl;
-    exit(1);
 }
