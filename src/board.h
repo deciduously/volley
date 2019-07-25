@@ -15,6 +15,7 @@ class Board
 
 public:
     Board(int boardSize = BOARD_SIZE);
+    char getCharAt(cell c);
     lines toLineStrings();
 };
 

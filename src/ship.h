@@ -11,12 +11,12 @@
 
 class Ship
 {
-    origin origin;
+    cell origin;
     Direction direction;
     int hits;
     ShipClass shipClass;
 
 public:
-    Ship(int row, int col, Direction dir, ShipClass sc);
+    Ship(int row, char col, Direction dir, ShipClass sc);
 };
 #endif

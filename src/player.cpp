@@ -124,7 +124,7 @@ ShipClass Player::getShipClass()
 }
 
 // Helper method to prompt user for origin
-origin Player::getOrigin(ShipClass sc)
+cell Player::getOrigin(ShipClass sc)
 {
     using std::cin;
     using std::cout;
@@ -180,7 +180,9 @@ origin Player::getOrigin(ShipClass sc)
             continue;
         }
 
-        // Return the result as a literal
+        // Return the result as a literal if it fits, or loop again
+        // TODO add the doesFit check here.
+        sc = ShipClass(ShipClassType::AircraftCarrier); // remove!!
         return {row, col};
     }
 }
@@ -188,7 +190,7 @@ origin Player::getOrigin(ShipClass sc)
 bool Player::doesFit(shipPlacement osd)
 {
     // Unpack the placement
-    origin o;
+    cell o;
     ShipClass sc;
     Direction d;
     std::tie(o, sc, d) = osd;
@@ -203,16 +205,17 @@ bool Player::doesFit(shipPlacement osd)
     //{
     //    if (board.getCharAt() != '.') // TODO WRITE BOARD::GETCHARAT
     //}
+    return true;
 }
 
 // Places a ship
-void Player::placeShip(shipPlacement osd)
+void Player::placeShip(shipPlacement csd)
 {
     // Unpack the placement
-    origin o;
+    cell c;
     ShipClass sc;
     Direction d;
-    std::tie(o, sc, d) = osd;
+    std::tie(c, sc, d) = csd;
 
     // This function does not validate whether it can first!
     // The input function should have done that.
@@ -241,7 +244,7 @@ void Player::runPlacement()
         cout << "Placing " << shipChoice.toString() << "." << endl;
 
         // Prompt user for origin
-        origin origin = getOrigin(shipChoice);
+        cell origin = getOrigin(shipChoice);
         cout << "Row: " << get<1>(origin) << " Col: " << get<0>(origin) << endl;
 
         // Prompt user for direction

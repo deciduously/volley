@@ -33,6 +33,6 @@ enum GameState
 typedef std::vector<std::string> lines;
 
 // origin tuple alias {row, col}
-typedef std::tuple<int, char> origin;
+typedef std::tuple<int, char> cell;
 
 #endif

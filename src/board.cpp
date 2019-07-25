@@ -70,7 +70,10 @@ lines Board::toLineStrings()
                 }
             }
             else
-                pushCharCell(rowString, '.'); // TODO get actual character based on ships
+            {
+                cell currentCell = {row, col + 64};
+                pushCharCell(rowString, getCharAt(currentCell)); // TODO get actual character based on ships
+            }
         }
         ret.push_back(rowString);
         // add a blank line
@@ -78,4 +81,14 @@ lines Board::toLineStrings()
     }
 
     return ret;
+}
+
+// Returns the corresponding cell character
+char Board::getCharAt(cell c)
+{
+    int row;
+    char col;
+    std::tie(row, col) = c;
+    // TODO
+    return '.';
 }
