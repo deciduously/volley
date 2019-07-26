@@ -16,7 +16,7 @@ void clearCin()
 bool isLetter(char c)
 {
     // 65 = 'A', 90 = 'z'
-    return (c >= 65 && c <= 90);
+    return (c >= 'A' && c <= 'z');
 }
 
 // Helper function to pretty-print the vector of shipclasses
@@ -139,16 +139,16 @@ cell Player::getOrigin(ShipClass sc)
         //prompt for input
         // TODO accept either RowCol or ColRow - trickier because of 10
         string originStr;
-        cout << "Origin, as RowCol (e.g \"A1\")> ";
+        cout << "Origin, as ColRow (e.g \"A1\")> ";
         cin >> originStr;
 
         // try to get a tuple from the input
         // if we fail - it's not an int and a char in either order - loop again
         int row = 0;
         char col = 'Z';
-        if (originStr.size() != 2)
+        if (originStr.size() > 3)
         {
-            cout << "Please only enter two characters, a letter column and an integer row" << endl;
+            cout << "Please only enter no more than three characters, a letter column and an integer row" << endl;
             clearCin();
             continue;
         }
@@ -187,13 +187,36 @@ cell Player::getOrigin(ShipClass sc)
     }
 }
 
+// Compare two ShipClasses for equality by variant - should likely be a method on ShipClass
+bool matchShipClass(ShipClass sc1, ShipClass sc2)
+{
+    return sc1.variant() == sc2.variant();
+}
+
 // Places a ship
 void Player::placeShip(cell o, ShipClass sc, Direction d)
 {
     // This function does not validate whether it can first!
     // The input function should have done that.
-    // Just push it to the board
+    // Push it to the board
     board.pushShip(Ship(o, sc, d));
+    // Remove it from unassignedShips
+    // find the idx
+    int toDelIdx = unassignedShips.size();
+    int maxSize = toDelIdx;
+    for (int i = 0; i < maxSize; i++)
+    {
+        if (matchShipClass(unassignedShips[i], sc))
+        {
+            toDelIdx = i;
+            break;
+        }
+    }
+    // erase if found
+    if (toDelIdx < maxSize)
+    {
+        unassignedShips.erase(unassignedShips.begin() + toDelIdx);
+    }
 }
 
 void Player::runPlacement()
@@ -209,6 +232,7 @@ void Player::runPlacement()
     using std::string;
 
     // Continually prompt to place ships until there are none left
+    outer:
     while (unassignedShips.size() > 0)
     {
         // display board
@@ -222,7 +246,7 @@ void Player::runPlacement()
 
         // Prompt user for origin
         cell origin = getOrigin(shipChoice);
-        cout << "Row: " << get<1>(origin) << " Col: " << get<0>(origin) << endl;
+        cout << "Row: " << get<0>(origin) << " Col: " << get<1>(origin) << endl;
 
         // get direction - default to Left arbitrarily
         Direction d = Direction::Left;
@@ -243,14 +267,14 @@ void Player::runPlacement()
         else if (fitsLeft && !fitsDown)
         {
             // must be Left - inform the user
-            cout << shipChoice.toString() << " only fits left.  Saving...";
+            cout << shipChoice.toString() << " only fits left.  Saving..." << endl;
             // technically no need to set, it should be Left already, but just in case
             d = Direction::Left;
         }
         else if (!fitsLeft && fitsDown)
         {
             // must be Down - inform the user
-            cout << shipChoice.toString() << " only fits down.  Saving...";
+            cout << shipChoice.toString() << " only fits down.  Saving..." << endl;
             d = Direction::Down;
         }
         else
@@ -262,18 +286,24 @@ void Player::runPlacement()
                 cout << "(L)eft or (D)own> ";
                 cin >> directionChoice;
                 directionChoice = toupper(directionChoice);
-                if (directionChoice != 'L' && directionChoice != 'D')
+                if (directionChoice == 'L' || directionChoice == 'D')
+                {
+                    if (directionChoice == 'L')
+                    {
+                        d = Direction::Left;
+                        break;
+                    }
+                    else if (directionChoice == 'D')
+                    {
+                        d = Direction::Down;
+                        break;
+                    }
+                    
+                }
+                else
                 {
                     cout << "Please enter \"L\" or \"D\"." << endl;
                     continue;
-                }
-                else if (directionChoice == 'L')
-                {
-                    d = Direction::Left;
-                }
-                else if (directionChoice == 'D')
-                {
-                    d = Direction::Down;
                 }
             }
         }
@@ -289,7 +319,6 @@ void Player::runPlacement()
             // only one other option...
             directionString.append("Down");
         }
-        cout << "Direction: " << directionString << endl;
 
         // Confirm triple
 
@@ -302,18 +331,18 @@ void Player::runPlacement()
 
             // build origin string
             std::string originStr = "";
-            originStr.append(std::to_string(get<0>(origin)));
             originStr.push_back(get<1>(origin));
+            originStr.append(std::to_string(get<0>(origin)));
 
             // display all three choices
-            cout << "Origin: " << originStr << " Class: " << shipChoice.toString() << " Direction: " << directionString << ".  Confirm? (Y/N)> " << endl;
+            cout << "Origin: " << originStr << endl << "Class: " << shipChoice.toString() << " (Length: " << shipChoice.size() << ")" << endl << "Direction: " << directionString << endl << "Confirm? (Y/N)> ";
             cin >> confirmChoice;
             confirmChoice = toupper(confirmChoice);
             if (confirmChoice != 'Y')
             {
                 // TODO allow to adjust just one.
                 cout << "Starting over!" << endl;
-                continue;
+                goto outer;
             }
             else
             {

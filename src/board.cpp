@@ -91,6 +91,16 @@ char Board::getCharAt(cell c)
     using std::find;
     using std::vector;
 
+    // first if row or cal out of bounds, return 'E'
+    // unpack cell
+    int row;
+    char col;
+    std::tie(row, col) = c;
+    if (row < 1 || row > size || col < 'A' || col > 'J') // TODO dont hardcode col bound
+    {
+        return 'E';
+    }
+
     // init return value to default (empty)
     char ret = '.';
     int shipsSize = ships.size();
@@ -142,7 +152,7 @@ bool Board::doesFit(cell o, ShipClassType sct, Direction d)
     Ship testShip = Ship(o, ShipClass(sct), d);
     std::vector<cell> cells = testShip.containedCells();
     int cellsSize = cells.size();
-    for (int i = 0; i < cellsSize - 1; i++)
+    for (int i = 0; i < cellsSize; i++)
     {
         if (getCharAt(cells[i]) != '.')
         {

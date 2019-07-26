@@ -24,7 +24,7 @@ std::vector<cell> Ship::containedCells()
     // Add the rest of the ship
     // TODO We don't check if it's legal at all - assuming runPlacement() did its job
     // Add some checks
-    for (int i = 1; i < shipClass.size() - 1; i++)
+    for (int i = 1; i < shipClass.size(); i++)
     {
         switch (direction)
         {
