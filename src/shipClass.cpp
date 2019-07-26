@@ -46,7 +46,7 @@ std::string ShipClass::toString()
     switch (type)
     {
     case AircraftCarrier:
-        return "Carrier";
+        return "Aircraft Carrier";
         break;
     case Battleship:
         return "Battleship";
@@ -124,4 +124,10 @@ int ShipClass::size()
     // if we got past the switch, something bad happened because it's exhaustive for that enum
     // Unreachable
     return -1;
+}
+
+// Getter for ShipClassType
+ShipClassType ShipClass::variant()
+{
+    return type;
 }

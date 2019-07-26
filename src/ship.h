@@ -17,6 +17,8 @@ class Ship
     ShipClass shipClass;
 
 public:
-    Ship(int row, char col, Direction dir, ShipClass sc);
+    Ship(cell o, ShipClass sc, Direction d);
+    std::vector<cell> containedCells();
+    ShipClass getShipClass();
 };
 #endif

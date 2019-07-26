@@ -12,6 +12,8 @@
 #include <tuple>
 #include <vector>
 
+#include "shipClass.h"
+
 // Board size is fixed
 const int BOARD_SIZE = 10;
 
@@ -20,7 +22,7 @@ const int BOARD_SIZE = 10;
 enum Direction
 {
     Left,
-    Right
+    Down
 };
 enum GameState
 {

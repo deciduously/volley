@@ -9,15 +9,12 @@
 
 #include "board.h"
 
-typedef std::tuple<cell, ShipClass, Direction> shipPlacement;
-
 class Player
 {
     Board board;
     cell getOrigin(ShipClass sc);
     ShipClass getShipClass();
-    bool doesFit(shipPlacement csd);
-    void placeShip(shipPlacement csd);
+    void placeShip(cell o, ShipClass sc, Direction d);
     std::vector<ShipClass> unassignedShips;
 
 public:

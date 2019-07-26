@@ -1,6 +1,8 @@
 /*
 * shipClass
-* This class holds getter methods for */
+* This class holds getter and printing methods for each of the different types of Ship
+* Benjamin Lovy
+*/
 #ifndef __SHIPCLASS_H_INCLUDED
 #define __SHIPCLASS_H_INCLUDED
 
@@ -29,6 +31,7 @@ public:
     // Methods
     char toChar();
     int size();
+    ShipClassType variant();
     std::string toString();
 };
 #endif

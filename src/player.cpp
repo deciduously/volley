@@ -155,7 +155,7 @@ cell Player::getOrigin(ShipClass sc)
 
         // check if the first one is a letter
         if (isLetter(originStr[0]))
-            col = originStr[0];
+            col = toupper(originStr[0]);
         else
         {
             cout << "Please enter a letter as the first character" << endl;
@@ -187,46 +187,23 @@ cell Player::getOrigin(ShipClass sc)
     }
 }
 
-bool Player::doesFit(shipPlacement osd)
-{
-    // Unpack the placement
-    cell o;
-    ShipClass sc;
-    Direction d;
-    std::tie(o, sc, d) = osd;
-
-    // unpack the origin
-    int row;
-    char col;
-    std::tie(row, col) = o;
-
-    // check each cell the ship would occupy
-    //for (int i = 0; i < sc.size() - 1; i++)
-    //{
-    //    if (board.getCharAt() != '.') // TODO WRITE BOARD::GETCHARAT
-    //}
-    return true;
-}
-
 // Places a ship
-void Player::placeShip(shipPlacement csd)
+void Player::placeShip(cell o, ShipClass sc, Direction d)
 {
-    // Unpack the placement
-    cell c;
-    ShipClass sc;
-    Direction d;
-    std::tie(c, sc, d) = csd;
-
     // This function does not validate whether it can first!
     // The input function should have done that.
+    // Just push it to the board
+    board.pushShip(Ship(o, sc, d));
 }
 
 void Player::runPlacement()
 {
     // <iostream>
+    using std::cin;
     using std::cout;
     using std::endl;
     using std::get;
+    using std::make_tuple;
 
     // <string>
     using std::string;
@@ -235,7 +212,7 @@ void Player::runPlacement()
     while (unassignedShips.size() > 0)
     {
         // display board
-        std::cout << toString();
+        cout << toString();
 
         // TODO - confirm each with a loop - generalize that.
 
@@ -247,10 +224,110 @@ void Player::runPlacement()
         cell origin = getOrigin(shipChoice);
         cout << "Row: " << get<1>(origin) << " Col: " << get<0>(origin) << endl;
 
-        // Prompt user for direction
-        // TODO THIS ONE IS EASY KNOCK IT OUT
+        // get direction - default to Left arbitrarily
+        Direction d = Direction::Left;
 
-        // Place ship
-        placeShip({origin, shipChoice, Direction::Left});
+        // Check if the ship fits either way
+        // If it fits one way or the other, set the direction automatically
+        // If both work, prompt to choose
+        bool fitsLeft = board.doesFit(origin, shipChoice.variant(), Direction::Left);
+        bool fitsDown = board.doesFit(origin, shipChoice.variant(), Direction::Down);
+        if (!fitsLeft && !fitsDown)
+        {
+            // Can't possibly place with that origin
+            // Tell them it's gonna be left or down, try again
+            cout << "Cannot place " << shipChoice.toString() << " at that location." << endl
+                 << "You will orient Left or Down from the origin.  Please pick a new origin." << endl;
+            continue;
+        }
+        else if (fitsLeft && !fitsDown)
+        {
+            // must be Left - inform the user
+            cout << shipChoice.toString() << " only fits left.  Saving...";
+            // technically no need to set, it should be Left already, but just in case
+            d = Direction::Left;
+        }
+        else if (!fitsLeft && fitsDown)
+        {
+            // must be Down - inform the user
+            cout << shipChoice.toString() << " only fits down.  Saving...";
+            d = Direction::Down;
+        }
+        else
+        {
+            // it fits both ways, prompt
+            char directionChoice = 'x';
+            for (;;)
+            {
+                cout << "(L)eft or (D)own> ";
+                cin >> directionChoice;
+                directionChoice = toupper(directionChoice);
+                if (directionChoice != 'L' && directionChoice != 'D')
+                {
+                    cout << "Please enter \"L\" or \"D\"." << endl;
+                    continue;
+                }
+                else if (directionChoice == 'L')
+                {
+                    d = Direction::Left;
+                }
+                else if (directionChoice == 'D')
+                {
+                    d = Direction::Down;
+                }
+            }
+        }
+
+        // Pretty-print direction string
+        std::string directionString = "";
+        if (d == Direction::Left)
+        {
+            directionString.append("Left");
+        }
+        else
+        {
+            // only one other option...
+            directionString.append("Down");
+        }
+        cout << "Direction: " << directionString << endl;
+
+        // Confirm triple
+
+        char confirmChoice = 'x';
+        bool startOver = false;
+        for (;;)
+        {
+            //TODO first, show the board with the ship placed - a Board::removeShip method would be good
+            // not urgent
+
+            // build origin string
+            std::string originStr = "";
+            originStr.append(std::to_string(get<0>(origin)));
+            originStr.push_back(get<1>(origin));
+
+            // display all three choices
+            cout << "Origin: " << originStr << " Class: " << shipChoice.toString() << " Direction: " << directionString << ".  Confirm? (Y/N)> " << endl;
+            cin >> confirmChoice;
+            confirmChoice = toupper(confirmChoice);
+            if (confirmChoice != 'Y')
+            {
+                // TODO allow to adjust just one.
+                cout << "Starting over!" << endl;
+                continue;
+            }
+            else
+            {
+                cout << "Confirmed!" << endl;
+                break;
+            }
+        }
+
+        // If the user didn't hit Y, start over
+        if (startOver)
+            break;
+
+        // Otherwise place ship
+        cout << "Placing ship..." << endl;
+        placeShip(origin, shipChoice, d);
     }
 }

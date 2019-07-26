@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "board.h"
 
 // Helper function to add a cell to a string with padding from a char
@@ -86,9 +88,72 @@ lines Board::toLineStrings()
 // Returns the corresponding cell character
 char Board::getCharAt(cell c)
 {
-    int row;
-    char col;
-    std::tie(row, col) = c;
-    // TODO
-    return '.';
+    using std::find;
+    using std::vector;
+
+    // init return value to default (empty)
+    char ret = '.';
+    int shipsSize = ships.size();
+
+    // loop through ships
+    for (int i = 0; i < shipsSize; i++)
+    {
+        Ship ship = ships[i];
+        // each ship, loop through the contained cells
+        vector<cell> cells = ship.containedCells();
+
+        // if any of them are found in cells, set ret to that ship character
+        // runPlacement should have avoided any overlaps
+        if (find(cells.begin(), cells.end(), c) != cells.end())
+        {
+            switch (ship.getShipClass().variant())
+            {
+            case ShipClassType::AircraftCarrier:
+                ret = 'A';
+                break;
+            case ShipClassType::Battleship:
+                ret = 'B';
+                break;
+            case ShipClassType::Cruiser:
+                ret = 'C';
+                break;
+            case ShipClassType::Destroyer:
+                ret = 'D';
+                break;
+            case ShipClassType::UBoat:
+                ret = 'U';
+                break;
+            case ShipClassType::Unknown:
+                ret = 'E';
+                break;
+            }
+        }
+
+        //TODO then, see if any are hits or misses - those overlay ships
+    }
+    return ret;
+}
+
+// Check if a shipPlacement would fit on the board before creating a Ship
+bool Board::doesFit(cell o, ShipClassType sct, Direction d)
+{
+    // check each cell the ship would occupy
+    // build the hypthetical ship and store its contained cells
+    Ship testShip = Ship(o, ShipClass(sct), d);
+    std::vector<cell> cells = testShip.containedCells();
+    int cellsSize = cells.size();
+    for (int i = 0; i < cellsSize - 1; i++)
+    {
+        if (getCharAt(cells[i]) != '.')
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Add a ship to the board
+void Board::pushShip(Ship s)
+{
+    ships.push_back(s);
 }
