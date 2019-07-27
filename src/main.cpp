@@ -33,6 +33,9 @@ int main()
     // run game loop
     game.run();
 
-    // Return success
+    // quit the process, which does all the proper cleanup
+    std::exit(0);
+
+    // Return success (?)
     return 0;
 }

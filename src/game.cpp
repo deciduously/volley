@@ -26,12 +26,6 @@ Cell Game::promptTarget()
 {
     Board b = player.getBoard();
     Cell ret = b.promptCell("Target");
-    if (ret == Cell())
-    {
-        ret = b.getRandomCell();
-        std::cout << "Randomly selecting: " << ret.toString() << std::endl
-                  << std::endl;
-    }
     return ret;
 }
 
@@ -44,7 +38,26 @@ void Game::runFiring()
     cout << endl
          << "Guns at the ready!" << endl
          << endl;
-    cout << toStringFiring() << endl;
+    while (gameState == GameState::Firing)
+    {
+        // Run turns until someone wins
+
+        // Display both boards
+        cout << toStringFiring() << endl;
+
+        // Get a target that hasn't been fired at
+        std::vector<Cell> toAvoid = computer.getBoard().getAllShots();
+        Cell nextTarget = Cell();
+        do
+        {
+            nextTarget = promptTarget();
+        } while (std::find(toAvoid.begin(), toAvoid.end(), nextTarget) != toAvoid.end());
+
+        cout << nextTarget.toString() << endl;
+
+        // artificially end the game - TODO REMOVE
+        gameState = GameState::GameOver;
+    }
 }
 
 // Run ship placement for both players
@@ -103,6 +116,7 @@ void Game::run()
     runPlacement();
     gameState = GameState::Firing;
     runFiring();
+    std::cout << "Game over!" << std::endl;
 }
 
 // Getter for board size

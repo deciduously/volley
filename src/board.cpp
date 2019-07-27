@@ -85,7 +85,7 @@ char Board::getCharAt(Cell c, bool showShips)
 Cell Board::getRandomCell()
 {
     // get two random numbers between 1 and board size
-    int max = size();
+    int max = size() - 1;
     int row = rand() % max + 1;
     int colNum = rand() % max + 1;
 
@@ -113,7 +113,8 @@ Cell Board::promptCell(std::string promptStr)
         // catch random
         if (originStr.size() == 1 && toupper(originStr[0]) == 'R')
         {
-            return Cell(size() + 1, size() + 1);
+            cout << "Rolling the dice..." << endl;
+            return getRandomCell();
         }
 
         // try to get a tuple from the input
