@@ -81,6 +81,18 @@ char Board::getCharAt(Cell c, bool showShips)
     return ret;
 }
 
+// Get a random cell on the board
+Cell Board::getRandomCell()
+{
+    // get two random numbers between 1 and board size
+    int max = size();
+    int row = rand() % max + 1;
+    int colNum = rand() % max + 1;
+
+    // return as a cell
+    return Cell(row, colNum);
+}
+
 // Method to prompt the user for a cell, ensuring its a valid spot on this board
 // Returning a default cell indicates 'R', or random
 Cell Board::promptCell(std::string promptStr)
@@ -95,13 +107,13 @@ Cell Board::promptCell(std::string promptStr)
     {
         //prompt for input
         string originStr;
-        cout << promptStr << " (ColRow, e.g. \"A1\" or \"a1\")> ";
+        cout << "Enter " << promptStr << ".  Enter 'R' for random.  (ColRow, e.g. \"A1\" or \"a1\")> ";
         cin >> originStr;
 
         // catch random
         if (originStr.size() == 1 && toupper(originStr[0]) == 'R')
         {
-            return Cell();
+            return Cell(size() + 1, size() + 1);
         }
 
         // try to get a tuple from the input

@@ -46,6 +46,7 @@ typedef struct Cell
     Cell(int r, char c);
     // == overload
     bool operator==(const Cell &other);
+    std::string toString();
 } Cell;
 
 // ShipClass

@@ -13,14 +13,8 @@ Cell Game::getRandomTarget(Player opponent)
     Cell ret = Cell();
     std::vector<Cell> cellsToAvoid = opponent.getAllShots();
     do
-    { // Get a random origin
-        // get two random numbers between 1 and board size
-        int max = size();
-        int row = rand() % max + 1;
-        int colNum = rand() % max + 1;
-
-        // store as a cell
-        ret = Cell(row, colNum);
+    {
+        ret = opponent.getBoard().getRandomCell();
         // Check if the opponent's board contains this cell
     } while (std::find(cellsToAvoid.begin(), cellsToAvoid.end(), ret) != cellsToAvoid.end());
 
@@ -30,7 +24,15 @@ Cell Game::getRandomTarget(Player opponent)
 // Prompt the user for a target
 Cell Game::promptTarget()
 {
-    return player.getBoard().promptCell("Enter your target, or 'R' to pick a random one");
+    Board b = player.getBoard();
+    Cell ret = b.promptCell("Target");
+    if (ret == Cell())
+    {
+        ret = b.getRandomCell();
+        std::cout << "Randomly selecting: " << ret.toString() << std::endl
+                  << std::endl;
+    }
+    return ret;
 }
 
 // Run the fire loop until someone wins

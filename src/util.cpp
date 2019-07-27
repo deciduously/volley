@@ -42,6 +42,16 @@ bool Cell::operator==(const Cell &other)
     return row == other.row && col == other.col;
 }
 
+// Prettyprint
+std::string Cell::toString()
+{
+    std::string ret = "Row: ";
+    ret += std::to_string(row);
+    ret += " Col: ";
+    ret.push_back(col);
+    return ret;
+}
+
 //
 // ShipClass
 //

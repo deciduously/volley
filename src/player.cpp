@@ -40,11 +40,16 @@ std::string shipClassString(std::vector<ShipClass> scs)
 Cell Player::getOrigin(ShipClass sc)
 {
     Cell ret = Cell();
+    Board b = getBoard();
 
     // Ensure what they pick fits at least one way
     do
     {
         ret = board.promptCell("Origin");
+        if (ret == Cell(b.size() + 1, b.size() + 1))
+        {
+            ret = b.getRandomCell();
+        }
     } while (!board.doesFit(ShipPlacement(ret, Direction::Left, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
 
     return ret;
@@ -87,14 +92,7 @@ Cell Player::getRandomOrigin(ShipClass sc)
 
     do
     {
-        // get two random numbers between 1 and board size
-        int max = board.size();
-        int row = rand() % max + 1;
-        int colNum = rand() % max + 1;
-
-        // store as a cell
-        ret = Cell(row, colNum);
-
+        ret = board.getRandomCell();
         // move on if it fits either way - placement will handle choosing a direction
     } while (!board.doesFit(ShipPlacement(ret, Direction::Left, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
 
@@ -304,7 +302,7 @@ outer:
 
         // Prompt user for origin
         Cell origin = getOrigin(shipChoice);
-        cout << "Row: " << origin.row << " Col: " << origin.col << endl;
+        cout << origin.toString() << endl;
 
         // get direction - default to Left arbitrarily
         Direction d = Direction::Left;

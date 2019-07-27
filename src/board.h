@@ -19,6 +19,7 @@ public:
     Board(int boardSize = BOARD_SIZE);
     bool doesFit(ShipPlacement sp);
     char getCharAt(Cell c, bool showShips);
+    Cell getRandomCell();
     Cell promptCell(std::string promptStr);
     void pushShip(Ship s);
     std::vector<Cell> getAllShots();
