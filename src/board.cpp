@@ -42,7 +42,7 @@ char Board::getCharAt(Cell c, bool showShips)
     using std::vector;
 
     // if row or col out of bounds, return 'E'
-    if (c.row < 1 || c.row > dimension || c.col < 'A' || c.col > ('A' + dimension))
+    if (c.row < 1 || c.row > dimension || c.col < 'A' || c.col >= ('A' + dimension))
     {
         return 'E';
     }
