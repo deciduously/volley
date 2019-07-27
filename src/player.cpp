@@ -115,11 +115,40 @@ Cell Player::getOrigin(ShipClass sc)
     }
 }
 
+// Return a random direction for the given origin and shipclass that fit - it's already ensured at least one of the two does
+Direction Player::getRandomDirection(Cell origin, ShipClass sc)
+{
+    bool fitsLeft = board.doesFit(ShipPlacement(origin, Direction::Left, sc));
+    bool fitsDown = board.doesFit(ShipPlacement(origin, Direction::Down, sc));
+    // don't bother doing the check for if neither work, getRandomOrigin checked it until one or the other did
+    if (fitsLeft && !fitsDown)
+    {
+        return Direction::Left;
+    }
+    else if (!fitsLeft && fitsDown)
+    {
+        return Direction::Down;
+    }
+    else
+    {
+        // it fits both ways, choose one randomly
+        int dirChoice = rand() % 2;
+        if (dirChoice == 1)
+        {
+            return Direction::Left;
+        }
+        else
+        {
+            return Direction::Down;
+        }
+    }
+}
+
 // Returns a random origin for a given ShipClass guaranteed to work in at least one direction
 Cell Player::getRandomOrigin(ShipClass sc)
 {
     // Declare return value
-    Cell ret = {0, ' '};
+    Cell ret = Cell();
 
     do
     {
@@ -165,7 +194,7 @@ ShipClass Player::getShipClass()
             return unassignedShips[0];
         }
 
-        cout << "\n\nWhich ship do you want to add? Select letter: " << shipClassString(unassignedShips) << "> ";
+        cout << "\n\nWhich ship do you want to add? Select letter, or 'R' to place all the rest randomly: " << shipClassString(unassignedShips) << "> ";
 
         cin >> shipTypeInput;
         // it was a character, check if it was an option
@@ -176,13 +205,21 @@ ShipClass Player::getShipClass()
             clearCin();
             continue;
         }
+
+        // upper case it and store it
+        ret = toupper(shipTypeInput[0]);
+
+        // Check if it's r, early return if so
+        if (ret == 'R')
+        {
+            return ret;
+        }
+
         // First, build a std::vector of the char representations of the ships available
         vector<char> unassignedShipLettersVec = {};
         int unassignedShipsLen = unassignedShips.size();
         for (int i = 0; i < unassignedShipsLen; i++)
             unassignedShipLettersVec.push_back(unassignedShips[i].toChar());
-
-        ret = toupper(shipTypeInput[0]);
 
         if (find(unassignedShipLettersVec.begin(), unassignedShipLettersVec.end(), ret) != unassignedShipLettersVec.end())
             // if the input can be found inside the vector of all of them, return it
@@ -235,12 +272,14 @@ void Player::randomlyPlaceShips()
     {
         // always act on unassignedShips[0]
         // placeShip will remove it, so the next time through it will be a new ship
-        //ShipClass currentShipClass = unassignedShips[0];
+        ShipClass currentShipClass = unassignedShips[0];
 
-        // each ship, randomly pick an origin
-        //Cell origin = getRandomOrigin(currentShipClass);
-        // then do the doesFit check, and if necessary randomly choose a direction
-        // no need to be removing ships as we go
+        // each ship, randomly pick a valid origin and direction
+        Cell origin = getRandomOrigin(currentShipClass);
+        Direction d = getRandomDirection(origin, currentShipClass);
+
+        // plop it on the board
+        placeShip(ShipPlacement(origin, d, currentShipClass));
     }
 }
 
@@ -261,7 +300,7 @@ lines Player::toLineStrings()
     // add "Player"  - or "Computer" ? -  header
     lines ret = {};
 
-    // 15 spaces left, 11 right
+    // 15 spaces left, 11 right - TODO this could be way more elegant, based on actual counts
     std::string headerLine = "               Player           ";
 
     ret.push_back(headerLine);
@@ -307,6 +346,14 @@ outer:
 
         // Prompt user for which ship to place
         ShipClass shipChoice = getShipClass();
+        // catch for runRandom
+        if (shipChoice == 'R')
+        {
+            // place the rest of the ships randomly
+            randomlyPlaceShips();
+            // skip to next iteration of loop, which should now fail the check
+            continue;
+        }
         cout << "Placing " << shipChoice.toString() << "." << endl;
 
         // Prompt user for origin

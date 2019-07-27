@@ -1,16 +1,9 @@
 #include "computer.h"
 
-// Automatically place all ships - currently just goes in order
+// Automatically place all ships
 void Computer::runPlacement()
 {
-    // iterate through ships.size()
-    //int shipsSize = unassignedShips.size();
-
-    /*{ // choose a random origin
-            // choose a random direction    }
-            // after each, erase() it
-            //
-            */
+    randomlyPlaceShips();
 }
 
 lines Computer::toLineStrings()
@@ -24,7 +17,7 @@ lines Computer::toLineStrings()
     ret.push_back(headerLine);
     ret.push_back("");
     // insert board line strings
-    lines boardLines = board.toLineStrings(false);
+    lines boardLines = board.toLineStrings(true);
     ret.insert(ret.end(), boardLines.begin(), boardLines.end());
     return ret;
 }

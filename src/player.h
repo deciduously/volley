@@ -12,6 +12,7 @@
 class Player
 {
     Cell getOrigin(ShipClass sc);
+    Direction getRandomDirection(Cell origin, ShipClass sc);
     Cell getRandomOrigin(ShipClass sc);
     ShipClass getShipClass();
     void placeShip(ShipPlacement sp);

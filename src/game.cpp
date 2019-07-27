@@ -18,8 +18,11 @@ void Game::runFiring()
 // Run the placement loop until all unplaced ships are placed
 void Game::runPlacement()
 {
+    std::cout << std::endl
+              << "Stage your battlefield!" << std::endl
+              << std::endl;
     player.runPlacement();
-    computer.runPlacement(); // this will be automated
+    computer.runPlacement();
 }
 
 std::string Game::toStringFiring()
@@ -65,6 +68,9 @@ Game::Game(int boardSize)
 void Game::run()
 {
     runPlacement();
+    std::cout << std::endl
+              << "Guns at the ready!" << std::endl
+              << std::endl;
     gameState = GameState::Firing;
     runFiring();
 }
