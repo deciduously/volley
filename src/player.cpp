@@ -92,6 +92,13 @@ ShipClass Player::getShipClass()
     string shipTypeInput;
     for (;;)
     {
+        // if there's only one left, autoselect it
+        if (unassignedShips.size() == 1)
+        {
+            cout << "One ship left: placing " << unassignedShips[0].toString() << endl;
+            return unassignedShips[0];
+        }
+
         cout << "\n\nWhich ship do you want to add? Select letter: " << shipClassString(unassignedShips) << "> ";
 
         cin >> shipTypeInput;
@@ -137,7 +144,6 @@ cell Player::getOrigin(ShipClass sc)
     for (;;)
     {
         //prompt for input
-        // TODO accept either RowCol or ColRow - trickier because of 10
         string originStr;
         cout << "Origin, as ColRow (e.g \"A1\")> ";
         cin >> originStr;
@@ -146,9 +152,9 @@ cell Player::getOrigin(ShipClass sc)
         // if we fail - it's not an int and a char in either order - loop again
         int row = 0;
         char col = 'Z';
-        if (originStr.size() > 3)
+        if (originStr.size() > 3 || originStr.size() < 2)
         {
-            cout << "Please only enter no more than three characters, a letter column and an integer row" << endl;
+            cout << "Please only enter two - three characters, a letter column and an integer row" << endl;
             clearCin();
             continue;
         }
@@ -187,12 +193,6 @@ cell Player::getOrigin(ShipClass sc)
     }
 }
 
-// Compare two ShipClasses for equality by variant - should likely be a method on ShipClass
-bool matchShipClass(ShipClass sc1, ShipClass sc2)
-{
-    return sc1.variant() == sc2.variant();
-}
-
 // Places a ship
 void Player::placeShip(cell o, ShipClass sc, Direction d)
 {
@@ -206,7 +206,7 @@ void Player::placeShip(cell o, ShipClass sc, Direction d)
     int maxSize = toDelIdx;
     for (int i = 0; i < maxSize; i++)
     {
-        if (matchShipClass(unassignedShips[i], sc))
+        if (unassignedShips[i].eqVariant(sc))
         {
             toDelIdx = i;
             break;
@@ -231,14 +231,12 @@ void Player::runPlacement()
     // <string>
     using std::string;
 
-    // Continually prompt to place ships until there are none left
-    outer:
+// Continually prompt to place ships until there are none left
+outer:
     while (unassignedShips.size() > 0)
     {
         // display board
         cout << toString();
-
-        // TODO - confirm each with a loop - generalize that.
 
         // Prompt user for which ship to place
         ShipClass shipChoice = getShipClass();
@@ -298,7 +296,6 @@ void Player::runPlacement()
                         d = Direction::Down;
                         break;
                     }
-                    
                 }
                 else
                 {
@@ -335,12 +332,14 @@ void Player::runPlacement()
             originStr.append(std::to_string(get<0>(origin)));
 
             // display all three choices
-            cout << "Origin: " << originStr << endl << "Class: " << shipChoice.toString() << " (Length: " << shipChoice.size() << ")" << endl << "Direction: " << directionString << endl << "Confirm? (Y/N)> ";
+            cout << "Origin: " << originStr << endl
+                 << "Class: " << shipChoice.toString() << " (Length: " << shipChoice.size() << ")" << endl
+                 << "Direction: " << directionString << endl
+                 << "Confirm? (Y/N)> ";
             cin >> confirmChoice;
             confirmChoice = toupper(confirmChoice);
             if (confirmChoice != 'Y')
             {
-                // TODO allow to adjust just one.
                 cout << "Starting over!" << endl;
                 goto outer;
             }

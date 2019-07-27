@@ -17,7 +17,6 @@ Board::Board(int boardSize)
     ships = {};
 }
 
-// TODO use sprintf for all of it instead of homebrew helpers?
 // Returns a vector of strings, one for each line of this board
 lines Board::toLineStrings()
 {
@@ -74,7 +73,7 @@ lines Board::toLineStrings()
             else
             {
                 cell currentCell = {row, col + 64};
-                pushCharCell(rowString, getCharAt(currentCell)); // TODO get actual character based on ships
+                pushCharCell(rowString, getCharAt(currentCell));
             }
         }
         ret.push_back(rowString);
@@ -96,7 +95,7 @@ char Board::getCharAt(cell c)
     int row;
     char col;
     std::tie(row, col) = c;
-    if (row < 1 || row > size || col < 'A' || col > 'J') // TODO dont hardcode col bound
+    if (row < 1 || row > size || col < 'A' || col > ('A' + size))
     {
         return 'E';
     }
@@ -138,8 +137,6 @@ char Board::getCharAt(cell c)
                 break;
             }
         }
-
-        //TODO then, see if any are hits or misses - those overlay ships
     }
     return ret;
 }

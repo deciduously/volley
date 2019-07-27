@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "game.h"
 
 Game::Game(int boardSize)
@@ -38,13 +40,17 @@ std::string Game::toStringFiring()
 // Run the fire loop until someone wins
 void Game::runFiring()
 {
+    using std::cout;
+    using std::endl;
+
+    cout << toStringFiring() << endl;
 }
 
 // Run the placement loop until all unplaced ships are placed
 void Game::runPlacement()
 {
     player.runPlacement();
-    //computer.runPlacement(); // this will be automated
+    computer.runPlacement(); // this will be automated
 }
 
 // PUBLIC

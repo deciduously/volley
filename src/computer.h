@@ -14,6 +14,7 @@ class Computer : public Player
 
 public:
     Computer(int boardSize = BOARD_SIZE) : Player(boardSize){};
+    void runPlacement();
 };
 
 #endif

@@ -131,3 +131,9 @@ ShipClassType ShipClass::variant()
 {
     return type;
 }
+
+// Check if this ShipClass has the same variant as other ShipClass
+bool ShipClass::eqVariant(ShipClass other)
+{
+    return type == other.variant();
+}

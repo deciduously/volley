@@ -15,6 +15,8 @@ class Player
     cell getOrigin(ShipClass sc);
     ShipClass getShipClass();
     void placeShip(cell o, ShipClass sc, Direction d);
+
+protected:
     std::vector<ShipClass> unassignedShips;
 
 public:

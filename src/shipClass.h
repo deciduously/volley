@@ -29,6 +29,7 @@ public:
     ShipClass(char c);
 
     // Methods
+    bool eqVariant(ShipClass other);
     char toChar();
     int size();
     ShipClassType variant();
