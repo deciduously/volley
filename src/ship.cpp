@@ -1,24 +1,26 @@
 #include "ship.h"
 
-//
-// PUBLIC METHODS
-//
-
-// Ship constructor
-Ship::Ship(Cell o, ShipClass sc, Direction d)
+// ShipPlacement default constructor
+ShipPlacement::ShipPlacement()
 {
-    // set members
-    origin = o;
+    cell = Cell();
+    direction = Direction::Left;
+    shipClass = ShipClass();
+}
+
+// Should always use explicit constructor
+ShipPlacement::ShipPlacement(Cell c, Direction d, ShipClass sc)
+{
+    cell = c;
     direction = d;
     shipClass = sc;
-    hits = shipClass.size();
 }
 
 // Return a vector containing each cell this ship occupies
-std::vector<Cell> Ship::containedCells()
+std::vector<Cell> ShipPlacement::containedCells()
 {
     //initalise return vector
-    std::vector<Cell> ret = {origin};
+    std::vector<Cell> ret = {cell};
 
     // Add the rest of the ship
     for (int i = 1; i < shipClass.size(); i++)
@@ -27,10 +29,10 @@ std::vector<Cell> Ship::containedCells()
         {
         case Direction::Left:
             // de-letter it
-            ret.push_back(Cell(origin.row, origin.col + i - 64));
+            ret.push_back(Cell(cell.row, cell.col + i - 64));
             break;
         case Direction::Down:
-            ret.push_back(Cell(origin.row + i, origin.col));
+            ret.push_back(Cell(cell.row + i, cell.col));
             break;
         }
     }
@@ -39,8 +41,26 @@ std::vector<Cell> Ship::containedCells()
     return ret;
 }
 
+//
+// PUBLIC METHODS
+//
+
+// Ship constructor
+Ship::Ship(ShipPlacement sp)
+{
+    // set members
+    placement = sp;
+    hits = placement.shipClass.size();
+}
+
+// Getter for contained cells, for convenience
+std::vector<Cell> Ship::containedCells()
+{
+    return placement.containedCells();
+}
+
 // Getter for ShipClass
 ShipClass Ship::getShipClass()
 {
-    return shipClass;
+    return placement.shipClass;
 }

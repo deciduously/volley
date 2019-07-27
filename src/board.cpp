@@ -18,12 +18,11 @@ Board::Board(int boardSize)
 }
 
 // Check if a shipPlacement would fit on the board before creating a Ship
-bool Board::doesFit(Cell o, ShipClass sc, Direction d)
+bool Board::doesFit(ShipPlacement sp)
 {
     // check each cell the ship would occupy
     // build the hypthetical ship and store its contained cells
-    Ship testShip = Ship(o, sc, d);
-    std::vector<Cell> cells = testShip.containedCells();
+    std::vector<Cell> cells = sp.containedCells();
     int cellsSize = cells.size();
     for (int i = 0; i < cellsSize; i++)
     {

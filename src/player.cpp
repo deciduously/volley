@@ -132,7 +132,7 @@ Cell Player::getRandomOrigin(ShipClass sc)
         ret = Cell(row, colNum);
 
         // move on if it fits either way - placement will handle choosing a direction
-    } while (!board.doesFit(ret, sc, Direction::Left) && !board.doesFit(ret, sc, Direction::Down));
+    } while (!board.doesFit(ShipPlacement(ret, Direction::Left, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
 
     return ret;
 }
@@ -197,19 +197,19 @@ ShipClass Player::getShipClass()
 }
 
 // Places a ship
-void Player::placeShip(Cell o, ShipClass sc, Direction d)
+void Player::placeShip(ShipPlacement sp)
 {
     // This function does not validate whether it can first!
     // The input function should have done that.
     // Push it to the board
-    board.pushShip(Ship(o, sc, d));
+    board.pushShip(Ship(sp));
     // Remove it from unassignedShips
     // find the idx
     int toDelIdx = unassignedShips.size();
     int maxSize = toDelIdx;
     for (int i = 0; i < maxSize; i++)
     {
-        if (unassignedShips[i] == sc)
+        if (unassignedShips[i] == sp.shipClass)
         {
             toDelIdx = i;
             break;
@@ -319,8 +319,8 @@ outer:
         // Check if the ship fits either way
         // If it fits one way or the other, set the direction automatically
         // If both work, prompt to choose
-        bool fitsLeft = board.doesFit(origin, shipChoice, Direction::Left);
-        bool fitsDown = board.doesFit(origin, shipChoice, Direction::Down);
+        bool fitsLeft = board.doesFit(ShipPlacement(origin, Direction::Left, shipChoice));
+        bool fitsDown = board.doesFit(ShipPlacement(origin, Direction::Down, shipChoice));
         if (!fitsLeft && !fitsDown)
         {
             // Can't possibly place with that origin
@@ -423,6 +423,6 @@ outer:
 
         // Otherwise place ship
         cout << "Placing ship..." << endl;
-        placeShip(origin, shipChoice, d);
+        placeShip(ShipPlacement(origin, d, shipChoice));
     }
 }

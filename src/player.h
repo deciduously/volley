@@ -14,7 +14,7 @@ class Player
     Cell getOrigin(ShipClass sc);
     Cell getRandomOrigin(ShipClass sc);
     ShipClass getShipClass();
-    void placeShip(Cell o, ShipClass sc, Direction d);
+    void placeShip(ShipPlacement sp);
 
 protected:
     Board board;
