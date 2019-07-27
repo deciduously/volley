@@ -20,19 +20,19 @@ enum ShipClassType
 
 class ShipClass
 {
-    ShipClassType type;
+    ShipClassType sct;
 
 public:
     // Constructors
     ShipClass();
-    ShipClass(ShipClassType sc);
     ShipClass(char c);
+    ShipClass(ShipClassType sc);
 
     // Methods
     bool eqVariant(ShipClass other);
-    char toChar();
     int size();
-    ShipClassType variant();
+    char toChar();
     std::string toString();
+    ShipClassType variant();
 };
 #endif

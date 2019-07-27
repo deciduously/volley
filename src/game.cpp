@@ -2,11 +2,24 @@
 
 #include "game.h"
 
-Game::Game(int boardSize)
+//
+// PRIVATE METHODS
+//
+
+// Run the fire loop until someone wins
+void Game::runFiring()
 {
-    Game::player = Player(boardSize);
-    Game::computer = Computer(boardSize);
-    gameState = GameState::Placement;
+    using std::cout;
+    using std::endl;
+
+    cout << toStringFiring() << endl;
+}
+
+// Run the placement loop until all unplaced ships are placed
+void Game::runPlacement()
+{
+    player.runPlacement();
+    computer.runPlacement(); // this will be automated
 }
 
 std::string Game::toStringFiring()
@@ -37,23 +50,16 @@ std::string Game::toStringFiring()
     return ret;
 }
 
-// Run the fire loop until someone wins
-void Game::runFiring()
+//
+// PUBLIC METHODS
+//
+
+Game::Game(int boardSize)
 {
-    using std::cout;
-    using std::endl;
-
-    cout << toStringFiring() << endl;
+    player = Player(boardSize);
+    computer = Computer(boardSize);
+    gameState = GameState::Placement;
 }
-
-// Run the placement loop until all unplaced ships are placed
-void Game::runPlacement()
-{
-    player.runPlacement();
-    computer.runPlacement(); // this will be automated
-}
-
-// PUBLIC
 
 // Run the game
 void Game::run()

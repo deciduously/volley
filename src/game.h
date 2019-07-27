@@ -13,9 +13,9 @@ class Game
     Player player;
     Computer computer;
     GameState gameState;
-    std::string toStringFiring();
     void runFiring();
     void runPlacement();
+    std::string toStringFiring();
 
 public:
     Game(int boardSize = BOARD_SIZE);

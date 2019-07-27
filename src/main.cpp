@@ -18,9 +18,13 @@ int main()
     using std::right;
     using std::setw;
 
+    // Init random seed
+    srand(time(0));
+
     // Instantiate game object
     Game game = Game(BOARD_SIZE);
 
+    // Display header
     int headerWidth = 25;
     cout << endl
          << setw(headerWidth) << right << "Battleship!!!" << endl
@@ -29,5 +33,6 @@ int main()
     // run game loop
     game.run();
 
+    // Return success
     return 0;
 }

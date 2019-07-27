@@ -19,11 +19,12 @@ lines Computer::toLineStrings()
     lines ret = {};
 
     // 15 spaces in
-    std::string headerLine = "               Computer\n";
+    std::string headerLine = "               Computer";
 
     ret.push_back(headerLine);
+    ret.push_back("");
     // insert board line strings
-    lines boardLines = board.toLineStrings();
+    lines boardLines = board.toLineStrings(false);
     ret.insert(ret.end(), boardLines.begin(), boardLines.end());
     return ret;
 }

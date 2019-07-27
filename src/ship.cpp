@@ -1,5 +1,9 @@
 #include "ship.h"
 
+//
+// PUBLIC METHODS
+//
+
 // Ship constructor
 Ship::Ship(cell o, ShipClass sc, Direction d)
 {

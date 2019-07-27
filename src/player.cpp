@@ -4,6 +4,10 @@
 
 #include "player.h"
 
+//
+// HELPER FUNCTIONS
+//
+
 // Helper function to clear out cin to loop for input again
 void clearCin()
 {
@@ -44,100 +48,9 @@ std::string shipClassString(std::vector<ShipClass> scs)
     return ret;
 }
 
-// PUBLIC
-
-Player::Player(int boardSize)
-{
-    board = Board(boardSize);
-    unassignedShips = {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
-}
-lines Player::toLineStrings()
-{
-    // add "Player"  - or "Computer" ? -  header
-    lines ret = {};
-
-    // 15 spaces in
-    std::string headerLine = "               Player\n";
-
-    ret.push_back(headerLine);
-    // insert board line strings
-    lines boardLines = board.toLineStrings();
-    ret.insert(ret.end(), boardLines.begin(), boardLines.end());
-    return ret;
-}
-
-std::string Player::toString()
-{
-    // put together a single string from the contents of Player::toLineStrings()
-    std::string ret = "";
-    lines lineStrings = toLineStrings();
-    int lineStringsSize = lineStrings.size();
-    for (int i = 0; i < lineStringsSize; i++)
-    {
-        ret.append(lineStrings[i]);
-        ret.push_back('\n');
-    }
-    return ret;
-}
-
-// Helper function to get a single ship input
-ShipClass Player::getShipClass()
-{
-    // <iostream>
-    using std::cin;
-    using std::cout;
-    using std::endl;
-
-    // <algorithm>
-    using std::find;
-
-    // <string> (via util.h)
-    using std::string;
-
-    // <vector> (via util.h)
-    using std::vector;
-
-    char ret = ' ';
-    string shipTypeInput;
-    for (;;)
-    {
-        // if there's only one left, autoselect it
-        if (unassignedShips.size() == 1)
-        {
-            cout << "One ship left: placing " << unassignedShips[0].toString() << endl;
-            return unassignedShips[0];
-        }
-
-        cout << "\n\nWhich ship do you want to add? Select letter: " << shipClassString(unassignedShips) << "> ";
-
-        cin >> shipTypeInput;
-        // it was a character, check if it was an option
-        // if it was longer than one character, it's invalid
-        if (shipTypeInput.size() > 1)
-        {
-            std::cout << "Please just enter a single letter";
-            clearCin();
-            continue;
-        }
-        // First, build a std::vector of the char representations of the ships available
-        vector<char> unassignedShipLettersVec = {};
-        int unassignedShipsLen = unassignedShips.size();
-        for (int i = 0; i < unassignedShipsLen; i++)
-            unassignedShipLettersVec.push_back(unassignedShips[i].toChar());
-
-        ret = toupper(shipTypeInput[0]);
-
-        if (find(unassignedShipLettersVec.begin(), unassignedShipLettersVec.end(), ret) != unassignedShipLettersVec.end())
-            // if the input can be found inside the vector of all of them, return it
-            return ShipClass(ret);
-        else
-        // They picked something not in the list, try again
-        {
-            cout << "Not an available ship!";
-            clearCin();
-        }
-    }
-}
+//
+// PRIVATE METHODS
+//
 
 // Helper method to prompt user for origin
 cell Player::getOrigin(ShipClass sc)
@@ -202,6 +115,86 @@ cell Player::getOrigin(ShipClass sc)
     }
 }
 
+// Returns a random origin for a given ShipClass guaranteed to work in at least one direction
+cell Player::getRandomOrigin(ShipClass sc)
+{
+    // Declare return value
+    cell ret = {0, ' '};
+
+    do
+    {
+        // get two random numbers between 1 and 10
+        int row = rand() % 10 + 1;
+        int colNum = rand() % 10 + 1;
+
+        // store as a cell
+        ret = {row, colNum + 64};
+
+        // move on if it fits either way - placement will handle choosing a direction
+    } while (!board.doesFit(ret, sc.variant(), Direction::Left) && !board.doesFit(ret, sc.variant(), Direction::Down));
+
+    return ret;
+}
+
+// Helper method to prompt user a single ship input
+ShipClass Player::getShipClass()
+{
+    // <iostream>
+    using std::cin;
+    using std::cout;
+    using std::endl;
+
+    // <algorithm>
+    using std::find;
+
+    // <string> (via util.h)
+    using std::string;
+
+    // <vector> (via util.h)
+    using std::vector;
+
+    char ret = ' ';
+    string shipTypeInput;
+    for (;;)
+    {
+        // if there's only one left, autoselect it
+        if (unassignedShips.size() == 1)
+        {
+            cout << "One ship left: placing " << unassignedShips[0].toString() << endl;
+            return unassignedShips[0];
+        }
+
+        cout << "\n\nWhich ship do you want to add? Select letter: " << shipClassString(unassignedShips) << "> ";
+
+        cin >> shipTypeInput;
+        // it was a character, check if it was an option
+        // if it was longer than one character, it's invalid
+        if (shipTypeInput.size() > 1)
+        {
+            std::cout << "Please just enter a single letter";
+            clearCin();
+            continue;
+        }
+        // First, build a std::vector of the char representations of the ships available
+        vector<char> unassignedShipLettersVec = {};
+        int unassignedShipsLen = unassignedShips.size();
+        for (int i = 0; i < unassignedShipsLen; i++)
+            unassignedShipLettersVec.push_back(unassignedShips[i].toChar());
+
+        ret = toupper(shipTypeInput[0]);
+
+        if (find(unassignedShipLettersVec.begin(), unassignedShipLettersVec.end(), ret) != unassignedShipLettersVec.end())
+            // if the input can be found inside the vector of all of them, return it
+            return ShipClass(ret);
+        else
+        // They picked something not in the list, try again
+        {
+            cout << "Not an available ship!";
+            clearCin();
+        }
+    }
+}
+
 // Places a ship
 void Player::placeShip(cell o, ShipClass sc, Direction d)
 {
@@ -228,6 +221,72 @@ void Player::placeShip(cell o, ShipClass sc, Direction d)
     }
 }
 
+//
+// PROTECTED METHODS
+//
+
+// Randomly choose placements for all remaining unassigned ships
+// Computer always uses this, player is given the option at each ship placement to do for the rest
+void Player::randomlyPlaceShips()
+{
+    int shipsSize = unassignedShips.size();
+    for (int i = 0; i < shipsSize; i++)
+    {
+        // always act on unassignedShips[0]
+        // placeShip will remove it, so the next time through it will be a new ship
+        ShipClass currentShipClass = unassignedShips[0];
+
+        // each ship, randomly pick an origin
+        cell origin = getRandomOrigin(currentShipClass);
+        // then do the doesFit check, and if necessary randomly choose a direction
+        // no need to be removing ships as we go
+    }
+}
+
+//
+// PUBLIC METHODS
+//
+
+// Constructor
+Player::Player(int boardSize)
+{
+    board = Board(boardSize);
+    unassignedShips = {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
+}
+
+// Return the board output as a vector of strings, one per line
+lines Player::toLineStrings()
+{
+    // add "Player"  - or "Computer" ? -  header
+    lines ret = {};
+
+    // 15 spaces left, 11 right
+    std::string headerLine = "               Player           ";
+
+    ret.push_back(headerLine);
+    ret.push_back("");
+    // insert board line strings
+    lines boardLines = board.toLineStrings(true);
+    ret.insert(ret.end(), boardLines.begin(), boardLines.end());
+    return ret;
+}
+
+// Return the board output as a single multiline string
+std::string Player::toString()
+{
+    // put together a single string from the contents of Player::toLineStrings()
+    std::string ret = "";
+    lines lineStrings = toLineStrings();
+    int lineStringsSize = lineStrings.size();
+    for (int i = 0; i < lineStringsSize; i++)
+    {
+        ret.append(lineStrings[i]);
+        ret.push_back('\n');
+    }
+    return ret;
+}
+
+// Run the placement loop to prompt user for ship locations
 void Player::runPlacement()
 {
     // <iostream>

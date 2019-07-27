@@ -15,10 +15,10 @@ class Board
 
 public:
     Board(int boardSize = BOARD_SIZE);
-    void pushShip(Ship s);
     bool doesFit(cell o, ShipClassType sct, Direction d);
-    char getCharAt(cell c);
-    lines toLineStrings();
+    char getCharAt(cell c, bool showShips);
+    void pushShip(Ship s);
+    lines toLineStrings(bool showShips);
 };
 
 #endif

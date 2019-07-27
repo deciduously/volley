@@ -12,12 +12,14 @@
 class Player
 {
     cell getOrigin(ShipClass sc);
+    cell getRandomOrigin(ShipClass sc);
     ShipClass getShipClass();
     void placeShip(cell o, ShipClass sc, Direction d);
 
 protected:
     Board board;
     std::vector<ShipClass> unassignedShips;
+    void randomlyPlaceShips();
 
 public:
     Player(int boardSize = BOARD_SIZE);
