@@ -11,12 +11,12 @@
 
 class Player
 {
-    Board board;
     cell getOrigin(ShipClass sc);
     ShipClass getShipClass();
     void placeShip(cell o, ShipClass sc, Direction d);
 
 protected:
+    Board board;
     std::vector<ShipClass> unassignedShips;
 
 public:

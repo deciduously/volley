@@ -12,3 +12,18 @@ void Computer::runPlacement()
             //
             */
 }
+
+lines Computer::toLineStrings()
+{
+    // add "Player"  - or "Computer" ? -  header
+    lines ret = {};
+
+    // 15 spaces in
+    std::string headerLine = "               Computer\n";
+
+    ret.push_back(headerLine);
+    // insert board line strings
+    lines boardLines = board.toLineStrings();
+    ret.insert(ret.end(), boardLines.begin(), boardLines.end());
+    return ret;
+}
