@@ -5,7 +5,7 @@
 //
 
 // Ship constructor
-Ship::Ship(cell o, ShipClass sc, Direction d)
+Ship::Ship(Cell o, ShipClass sc, Direction d)
 {
     // set members
     origin = o;
@@ -15,15 +15,10 @@ Ship::Ship(cell o, ShipClass sc, Direction d)
 }
 
 // Return a vector containing each cell this ship occupies
-std::vector<cell> Ship::containedCells()
+std::vector<Cell> Ship::containedCells()
 {
-    //unpack origin
-    int row;
-    char col;
-    std::tie(row, col) = origin;
-
     //initalise return vector
-    std::vector<cell> ret = {origin};
+    std::vector<Cell> ret = {origin};
 
     // Add the rest of the ship
     for (int i = 1; i < shipClass.size(); i++)
@@ -31,10 +26,11 @@ std::vector<cell> Ship::containedCells()
         switch (direction)
         {
         case Direction::Left:
-            ret.push_back({row, col + i});
+            // de-letter it
+            ret.push_back(Cell(origin.row, origin.col + i - 64));
             break;
         case Direction::Down:
-            ret.push_back({row + i, col});
+            ret.push_back(Cell(origin.row + i, origin.col));
             break;
         }
     }

@@ -53,7 +53,7 @@ std::string shipClassString(std::vector<ShipClass> scs)
 //
 
 // Helper method to prompt user for origin
-cell Player::getOrigin(ShipClass sc)
+Cell Player::getOrigin(ShipClass sc)
 {
     using std::cin;
     using std::cout;
@@ -111,24 +111,25 @@ cell Player::getOrigin(ShipClass sc)
         // Return the result as a literal if it fits, or loop again
         // TODO add the doesFit check here.
         sc = ShipClass(ShipClassType::AircraftCarrier); // remove!!
-        return {row, col};
+        return Cell(row, col);
     }
 }
 
 // Returns a random origin for a given ShipClass guaranteed to work in at least one direction
-cell Player::getRandomOrigin(ShipClass sc)
+Cell Player::getRandomOrigin(ShipClass sc)
 {
     // Declare return value
-    cell ret = {0, ' '};
+    Cell ret = {0, ' '};
 
     do
     {
-        // get two random numbers between 1 and 10
-        int row = rand() % 10 + 1;
-        int colNum = rand() % 10 + 1;
+        // get two random numbers between 1 and board size
+        int max = board.size();
+        int row = rand() % max + 1;
+        int colNum = rand() % max + 1;
 
         // store as a cell
-        ret = {row, colNum + 64};
+        ret = Cell(row, colNum);
 
         // move on if it fits either way - placement will handle choosing a direction
     } while (!board.doesFit(ret, sc.variant(), Direction::Left) && !board.doesFit(ret, sc.variant(), Direction::Down));
@@ -196,7 +197,7 @@ ShipClass Player::getShipClass()
 }
 
 // Places a ship
-void Player::placeShip(cell o, ShipClass sc, Direction d)
+void Player::placeShip(Cell o, ShipClass sc, Direction d)
 {
     // This function does not validate whether it can first!
     // The input function should have done that.
@@ -234,10 +235,10 @@ void Player::randomlyPlaceShips()
     {
         // always act on unassignedShips[0]
         // placeShip will remove it, so the next time through it will be a new ship
-        ShipClass currentShipClass = unassignedShips[0];
+        //ShipClass currentShipClass = unassignedShips[0];
 
         // each ship, randomly pick an origin
-        cell origin = getRandomOrigin(currentShipClass);
+        //Cell origin = getRandomOrigin(currentShipClass);
         // then do the doesFit check, and if necessary randomly choose a direction
         // no need to be removing ships as we go
     }
@@ -293,8 +294,6 @@ void Player::runPlacement()
     using std::cin;
     using std::cout;
     using std::endl;
-    using std::get;
-    using std::make_tuple;
 
     // <string>
     using std::string;
@@ -311,8 +310,8 @@ outer:
         cout << "Placing " << shipChoice.toString() << "." << endl;
 
         // Prompt user for origin
-        cell origin = getOrigin(shipChoice);
-        cout << "Row: " << get<0>(origin) << " Col: " << get<1>(origin) << endl;
+        Cell origin = getOrigin(shipChoice);
+        cout << "Row: " << origin.row << " Col: " << origin.col << endl;
 
         // get direction - default to Left arbitrarily
         Direction d = Direction::Left;
@@ -396,8 +395,8 @@ outer:
 
             // build origin string
             std::string originStr = "";
-            originStr.push_back(get<1>(origin));
-            originStr.append(std::to_string(get<0>(origin)));
+            originStr.push_back(origin.col);
+            originStr.append(std::to_string(origin.row));
 
             // display all three choices
             cout << "Origin: " << originStr << endl

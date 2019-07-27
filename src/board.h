@@ -10,14 +10,15 @@
 
 class Board
 {
-    int size;
+    int dimension;
     std::vector<Ship> ships;
 
 public:
     Board(int boardSize = BOARD_SIZE);
-    bool doesFit(cell o, ShipClassType sct, Direction d);
-    char getCharAt(cell c, bool showShips);
+    bool doesFit(Cell o, ShipClassType sct, Direction d);
+    char getCharAt(Cell c, bool showShips);
     void pushShip(Ship s);
+    int size();
     lines toLineStrings(bool showShips);
 };
 

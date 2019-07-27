@@ -7,18 +7,19 @@
 #define __SHIP_H_INCLUDED
 
 #include "shipClass.h"
-#include "util.h"
+
+// TODO typedef struct shipPlacement
 
 class Ship
 {
-    cell origin;
+    Cell origin;
     Direction direction;
     int hits;
     ShipClass shipClass;
 
 public:
-    Ship(cell o, ShipClass sc, Direction d);
-    std::vector<cell> containedCells();
+    Ship(Cell o, ShipClass sc, Direction d);
+    std::vector<Cell> containedCells();
     ShipClass getShipClass();
 };
 #endif

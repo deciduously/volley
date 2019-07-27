@@ -13,17 +13,17 @@ void pushCharCell(std::string &s, char contents)
 // Board constructor
 Board::Board(int boardSize)
 {
-    size = boardSize; // All boards are 10, hardcoded in "game.h" (A-J)
+    dimension = boardSize; // All boards are 10, hardcoded in "game.h" (A-J)
     ships = {};
 }
 
 // Check if a shipPlacement would fit on the board before creating a Ship
-bool Board::doesFit(cell o, ShipClassType sct, Direction d)
+bool Board::doesFit(Cell o, ShipClassType sct, Direction d)
 {
     // check each cell the ship would occupy
     // build the hypthetical ship and store its contained cells
     Ship testShip = Ship(o, ShipClass(sct), d);
-    std::vector<cell> cells = testShip.containedCells();
+    std::vector<Cell> cells = testShip.containedCells();
     int cellsSize = cells.size();
     for (int i = 0; i < cellsSize; i++)
     {
@@ -37,34 +37,32 @@ bool Board::doesFit(cell o, ShipClassType sct, Direction d)
 
 // Returns the corresponding cell character
 // Pass true to show ship locations, false to only show hits/misses
-char Board::getCharAt(cell c, bool showShips)
+char Board::getCharAt(Cell c, bool showShips)
 {
     using std::find;
     using std::vector;
 
-    // first if row or cal out of bounds, return 'E'
-    // unpack cell
-    int row;
-    char col;
-    std::tie(row, col) = c;
-    if (row < 1 || row > size || col < 'A' || col > ('A' + size))
+    // if row or col out of bounds, return 'E'
+    if (c.row < 1 || c.row > dimension || c.col < 'A' || c.col > ('A' + dimension))
     {
         return 'E';
     }
 
     // init return value to default (empty)
     char ret = '.';
-    int shipsSize = ships.size();
 
-    // loop through ships
-    for (int i = 0; i < shipsSize; i++)
+    // If we're displaying the ships, run that check
+    if (showShips)
     {
-        Ship ship = ships[i];
-        // each ship, loop through the contained cells
-        vector<cell> cells = ship.containedCells();
+        int shipsSize = ships.size();
 
-        if (showShips)
+        // loop through ships
+        for (int i = 0; i < shipsSize; i++)
         {
+            Ship ship = ships[i];
+            // each ship, loop through the contained cells
+            vector<Cell> cells = ship.containedCells();
+
             // if any of them are found in cells, set ret to that ship character
             // runPlacement should have avoided any overlaps
             if (find(cells.begin(), cells.end(), c) != cells.end())
@@ -102,6 +100,12 @@ void Board::pushShip(Ship s)
     ships.push_back(s);
 }
 
+// Getter for board dimension
+int Board::size()
+{
+    return dimension;
+}
+
 // Returns a vector of strings, one for each line of this board
 // pass true to show ship locations, false to only show hits/misses
 lines Board::toLineStrings(bool showShips)
@@ -114,7 +118,7 @@ lines Board::toLineStrings(bool showShips)
 
     // Write the header column labels
     string headerLine = "";
-    for (int i = 0; i <= size; i++)
+    for (int i = 0; i <= dimension; i++)
     {
         // first one should be blank
         if (i == 0)
@@ -128,10 +132,10 @@ lines Board::toLineStrings(bool showShips)
     ret.push_back("");
 
     // then, write the grid
-    for (int row = 1; row <= size; row++)
+    for (int row = 1; row <= dimension; row++)
     {
         string rowString = "";
-        for (int col = 0; col <= size; col++)
+        for (int col = 0; col <= dimension; col++)
         {
             if (col == 0)
             {
@@ -158,8 +162,8 @@ lines Board::toLineStrings(bool showShips)
             }
             else
             {
-                cell currentCell = {row, col + 64};
-                pushCharCell(rowString, getCharAt(currentCell, showShips));
+                // All other cells get looked up on the board
+                pushCharCell(rowString, getCharAt(Cell(row, col), showShips));
             }
         }
         ret.push_back(rowString);

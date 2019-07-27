@@ -32,7 +32,19 @@ enum GameState
 // string vector alias
 typedef std::vector<std::string> lines;
 
-// origin tuple alias {row, col}
-typedef std::tuple<int, char> cell;
+// A single cell on the board
+typedef struct Cell
+{
+    int row;
+    char col;
+    // Default constructor
+    Cell();
+    //Constructor from two ints
+    Cell(int r, int c);
+    // Constructor from an int and a col
+    Cell(int r, char c);
+    // == overload
+    bool operator==(const Cell &other);
+} Cell;
 
 #endif

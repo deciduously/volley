@@ -11,10 +11,10 @@
 
 class Player
 {
-    cell getOrigin(ShipClass sc);
-    cell getRandomOrigin(ShipClass sc);
+    Cell getOrigin(ShipClass sc);
+    Cell getRandomOrigin(ShipClass sc);
     ShipClass getShipClass();
-    void placeShip(cell o, ShipClass sc, Direction d);
+    void placeShip(Cell o, ShipClass sc, Direction d);
 
 protected:
     Board board;
