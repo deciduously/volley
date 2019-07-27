@@ -15,7 +15,7 @@ class Board
 
 public:
     Board(int boardSize = BOARD_SIZE);
-    bool doesFit(Cell o, ShipClassType sct, Direction d);
+    bool doesFit(Cell o, ShipClass sc, Direction d);
     char getCharAt(Cell c, bool showShips);
     void pushShip(Ship s);
     int size();

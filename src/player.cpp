@@ -132,7 +132,7 @@ Cell Player::getRandomOrigin(ShipClass sc)
         ret = Cell(row, colNum);
 
         // move on if it fits either way - placement will handle choosing a direction
-    } while (!board.doesFit(ret, sc.variant(), Direction::Left) && !board.doesFit(ret, sc.variant(), Direction::Down));
+    } while (!board.doesFit(ret, sc, Direction::Left) && !board.doesFit(ret, sc, Direction::Down));
 
     return ret;
 }
@@ -209,7 +209,7 @@ void Player::placeShip(Cell o, ShipClass sc, Direction d)
     int maxSize = toDelIdx;
     for (int i = 0; i < maxSize; i++)
     {
-        if (unassignedShips[i].eqVariant(sc))
+        if (unassignedShips[i] == sc)
         {
             toDelIdx = i;
             break;
@@ -319,8 +319,8 @@ outer:
         // Check if the ship fits either way
         // If it fits one way or the other, set the direction automatically
         // If both work, prompt to choose
-        bool fitsLeft = board.doesFit(origin, shipChoice.variant(), Direction::Left);
-        bool fitsDown = board.doesFit(origin, shipChoice.variant(), Direction::Down);
+        bool fitsLeft = board.doesFit(origin, shipChoice, Direction::Left);
+        bool fitsDown = board.doesFit(origin, shipChoice, Direction::Down);
         if (!fitsLeft && !fitsDown)
         {
             // Can't possibly place with that origin

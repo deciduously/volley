@@ -6,7 +6,7 @@
 #ifndef __SHIP_H_INCLUDED
 #define __SHIP_H_INCLUDED
 
-#include "shipClass.h"
+#include "util.h"
 
 // TODO typedef struct shipPlacement
 

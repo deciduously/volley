@@ -18,11 +18,11 @@ Board::Board(int boardSize)
 }
 
 // Check if a shipPlacement would fit on the board before creating a Ship
-bool Board::doesFit(Cell o, ShipClassType sct, Direction d)
+bool Board::doesFit(Cell o, ShipClass sc, Direction d)
 {
     // check each cell the ship would occupy
     // build the hypthetical ship and store its contained cells
-    Ship testShip = Ship(o, ShipClass(sct), d);
+    Ship testShip = Ship(o, sc, d);
     std::vector<Cell> cells = testShip.containedCells();
     int cellsSize = cells.size();
     for (int i = 0; i < cellsSize; i++)
@@ -67,7 +67,7 @@ char Board::getCharAt(Cell c, bool showShips)
             // runPlacement should have avoided any overlaps
             if (find(cells.begin(), cells.end(), c) != cells.end())
             {
-                switch (ship.getShipClass().variant())
+                switch (ship.getShipClass().sct)
                 {
                 case ShipClassType::AircraftCarrier:
                     ret = 'A';

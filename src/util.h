@@ -10,8 +10,6 @@
 #include <tuple>
 #include <vector>
 
-#include "shipClass.h"
-
 // Board size is fixed
 const int BOARD_SIZE = 10;
 
@@ -46,5 +44,34 @@ typedef struct Cell
     // == overload
     bool operator==(const Cell &other);
 } Cell;
+
+// ShipClass
+
+enum ShipClassType
+{
+    AircraftCarrier,
+    Battleship,
+    Cruiser,
+    Destroyer,
+    UBoat,
+    Unknown
+};
+
+typedef struct ShipClass
+{
+    ShipClassType sct;
+    // Constructors
+    ShipClass();
+    ShipClass(char c);
+    ShipClass(ShipClassType sc);
+
+    // Overload
+    bool operator==(const ShipClass &other);
+
+    // Getters
+    int size();
+    char toChar();
+    std::string toString();
+} ShipClass;
 
 #endif
