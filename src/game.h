@@ -13,6 +13,8 @@ class Game
     Player player;
     Computer computer;
     GameState gameState;
+    Cell getRandomTarget(Player opponent);
+    Cell promptTarget();
     void runFiring();
     void runPlacement();
     std::string toStringFiring();
@@ -20,5 +22,6 @@ class Game
 public:
     Game(int boardSize = BOARD_SIZE);
     void run();
+    int size();
 };
 #endif

@@ -1,4 +1,15 @@
+#include <iostream>
+#include <limits>
+
 #include "util.h"
+
+// Helper function to clear out cin to loop for input again
+void clearCin()
+{
+    std::cin.clear();
+    // ignore rest of current line, up to newline
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 
 //
 // Cell

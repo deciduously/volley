@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 
 #include "game.h"
@@ -6,16 +7,45 @@
 // PRIVATE METHODS
 //
 
+// Pick a random target avoiding a specific board's recorded hits and misses
+Cell Game::getRandomTarget(Player opponent)
+{
+    Cell ret = Cell();
+    std::vector<Cell> cellsToAvoid = opponent.getAllShots();
+    do
+    { // Get a random origin
+        // get two random numbers between 1 and board size
+        int max = size();
+        int row = rand() % max + 1;
+        int colNum = rand() % max + 1;
+
+        // store as a cell
+        ret = Cell(row, colNum);
+        // Check if the opponent's board contains this cell
+    } while (std::find(cellsToAvoid.begin(), cellsToAvoid.end(), ret) != cellsToAvoid.end());
+
+    return ret;
+}
+
+// Prompt the user for a target
+Cell Game::promptTarget()
+{
+    return player.getBoard().promptCell("Enter your target, or 'R' to pick a random one");
+}
+
 // Run the fire loop until someone wins
 void Game::runFiring()
 {
     using std::cout;
     using std::endl;
 
+    cout << endl
+         << "Guns at the ready!" << endl
+         << endl;
     cout << toStringFiring() << endl;
 }
 
-// Run the placement loop until all unplaced ships are placed
+// Run ship placement for both players
 void Game::runPlacement()
 {
     std::cout << std::endl
@@ -25,6 +55,7 @@ void Game::runPlacement()
     computer.runPlacement();
 }
 
+// Render the game string with both players side-by-side during the Firing stage
 std::string Game::toStringFiring()
 {
     using std::string;
@@ -68,9 +99,12 @@ Game::Game(int boardSize)
 void Game::run()
 {
     runPlacement();
-    std::cout << std::endl
-              << "Guns at the ready!" << std::endl
-              << std::endl;
     gameState = GameState::Firing;
     runFiring();
+}
+
+// Getter for board size
+int Game::size()
+{
+    return player.getBoard().size();
 }

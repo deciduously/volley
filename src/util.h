@@ -10,6 +10,9 @@
 #include <tuple>
 #include <vector>
 
+// Helper function to clear out cin to loop for input again
+void clearCin();
+
 // Board size is fixed
 const int BOARD_SIZE = 10;
 

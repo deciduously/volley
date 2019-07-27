@@ -1,27 +1,11 @@
 #include <algorithm>
 #include <iostream>
-#include <limits>
 
 #include "player.h"
 
 //
 // HELPER FUNCTIONS
 //
-
-// Helper function to clear out cin to loop for input again
-void clearCin()
-{
-    std::cin.clear();
-    // ignore rest of current line, up to newline
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
-// Helper function to determine if a char is a letter
-bool isLetter(char c)
-{
-    // 65 = 'A', 90 = 'z'
-    return (c >= 'A' && c <= 'z');
-}
 
 // Helper function to pretty-print the vector of shipclasses
 std::string shipClassString(std::vector<ShipClass> scs)
@@ -55,64 +39,15 @@ std::string shipClassString(std::vector<ShipClass> scs)
 // Helper method to prompt user for origin
 Cell Player::getOrigin(ShipClass sc)
 {
-    using std::cin;
-    using std::cout;
-    using std::endl;
-    using std::string;
+    Cell ret = Cell();
 
-    // Instantiate return string
-    string ret = "";
-
-    for (;;)
+    // Ensure what they pick fits at least one way
+    do
     {
-        //prompt for input
-        string originStr;
-        cout << "Origin, as ColRow (e.g \"A1\")> ";
-        cin >> originStr;
+        ret = board.promptCell("Origin");
+    } while (!board.doesFit(ShipPlacement(ret, Direction::Left, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
 
-        // try to get a tuple from the input
-        // if we fail - it's not an int and a char in either order - loop again
-        int row = 0;
-        char col = 'Z';
-        if (originStr.size() > 3 || originStr.size() < 2)
-        {
-            cout << "Please only enter two - three characters, a letter column and an integer row" << endl;
-            clearCin();
-            continue;
-        }
-
-        // check if the first one is a letter
-        if (isLetter(originStr[0]))
-            col = toupper(originStr[0]);
-        else
-        {
-            cout << "Please enter a letter as the first character" << endl;
-            clearCin();
-            continue;
-        }
-
-        // store the rest as the number
-        row = stoi(originStr.substr(1, originStr.size() - 1));
-
-        // ensure it's a valid spot on the board
-        if (row < 1 || row > 10)
-        {
-            cout << "Invalid row!" << endl;
-            clearCin();
-            continue;
-        }
-        if (col < 65 || col > 74) // A < col < J
-        {
-            cout << "Invalid column!" << endl;
-            clearCin();
-            continue;
-        }
-
-        // Return the result as a literal if it fits, or loop again
-        // TODO add the doesFit check here.
-        sc = ShipClass(ShipClassType::AircraftCarrier); // remove!!
-        return Cell(row, col);
-    }
+    return ret;
 }
 
 // Return a random direction for the given origin and shipclass that fit - it's already ensured at least one of the two does
@@ -194,7 +129,7 @@ ShipClass Player::getShipClass()
             return unassignedShips[0];
         }
 
-        cout << "\n\nWhich ship do you want to add? Select letter, or 'R' to place all the rest randomly: " << shipClassString(unassignedShips) << "> ";
+        cout << "\n\nWhich ship do you want to add?\nSelect letter, or 'R' to place all the rest randomly: " << shipClassString(unassignedShips) << "> ";
 
         cin >> shipTypeInput;
         // it was a character, check if it was an option
@@ -292,6 +227,17 @@ Player::Player(int boardSize)
 {
     board = Board(boardSize);
     unassignedShips = {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
+}
+
+std::vector<Cell> Player::getAllShots()
+{
+    return board.getAllShots();
+}
+
+// Getter for the board
+Board Player::getBoard()
+{
+    return board;
 }
 
 // Return the board output as a vector of strings, one per line

@@ -24,6 +24,8 @@ protected:
 
 public:
     Player(int boardSize = BOARD_SIZE);
+    std::vector<Cell> getAllShots();
+    Board getBoard();
     lines toLineStrings();
     std::string toString();
     void runPlacement();

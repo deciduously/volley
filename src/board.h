@@ -11,13 +11,19 @@
 class Board
 {
     int dimension;
+    std::vector<Cell> hits;
+    std::vector<Cell> misses;
     std::vector<Ship> ships;
 
 public:
     Board(int boardSize = BOARD_SIZE);
     bool doesFit(ShipPlacement sp);
     char getCharAt(Cell c, bool showShips);
+    Cell promptCell(std::string promptStr);
     void pushShip(Ship s);
+    std::vector<Cell> getAllShots();
+    std::vector<Cell> getHits();
+    std::vector<Cell> getMisses();
     int size();
     lines toLineStrings(bool showShips);
 };

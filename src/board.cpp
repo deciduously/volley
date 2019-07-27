@@ -1,6 +1,14 @@
 #include <algorithm>
+#include <iostream>
 
 #include "board.h"
+
+// Helper function to determine if a char is a letter
+bool isLetter(char c)
+{
+    // 65 = 'A', 90 = 'z'
+    return (c >= 'A' && c <= 'z');
+}
 
 // Helper function to add a cell to a string with padding from a char
 void pushCharCell(std::string &s, char contents)
@@ -66,37 +74,121 @@ char Board::getCharAt(Cell c, bool showShips)
             // runPlacement should have avoided any overlaps
             if (find(cells.begin(), cells.end(), c) != cells.end())
             {
-                switch (ship.getShipClass().sct)
-                {
-                case ShipClassType::AircraftCarrier:
-                    ret = 'A';
-                    break;
-                case ShipClassType::Battleship:
-                    ret = 'B';
-                    break;
-                case ShipClassType::Cruiser:
-                    ret = 'C';
-                    break;
-                case ShipClassType::Destroyer:
-                    ret = 'D';
-                    break;
-                case ShipClassType::UBoat:
-                    ret = 'U';
-                    break;
-                case ShipClassType::Unknown:
-                    ret = 'E';
-                    break;
-                }
+                ret = ship.getShipClass().toChar();
             }
         }
     }
     return ret;
 }
 
+// Method to prompt the user for a cell, ensuring its a valid spot on this board
+// Returning a default cell indicates 'R', or random
+Cell Board::promptCell(std::string promptStr)
+{
+    using std::cerr;
+    using std::cin;
+    using std::cout;
+    using std::endl;
+    using std::string;
+
+    for (;;)
+    {
+        //prompt for input
+        string originStr;
+        cout << promptStr << " (ColRow, e.g. \"A1\" or \"a1\")> ";
+        cin >> originStr;
+
+        // catch random
+        if (originStr.size() == 1 && toupper(originStr[0]) == 'R')
+        {
+            return Cell();
+        }
+
+        // try to get a tuple from the input
+        // if we fail - it's not an int and a char in either order - loop again
+        int row = 0;
+        char col = 'Z';
+        if (originStr.size() > 3 || originStr.size() < 2)
+        {
+            cerr << "Please only enter two - three characters, a letter column and an integer row" << endl;
+            clearCin();
+            continue;
+        }
+
+        // check if the first one is a letter
+        if (isLetter(originStr[0]))
+            col = toupper(originStr[0]);
+        else
+        {
+            cerr << "Please enter a letter as the first character" << endl;
+            clearCin();
+            continue;
+        }
+
+        // store the rest as the number
+        try
+        {
+            row = stoi(originStr.substr(1, originStr.size() - 1));
+        }
+        catch (const std::invalid_argument &ia)
+        {
+            cerr << "Please enter a number as the rest of your input." << endl;
+            clearCin();
+            continue;
+        }
+
+        // ensure it's a valid spot on the board
+        if (row < 1 || row > size())
+        {
+            cerr << "Invalid row!" << endl;
+            clearCin();
+            continue;
+        }
+        else if (col < 65 || col >= 'A' + size())
+        {
+            cerr << "Invalid column!" << endl;
+            clearCin();
+            continue;
+        }
+        else
+        {
+            // if it fits, return it
+            return Cell(row, col);
+        }
+    }
+}
+
 // Add a ship to the board
 void Board::pushShip(Ship s)
 {
     ships.push_back(s);
+}
+
+// Get all recorded hits and misses
+std::vector<Cell> Board::getAllShots()
+{
+    // Initialize to hits
+    std::vector<Cell> ret = getHits();
+
+    // Add all the misses
+    int missesLen = getMisses().size();
+    for (int i = 0; i < missesLen; i++)
+    {
+        ret.push_back(misses[i]);
+    }
+    return ret;
+}
+
+// Getter for hits taken
+std::vector<Cell> Board::getHits()
+{
+    return hits;
+}
+
+// Getter for misses taken
+std::vector<Cell> Board::getMisses()
+{
+    return misses;
 }
 
 // Getter for board dimension
