@@ -8,7 +8,7 @@
 //
 
 // Pick a random target avoiding a specific board's recorded hits and misses
-Cell Game::getRandomTarget(Player opponent)
+Cell Game::getRandomTarget(Player &opponent)
 {
     Cell ret = Cell();
     std::vector<Cell> cellsToAvoid = opponent.getAllShots();
@@ -24,7 +24,7 @@ Cell Game::getRandomTarget(Player opponent)
 // Prompt the user for a target
 Cell Game::promptTarget()
 {
-    Board b = player.getBoard();
+    Board b = player->getBoard();
     Cell ret = b.promptCell("Target");
     return ret;
 }
@@ -46,7 +46,7 @@ void Game::runFiring()
         cout << toStringFiring() << endl;
 
         // Get a target that hasn't been fired at
-        std::vector<Cell> toAvoid = computer.getBoard().getAllShots();
+        std::vector<Cell> toAvoid = computer->getBoard().getAllShots();
         Cell nextTarget = Cell();
         do
         {
@@ -55,8 +55,11 @@ void Game::runFiring()
 
         cout << nextTarget.toString() << endl;
 
+        // Fire it at the computer
+        player->fireShot(nextTarget, *computer);
+
         // artificially end the game - TODO REMOVE
-        gameState = GameState::GameOver;
+        //gameState = GameState::GameOver;
     }
 }
 
@@ -66,8 +69,8 @@ void Game::runPlacement()
     std::cout << std::endl
               << "Stage your battlefield!" << std::endl
               << std::endl;
-    player.runPlacement();
-    computer.runPlacement();
+    player->runPlacement();
+    computer->runPlacement();
 }
 
 // Render the game string with both players side-by-side during the Firing stage
@@ -78,10 +81,10 @@ std::string Game::toStringFiring()
     string ret = "";
 
     // The player board output lines
-    lines playerLines = player.toLineStrings();
+    lines playerLines = player->toLineStrings();
 
     // The computer board output lines
-    lines computerLines = computer.toLineStrings();
+    lines computerLines = computer->toLineStrings();
 
     // THis should be the same for both, so grab either
     int playerLinesSize = playerLines.size();
@@ -105,9 +108,15 @@ std::string Game::toStringFiring()
 
 Game::Game(int boardSize)
 {
-    player = Player(boardSize);
-    computer = Computer(boardSize);
+    player = new Player(boardSize);
+    computer = new Computer(boardSize);
     gameState = GameState::Placement;
+}
+
+Game::~Game()
+{
+    delete player;
+    delete computer;
 }
 
 // Run the game
@@ -122,5 +131,5 @@ void Game::run()
 // Getter for board size
 int Game::size()
 {
-    return player.getBoard().size();
+    return player->getBoard().size();
 }

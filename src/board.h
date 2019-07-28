@@ -11,8 +11,7 @@
 class Board
 {
     int dimension;
-    std::vector<Cell> hits;
-    std::vector<Cell> misses;
+    std::vector<Cell> receivedShots;
     std::vector<Ship> ships;
 
 public:
@@ -23,8 +22,7 @@ public:
     Cell promptCell(std::string promptStr);
     void pushShip(Ship s);
     std::vector<Cell> getAllShots();
-    std::vector<Cell> getHits();
-    std::vector<Cell> getMisses();
+    bool receiveFire(Cell target);
     int size();
     lines toLineStrings(bool showShips);
 };

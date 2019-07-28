@@ -10,10 +10,10 @@
 
 class Game
 {
-    Player player;
-    Computer computer;
+    Player *player;
+    Computer *computer;
     GameState gameState;
-    Cell getRandomTarget(Player opponent);
+    Cell getRandomTarget(Player &opponent);
     Cell promptTarget();
     void runFiring();
     void runPlacement();
@@ -21,6 +21,7 @@ class Game
 
 public:
     Game(int boardSize = BOARD_SIZE);
+    ~Game();
     void run();
     int size();
 };

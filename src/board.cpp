@@ -58,26 +58,48 @@ char Board::getCharAt(Cell c, bool showShips)
     // init return value to default (empty)
     char ret = '.';
 
-    // If we're displaying the ships, run that check
-    if (showShips)
+    // Add the ships
+
+    int shipsSize = ships.size();
+
+    // loop through ships
+    for (int i = 0; i < shipsSize; i++)
     {
-        int shipsSize = ships.size();
+        Ship ship = ships[i];
+        // each ship, loop through the contained cells
+        vector<Cell> cells = ship.containedCells();
 
-        // loop through ships
-        for (int i = 0; i < shipsSize; i++)
+        // if any of them are found in cells, set ret to that ship character
+        // runPlacement should have avoided any overlaps
+        if (find(cells.begin(), cells.end(), c) != cells.end())
         {
-            Ship ship = ships[i];
-            // each ship, loop through the contained cells
-            vector<Cell> cells = ship.containedCells();
-
-            // if any of them are found in cells, set ret to that ship character
-            // runPlacement should have avoided any overlaps
-            if (find(cells.begin(), cells.end(), c) != cells.end())
-            {
-                ret = ship.getShipClass().toChar();
-            }
+            ret = ship.getShipClass().toChar();
         }
     }
+
+    // Check in hits and misses
+    if (find(receivedShots.begin(), receivedShots.end(), c) != receivedShots.end())
+    {
+        if (ret == '.')
+        {
+            ret = 'O';
+        }
+        else
+        {
+            ret = 'X';
+        }
+    }
+
+    if (!showShips)
+    {
+        // if its a ship and not an x or an o, turn it back to .
+        if (ret != 'X' && ret != 'O')
+        {
+            if (ret != '.')
+                ret = '.';
+        }
+    }
+
     return ret;
 }
 
@@ -180,28 +202,14 @@ void Board::pushShip(Ship s)
 // Get all recorded hits and misses
 std::vector<Cell> Board::getAllShots()
 {
-    // Initialize to hits
-    std::vector<Cell> ret = getHits();
-
-    // Add all the misses
-    int missesLen = getMisses().size();
-    for (int i = 0; i < missesLen; i++)
-    {
-        ret.push_back(misses[i]);
-    }
-    return ret;
+    return receivedShots;
 }
 
-// Getter for hits taken
-std::vector<Cell> Board::getHits()
+// Take a shot at a cell, return true if it's a hit
+bool Board::receiveFire(Cell target)
 {
-    return hits;
-}
-
-// Getter for misses taken
-std::vector<Cell> Board::getMisses()
-{
-    return misses;
+    receivedShots.push_back(target);
+    return getCharAt(target, true) != '.';
 }
 
 // Getter for board dimension

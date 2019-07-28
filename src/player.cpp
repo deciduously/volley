@@ -227,6 +227,23 @@ Player::Player(int boardSize)
     unassignedShips = {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
 }
 
+// Fire a shot.  Records in opponents Board and attacker's Player - do we need to store locally too?
+// True indicates a hit, false a miss
+void Player::fireShot(Cell target, Player &opponent)
+{
+    if (opponent.getBoard().receiveFire(target))
+    {
+        // Hit
+        hits.push_back(target);
+    }
+    else
+    {
+        // Miss
+        misses.push_back(target);
+    }
+}
+
+// Get all recorded hits and misses
 std::vector<Cell> Player::getAllShots()
 {
     return board.getAllShots();

@@ -15,6 +15,8 @@ class Player
     Direction getRandomDirection(Cell origin, ShipClass sc);
     Cell getRandomOrigin(ShipClass sc);
     ShipClass getShipClass();
+    std::vector<Cell> hits;
+    std::vector<Cell> misses;
     void placeShip(ShipPlacement sp);
 
 protected:
@@ -24,6 +26,7 @@ protected:
 
 public:
     Player(int boardSize = BOARD_SIZE);
+    void fireShot(Cell target, Player &opponent);
     std::vector<Cell> getAllShots();
     Board getBoard();
     lines toLineStrings();
