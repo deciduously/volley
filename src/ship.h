@@ -12,8 +12,8 @@
 typedef struct ShipPlacement
 {
     Cell cell;
-    Direction direction;
-    ShipClass shipClass;
+    Direction direction = Direction::Left;
+    ShipClass shipClass = ShipClass();
     ShipPlacement();
     ShipPlacement(Cell c, Direction d, ShipClass sc);
     std::vector<Cell> containedCells() const;

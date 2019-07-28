@@ -39,8 +39,8 @@ std::ostream &operator<<(std::ostream &stream, const lines &l);
 // A single cell on the board
 typedef struct Cell
 {
-    int row;
-    char col;
+    int row = 1;
+    char col = 'A';
     // Default constructor
     Cell();
     //Constructor from two ints
@@ -69,7 +69,7 @@ enum ShipClassType
 
 typedef struct ShipClass
 {
-    ShipClassType sct;
+    ShipClassType sct = ShipClassType::Unknown;
     // Constructors
     ShipClass();
     ShipClass(char c);

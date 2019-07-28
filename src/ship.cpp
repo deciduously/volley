@@ -3,9 +3,6 @@
 // ShipPlacement default constructor
 ShipPlacement::ShipPlacement()
 {
-    cell = Cell();
-    direction = Direction::Left;
-    shipClass = ShipClass();
 }
 
 // Should always use explicit constructor

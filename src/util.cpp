@@ -29,8 +29,6 @@ std::ostream &operator<<(std::ostream &stream, const lines &l)
 // Default to top left corner
 Cell::Cell()
 {
-    row = 1;
-    col = 'A';
 }
 
 // Automatically turns col into char, e.g. 1 -> 'A', 2 -> 'B', etc.
@@ -76,7 +74,6 @@ std::ostream &operator<<(std::ostream &stream, const Cell &c)
 // Default constructor
 ShipClass::ShipClass()
 {
-    sct = ShipClassType::Unknown;
 }
 
 // Construct a ShipClass from a char

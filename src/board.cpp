@@ -208,8 +208,9 @@ std::vector<Cell> Board::getAllShots() const
 // Take a shot at a cell, return true if it's a hit
 bool Board::receiveFire(Cell target)
 {
+    char result = getCharAt(target, true);
     receivedShots.push_back(target);
-    return getCharAt(target, true) == 'X';
+    return result != '.' && result != 'O';
 }
 
 // Getter for board dimension
