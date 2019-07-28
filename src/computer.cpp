@@ -6,7 +6,7 @@ void Computer::runPlacement()
     randomlyPlaceShips();
 }
 
-lines Computer::toLineStrings()
+lines Computer::toLineStrings() const
 {
     // add "Player"  - or "Computer" ? -  header
     lines ret = {};

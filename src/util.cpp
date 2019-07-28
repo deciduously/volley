@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 #include <limits>
 
 #include "util.h"
@@ -9,6 +10,16 @@ void clearCin()
     std::cin.clear();
     // ignore rest of current line, up to newline
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+// ostream overload for lineStrings - replacing a toString()
+std::ostream &operator<<(std::ostream &stream, const lines &l)
+{
+    if (!l.empty())
+    {
+        std::copy(l.begin(), l.end(), std::ostream_iterator<std::string>(stream, "\n"));
+    }
+    return stream;
 }
 
 //
@@ -37,19 +48,25 @@ Cell::Cell(int r, char c)
 }
 
 // == overload for Cell
-bool Cell::operator==(const Cell &other)
+bool Cell::operator==(const Cell &other) const
 {
     return row == other.row && col == other.col;
 }
 
 // Prettyprint
-std::string Cell::toString()
+std::string Cell::toString() const
 {
     std::string ret = "Row: ";
     ret += std::to_string(row);
     ret += " Col: ";
     ret.push_back(col);
     return ret;
+}
+
+// Stream overload
+std::ostream &operator<<(std::ostream &stream, const Cell &c)
+{
+    return stream << c.toString();
 }
 
 //
@@ -94,13 +111,13 @@ ShipClass::ShipClass(ShipClassType sc)
 }
 
 // Check if this ShipClass has the same variant as other ShipClass
-bool ShipClass::operator==(const ShipClass &other)
+bool ShipClass::operator==(const ShipClass &other) const
 {
     return sct == other.sct;
 }
 
 // Get the corresponding length for each ShipClass variant
-int ShipClass::size()
+int ShipClass::size() const
 {
     switch (sct)
     {
@@ -129,7 +146,7 @@ int ShipClass::size()
 }
 
 // Get the corresponding char for each ShipClass variant
-char ShipClass::toChar()
+char ShipClass::toChar() const
 {
     switch (sct)
     {
@@ -157,7 +174,7 @@ char ShipClass::toChar()
 }
 
 // Pretty-print the ShipClass enum in long-form text
-std::string ShipClass::toString()
+std::string ShipClass::toString() const
 {
     switch (sct)
     {
@@ -183,4 +200,10 @@ std::string ShipClass::toString()
     // if we got past the switch, something bad happened because it's exhaustive for that enum
     // Unreachable
     return "ERROR: UNKNOWN SHIP CLASS";
+}
+
+// Stream overload
+std::ostream &operator<<(std::ostream &stream, const ShipClass &sc)
+{
+    return stream << sc.toString();
 }

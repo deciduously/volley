@@ -37,10 +37,10 @@ std::string shipClassString(std::vector<ShipClass> scs)
 //
 
 // Helper method to prompt user for origin
-Cell Player::getOrigin(ShipClass sc)
+Cell Player::getOrigin(ShipClass sc) const
 {
     Cell ret = Cell();
-    Board b = getBoard();
+    Board b = getBoardConst();
 
     // Ensure what they pick fits at least one way
     do
@@ -56,9 +56,9 @@ Cell Player::getOrigin(ShipClass sc)
 }
 
 // Return a random direction for the given origin and shipclass that fit - it's already ensured at least one of the two does
-Direction Player::getRandomDirection(Cell origin, ShipClass sc)
+Direction Player::getRandomDirection(Cell origin, ShipClass sc) const
 {
-    bool fitsLeft = board.doesFit(ShipPlacement(origin, Direction::Left, sc));
+    bool fitsLeft = getBoardConst().doesFit(ShipPlacement(origin, Direction::Left, sc));
     bool fitsDown = board.doesFit(ShipPlacement(origin, Direction::Down, sc));
     // don't bother doing the check for if neither work, getRandomOrigin checked it until one or the other did
     if (fitsLeft && !fitsDown)
@@ -85,7 +85,7 @@ Direction Player::getRandomDirection(Cell origin, ShipClass sc)
 }
 
 // Returns a random origin for a given ShipClass guaranteed to work in at least one direction
-Cell Player::getRandomOrigin(ShipClass sc)
+Cell Player::getRandomOrigin(ShipClass sc) const
 {
     // Declare return value
     Cell ret = Cell();
@@ -100,7 +100,7 @@ Cell Player::getRandomOrigin(ShipClass sc)
 }
 
 // Helper method to prompt user a single ship input
-ShipClass Player::getShipClass()
+ShipClass Player::getShipClass() const
 {
     // <iostream>
     using std::cin;
@@ -244,7 +244,7 @@ void Player::fireShot(Cell target, Player &opponent)
 }
 
 // Get all recorded hits and misses
-std::vector<Cell> Player::getAllShots()
+std::vector<Cell> Player::getAllShots() const
 {
     return board.getAllShots();
 }
@@ -255,8 +255,14 @@ Board Player::getBoard()
     return board;
 }
 
+// Const Getter for the board
+Board Player::getBoardConst() const
+{
+    return board;
+}
+
 // Return the board output as a vector of strings, one per line
-lines Player::toLineStrings()
+lines Player::toLineStrings() const
 {
     // add "Player"  - or "Computer" ? -  header
     lines ret = {};
@@ -273,7 +279,7 @@ lines Player::toLineStrings()
 }
 
 // Return the board output as a single multiline string
-std::string Player::toString()
+std::string Player::toString() const
 {
     // put together a single string from the contents of Player::toLineStrings()
     std::string ret = "";
@@ -315,7 +321,7 @@ outer:
             // skip to next iteration of loop, which should now fail the check
             continue;
         }
-        cout << "Placing " << shipChoice.toString() << "." << endl;
+        cout << "Placing " << shipChoice << "." << endl;
 
         // Prompt user for origin
         Cell origin = getOrigin(shipChoice);
@@ -333,21 +339,21 @@ outer:
         {
             // Can't possibly place with that origin
             // Tell them it's gonna be left or down, try again
-            cout << "Cannot place " << shipChoice.toString() << " at that location." << endl
+            cout << "Cannot place " << shipChoice << " at that location." << endl
                  << "You will orient Left or Down from the origin.  Please pick a new origin." << endl;
             continue;
         }
         else if (fitsLeft && !fitsDown)
         {
             // must be Left - inform the user
-            cout << shipChoice.toString() << " only fits left.  Saving..." << endl;
+            cout << shipChoice << " only fits left.  Saving..." << endl;
             // technically no need to set, it should be Left already, but just in case
             d = Direction::Left;
         }
         else if (!fitsLeft && fitsDown)
         {
             // must be Down - inform the user
-            cout << shipChoice.toString() << " only fits down.  Saving..." << endl;
+            cout << shipChoice << " only fits down.  Saving..." << endl;
             d = Direction::Down;
         }
         else
@@ -408,7 +414,7 @@ outer:
 
             // display all three choices
             cout << "Origin: " << originStr << endl
-                 << "Class: " << shipChoice.toString() << " (Length: " << shipChoice.size() << ")" << endl
+                 << "Class: " << shipChoice << " (Length: " << shipChoice.size() << ")" << endl
                  << "Direction: " << directionString << endl
                  << "Confirm? (Y/N)> ";
             cin >> confirmChoice;

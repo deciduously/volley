@@ -11,10 +11,10 @@
 
 class Player
 {
-    Cell getOrigin(ShipClass sc);
-    Direction getRandomDirection(Cell origin, ShipClass sc);
-    Cell getRandomOrigin(ShipClass sc);
-    ShipClass getShipClass();
+    Cell getOrigin(ShipClass sc) const;
+    Direction getRandomDirection(Cell origin, ShipClass sc) const;
+    Cell getRandomOrigin(ShipClass sc) const;
+    ShipClass getShipClass() const;
     std::vector<Cell> hits;
     std::vector<Cell> misses;
     void placeShip(ShipPlacement sp);
@@ -27,10 +27,12 @@ protected:
 public:
     Player(int boardSize = BOARD_SIZE);
     void fireShot(Cell target, Player &opponent);
-    std::vector<Cell> getAllShots();
+    std::vector<Cell> getAllShots() const;
     Board getBoard();
-    lines toLineStrings();
-    std::string toString();
+    Board getBoardConst() const;
+    lines toLineStrings() const;
+    std::string toString() const; // TODO - REMOVE?
     void runPlacement();
 };
+
 #endif

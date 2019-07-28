@@ -16,7 +16,7 @@ typedef struct ShipPlacement
     ShipClass shipClass;
     ShipPlacement();
     ShipPlacement(Cell c, Direction d, ShipClass sc);
-    std::vector<Cell> containedCells();
+    std::vector<Cell> containedCells() const;
 } ShipPlacement;
 
 class Ship
@@ -26,7 +26,7 @@ class Ship
 
 public:
     Ship(ShipPlacement sp);
-    std::vector<Cell> containedCells();
-    ShipClass getShipClass();
+    std::vector<Cell> containedCells() const;
+    ShipClass getShipClass() const;
 };
 #endif

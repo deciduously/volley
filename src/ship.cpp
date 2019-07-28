@@ -17,7 +17,7 @@ ShipPlacement::ShipPlacement(Cell c, Direction d, ShipClass sc)
 }
 
 // Return a vector containing each cell this ship occupies
-std::vector<Cell> ShipPlacement::containedCells()
+std::vector<Cell> ShipPlacement::containedCells() const
 {
     //initalise return vector
     std::vector<Cell> ret = {cell};
@@ -54,13 +54,13 @@ Ship::Ship(ShipPlacement sp)
 }
 
 // Getter for contained cells, for convenience
-std::vector<Cell> Ship::containedCells()
+std::vector<Cell> Ship::containedCells() const
 {
     return placement.containedCells();
 }
 
 // Getter for ShipClass
-ShipClass Ship::getShipClass()
+ShipClass Ship::getShipClass() const
 {
     return placement.shipClass;
 }

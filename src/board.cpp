@@ -26,7 +26,7 @@ Board::Board(int boardSize)
 }
 
 // Check if a shipPlacement would fit on the board before creating a Ship
-bool Board::doesFit(ShipPlacement sp)
+bool Board::doesFit(ShipPlacement sp) const
 {
     // check each cell the ship would occupy
     // build the hypthetical ship and store its contained cells
@@ -44,7 +44,7 @@ bool Board::doesFit(ShipPlacement sp)
 
 // Returns the corresponding cell character
 // Pass true to show ship locations, false to only show hits/misses
-char Board::getCharAt(Cell c, bool showShips)
+char Board::getCharAt(Cell c, bool showShips) const
 {
     using std::find;
     using std::vector;
@@ -77,7 +77,7 @@ char Board::getCharAt(Cell c, bool showShips)
         }
     }
 
-    // Check in hits and misses
+    // Overlay hits and misses
     if (find(receivedShots.begin(), receivedShots.end(), c) != receivedShots.end())
     {
         if (ret == '.')
@@ -104,7 +104,7 @@ char Board::getCharAt(Cell c, bool showShips)
 }
 
 // Get a random cell on the board
-Cell Board::getRandomCell()
+Cell Board::getRandomCell() const
 {
     // get two random numbers between 1 and board size
     int max = size() - 1;
@@ -117,7 +117,7 @@ Cell Board::getRandomCell()
 
 // Method to prompt the user for a cell, ensuring its a valid spot on this board
 // Returning a default cell indicates 'R', or random
-Cell Board::promptCell(std::string promptStr)
+Cell Board::promptCell(const std::string &promptStr) const
 {
     using std::cerr;
     using std::cin;
@@ -200,7 +200,7 @@ void Board::pushShip(Ship s)
 }
 
 // Get all recorded hits and misses
-std::vector<Cell> Board::getAllShots()
+std::vector<Cell> Board::getAllShots() const
 {
     return receivedShots;
 }
@@ -209,18 +209,18 @@ std::vector<Cell> Board::getAllShots()
 bool Board::receiveFire(Cell target)
 {
     receivedShots.push_back(target);
-    return getCharAt(target, true) != '.';
+    return getCharAt(target, true) == 'X';
 }
 
 // Getter for board dimension
-int Board::size()
+int Board::size() const
 {
     return dimension;
 }
 
 // Returns a vector of strings, one for each line of this board
 // pass true to show ship locations, false to only show hits/misses
-lines Board::toLineStrings(bool showShips)
+lines Board::toLineStrings(bool showShips) const
 {
     using std::string;
     using std::to_string;

@@ -33,6 +33,9 @@ enum GameState
 // string vector alias
 typedef std::vector<std::string> lines;
 
+// ostream overload for lineStrings - replacing a toString()
+std::ostream &operator<<(std::ostream &stream, const lines &l);
+
 // A single cell on the board
 typedef struct Cell
 {
@@ -45,9 +48,12 @@ typedef struct Cell
     // Constructor from an int and a col
     Cell(int r, char c);
     // == overload
-    bool operator==(const Cell &other);
-    std::string toString();
+    bool operator==(const Cell &other) const;
+    std::string toString() const;
 } Cell;
+
+// Stream overload
+std::ostream &operator<<(std::ostream &stream, const Cell &c);
 
 // ShipClass
 
@@ -70,12 +76,15 @@ typedef struct ShipClass
     ShipClass(ShipClassType sc);
 
     // Overload
-    bool operator==(const ShipClass &other);
+    bool operator==(const ShipClass &other) const;
 
     // Getters
-    int size();
-    char toChar();
-    std::string toString();
+    int size() const;
+    char toChar() const;
+    std::string toString() const;
 } ShipClass;
+
+// Stream overload
+std::ostream &operator<<(std::ostream &stream, const ShipClass &sc);
 
 #endif

@@ -8,13 +8,13 @@
 //
 
 // Pick a random target avoiding a specific board's recorded hits and misses
-Cell Game::getRandomTarget(Player &opponent)
+Cell Game::getRandomTarget(const Player &opponent) const
 {
     Cell ret = Cell();
     std::vector<Cell> cellsToAvoid = opponent.getAllShots();
     do
     {
-        ret = opponent.getBoard().getRandomCell();
+        ret = opponent.getBoardConst().getRandomCell();
         // Check if the opponent's board contains this cell
     } while (std::find(cellsToAvoid.begin(), cellsToAvoid.end(), ret) != cellsToAvoid.end());
 
@@ -22,7 +22,7 @@ Cell Game::getRandomTarget(Player &opponent)
 }
 
 // Prompt the user for a target
-Cell Game::promptTarget()
+Cell Game::promptTarget() const
 {
     Board b = player->getBoard();
     Cell ret = b.promptCell("Target");
@@ -74,7 +74,8 @@ void Game::runPlacement()
 }
 
 // Render the game string with both players side-by-side during the Firing stage
-std::string Game::toStringFiring()
+// TODO this can probably me enchanced by the <<< overlaods you have
+std::string Game::toStringFiring() const
 {
     using std::string;
     // The return string
@@ -113,6 +114,7 @@ Game::Game(int boardSize)
     gameState = GameState::Placement;
 }
 
+// Destructor
 Game::~Game()
 {
     delete player;
@@ -129,7 +131,7 @@ void Game::run()
 }
 
 // Getter for board size
-int Game::size()
+int Game::size() const
 {
     return player->getBoard().size();
 }

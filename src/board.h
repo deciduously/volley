@@ -16,15 +16,15 @@ class Board
 
 public:
     Board(int boardSize = BOARD_SIZE);
-    bool doesFit(ShipPlacement sp);
-    char getCharAt(Cell c, bool showShips);
-    Cell getRandomCell();
-    Cell promptCell(std::string promptStr);
+    bool doesFit(ShipPlacement sp) const;
+    char getCharAt(Cell c, bool showShips) const;
+    Cell getRandomCell() const;
+    Cell promptCell(const std::string &promptStr) const;
     void pushShip(Ship s);
-    std::vector<Cell> getAllShots();
+    std::vector<Cell> getAllShots() const;
     bool receiveFire(Cell target);
-    int size();
-    lines toLineStrings(bool showShips);
+    int size() const;
+    lines toLineStrings(bool showShips) const;
 };
 
 #endif
