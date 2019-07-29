@@ -22,7 +22,7 @@ int main()
     srand(time(0));
 
     // Instantiate game object
-    Game *game = new Game(BOARD_SIZE);
+    Game *game = new Game();
 
     // Display header
     int headerWidth = 25;

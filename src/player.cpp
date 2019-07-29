@@ -278,21 +278,6 @@ lines Player::toLineStrings() const
     return ret;
 }
 
-// Return the board output as a single multiline string
-std::string Player::toString() const
-{
-    // put together a single string from the contents of Player::toLineStrings()
-    std::string ret = "";
-    lines lineStrings = toLineStrings();
-    int lineStringsSize = lineStrings.size();
-    for (int i = 0; i < lineStringsSize; i++)
-    {
-        ret.append(lineStrings[i]);
-        ret.push_back('\n');
-    }
-    return ret;
-}
-
 // Run the placement loop to prompt user for ship locations
 void Player::runPlacement()
 {
@@ -309,7 +294,7 @@ outer:
     while (unassignedShips.size() > 0)
     {
         // display board
-        cout << toString();
+        cout << toLineStrings();
 
         // Prompt user for which ship to place
         ShipClass shipChoice = getShipClass();

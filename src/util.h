@@ -23,6 +23,10 @@ enum Direction
     Left,
     Down
 };
+
+// ostream overload for Direction
+std::ostream &operator<<(std::ostream &stream, const Direction &d);
+
 enum GameState
 {
     Firing,
@@ -33,7 +37,7 @@ enum GameState
 // string vector alias
 typedef std::vector<std::string> lines;
 
-// ostream overload for lineStrings - replacing a toString()
+// ostream overload for lines
 std::ostream &operator<<(std::ostream &stream, const lines &l);
 
 // A single cell on the board

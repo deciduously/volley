@@ -12,7 +12,20 @@ void clearCin()
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-// ostream overload for lineStrings - replacing a toString()
+// ostream overload for Direction
+std::ostream &operator<<(std::ostream &stream, const Direction &d)
+{
+    if (d == Direction::Left)
+    {
+        return stream << "Left";
+    }
+    else
+    {
+        return stream << "Down";
+    }
+}
+
+// ostream overload for lines
 std::ostream &operator<<(std::ostream &stream, const lines &l)
 {
     if (!l.empty())

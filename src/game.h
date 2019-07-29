@@ -20,11 +20,11 @@ class Game
     Player *player;
     Computer *computer;
     GameState gameState;
+    lines bothBoardLines() const;
     Cell getRandomTarget(const Player &opponent) const;
     Cell promptTarget() const;
     void runFiring();
     void runPlacement();
-    std::string toStringFiring() const;
 
 public:
     Game(int boardSize = BOARD_SIZE);
@@ -32,4 +32,5 @@ public:
     void run();
     int size() const;
 };
+
 #endif

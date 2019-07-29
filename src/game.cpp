@@ -7,6 +7,27 @@
 // PRIVATE METHODS
 //
 
+// Return a vector of strings containing both boards side by side
+lines Game::bothBoardLines() const
+{
+    // Init return value to player board output lines
+    lines ret = player->toLineStrings();
+
+    // The computer board output lines
+    lines computerLines = computer->toLineStrings();
+
+    // Grab size
+    int boardSize = computerLines.size();
+
+    // Each line, mash together the player and computer board side by side
+    for (int i = 0; i < boardSize; i++)
+    {
+        ret[i].append("         "); // 10 spaces
+        ret[i].append(computerLines[i]);
+    }
+    return ret;
+}
+
 // Pick a random target avoiding a specific board's recorded hits and misses
 Cell Game::getRandomTarget(const Player &opponent) const
 {
@@ -43,7 +64,7 @@ void Game::runFiring()
         // Run turns until someone wins
 
         // Display both boards
-        cout << toStringFiring() << endl;
+        cout << bothBoardLines() << endl;
 
         // Get a target that hasn't been fired at
         std::vector<Cell> toAvoid = computer->getBoard().getAllShots();
@@ -71,36 +92,6 @@ void Game::runPlacement()
               << std::endl;
     player->runPlacement();
     computer->runPlacement();
-}
-
-// Render the game string with both players side-by-side during the Firing stage
-// TODO this can probably me enchanced by the <<< overlaods you have
-std::string Game::toStringFiring() const
-{
-    using std::string;
-    // The return string
-    string ret = "";
-
-    // The player board output lines
-    lines playerLines = player->toLineStrings();
-
-    // The computer board output lines
-    lines computerLines = computer->toLineStrings();
-
-    // THis should be the same for both, so grab either
-    int playerLinesSize = playerLines.size();
-
-    // Each line, mash together the player and computer board side by side
-    for (int i = 0; i < playerLinesSize; i++)
-    {
-        string rowString = "";
-        rowString.append(playerLines[i]);
-        rowString.append("          ");
-        rowString.append(computerLines[i]);
-        ret.append(rowString);
-        ret.push_back('\n');
-    }
-    return ret;
 }
 
 //

@@ -31,7 +31,6 @@ public:
     Board getBoard();
     Board getBoardConst() const;
     lines toLineStrings() const;
-    std::string toString() const; // TODO - REMOVE?
     void runPlacement();
 };
 
