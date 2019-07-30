@@ -20,7 +20,8 @@ Row: 9 Col: D
 It's a hit!
 Opponent fires Row: 7 Col: D
 It's a miss.
-               Player                                   Computer
+                Player                                   Computer
+            Ships alive: 5                          Ships alive: 5
 
     A  B  C  D  E  F  G  H  I  J              A  B  C  D  E  F  G  H  I  J
 
