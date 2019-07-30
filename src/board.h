@@ -24,6 +24,7 @@ public:
     void pushShip(Ship s);
     std::vector<Cell> getAllShots() const;
     bool receiveShot(Cell target);
+    int remainingShips() const;
     int size() const;
     lines toLineStrings(bool showShips) const;
 };

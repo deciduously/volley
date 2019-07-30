@@ -56,6 +56,18 @@ std::vector<Cell> Ship::containedCells() const
     return placement.containedCells();
 }
 
+// Getter for Hits
+int Ship::getHits() const
+{
+    return hits;
+}
+
+// Take a hit
+void Ship::takeHit()
+{
+    hits--;
+}
+
 // Getter for ShipClass
 ShipClass Ship::getShipClass() const
 {

@@ -27,6 +27,8 @@ class Ship
 public:
     Ship(ShipPlacement sp);
     std::vector<Cell> containedCells() const;
+    int getHits() const;
+    void takeHit();
     ShipClass getShipClass() const;
 };
 #endif

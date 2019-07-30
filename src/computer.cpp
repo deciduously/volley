@@ -12,9 +12,10 @@ lines Computer::toLineStrings() const
     lines ret = {};
 
     // 15 spaces in
-    std::string headerLine = "               Computer";
-
-    ret.push_back(headerLine);
+    ret.push_back("               Computer");
+    std::string shipsRemainLine = "                 Ships alive: ";
+    shipsRemainLine.append(std::to_string(remainingShips()));
+    ret.push_back(shipsRemainLine);
     ret.push_back("");
     // insert board line strings
     lines boardLines = board.toLineStrings(false);

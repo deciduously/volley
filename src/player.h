@@ -23,6 +23,7 @@ protected:
     Board board;
     std::vector<ShipClass> unassignedShips;
     void randomlyPlaceShips();
+    int remainingShips() const;
 
 public:
     Player(int boardSize = BOARD_SIZE);

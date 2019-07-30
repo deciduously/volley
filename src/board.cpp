@@ -106,7 +106,7 @@ char Board::getCharAt(Cell c, bool showShips) const
 Cell Board::getRandomCell() const
 {
     // get two random numbers between 1 and board size
-    int max = size() - 1;
+    int max = size();
     int row = rand() % max + 1;
     int colNum = rand() % max + 1;
 
@@ -224,9 +224,35 @@ bool Board::receiveShot(Cell target)
     // record hit if true
     if (ret)
     {
-        // std::find_if chipClass.char == result
-        // then increment that ships hits
-        // then add stuff to Ship to display when it's sunk
+        int shipsSize = ships.size();
+        for (int i = 0; i < shipsSize; i++)
+        {
+            Ship ship = ships[i];
+            if (result == ship.getShipClass().toChar())
+            {
+                ships[i].takeHit();
+            }
+        }
+    }
+    return ret;
+}
+
+// get how many ships still have health
+int Board::remainingShips() const
+{
+    // Before we've started, there are no ships
+    // This means we're in Placement, return the total number of ships
+    int shipsLen = ships.size();
+    if (shipsLen == 0)
+        return 5;
+
+    int ret = 0;
+    for (int i = 0; i < shipsLen; i++)
+    {
+        if (ships[i].getHits() > 0)
+        {
+            ret++;
+        }
     }
     return ret;
 }

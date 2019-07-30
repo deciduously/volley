@@ -216,6 +216,11 @@ void Player::randomlyPlaceShips()
     }
 }
 
+int Player::remainingShips() const
+{
+    return board.remainingShips();
+}
+
 //
 // PUBLIC METHODS
 //
@@ -269,10 +274,10 @@ lines Player::toLineStrings() const
     // add "Player"  - or "Computer" ? -  header
     lines ret = {};
 
-    // 15 spaces left, 11 right - TODO this could be way more elegant, based on actual counts
-    std::string headerLine = "               Player           ";
-
-    ret.push_back(headerLine);
+    ret.push_back("                Player           ");
+    std::string shipsRemainLine = "            Ships alive: ";
+    shipsRemainLine.append(std::to_string(remainingShips()));
+    ret.push_back(shipsRemainLine);
     ret.push_back("");
     // insert board line strings
     lines boardLines = board.toLineStrings(true);
