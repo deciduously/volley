@@ -16,29 +16,32 @@ If an 'E' shows up on the board, something is wrong. That's used to signify an E
 ```
 Enter Target.  Enter 'R' for random.  (ColRow, e.g. "A1" or "a1")> r
 Rolling the dice...
-Row: 6 Col: H
+Row: 9 Col: D
 It's a hit!
+Opponent fires Row: 7 Col: D
+It's a miss.
                Player                                   Computer
 
     A  B  C  D  E  F  G  H  I  J              A  B  C  D  E  F  G  H  I  J
 
- 1  .  U  .  .  .  .  .  .  .  .           1  .  .  .  .  .  .  .  .  .  .
+ 1  .  .  .  .  .  .  .  .  D  D           1  .  .  .  .  .  .  .  .  .  .
 
- 2  .  U  .  .  .  .  O  .  .  .           2  .  .  .  .  O  .  .  .  .  .
+ 2  .  .  .  .  .  .  .  .  .  .           2  .  .  .  .  .  .  .  O  .  .
 
- 3  .  U  .  .  .  .  .  .  .  .           3  .  O  .  .  .  .  .  .  .  .
+ 3  .  .  .  .  A  .  U  U  U  .           3  .  .  .  .  .  .  .  .  .  .
 
- 4  O  .  .  .  .  .  .  .  C  .           4  .  .  .  .  .  .  .  .  .  .
+ 4  .  .  .  .  A  .  .  .  O  .           4  .  .  .  .  .  .  O  .  .  .
 
- 5  .  .  .  .  .  .  A  .  C  .           5  .  .  .  .  .  .  .  .  .  .
+ 5  O  .  .  .  A  .  .  .  .  .           5  .  .  O  .  .  .  .  .  .  .
 
- 6  .  .  B  .  .  .  A  .  C  .           6  .  .  .  .  .  O  .  X  .  .
+ 6  .  .  .  .  A  .  .  .  .  .           6  .  .  .  .  .  .  .  .  .  .
 
- 7  .  .  B  .  .  .  A  .  D  .           7  .  .  .  .  .  .  .  .  .  .
+ 7  .  .  .  O  A  .  .  .  .  .           7  .  .  .  .  .  .  .  .  .  .
 
- 8  .  .  B  .  .  .  X  .  D  .           8  .  .  .  .  .  .  .  .  .  .
+ 8  .  B  B  B  B  .  C  .  .  .           8  .  .  .  .  .  .  .  .  .  .
 
- 9  .  .  B  .  .  .  A  .  .  .           9  .  .  .  .  .  .  .  .  .  .
+ 9  .  .  .  .  .  .  C  O  .  .           9  .  .  .  X  .  .  .  .  .  .
 
-10  .  .  .  .  .  .  .  .  .  .          10  .  .  .  .  .  .  .  .  .  .
+10  .  .  .  .  .  .  C  .  .  .          10  .  .  .  .  .  .  .  .  .  .
+
 ```
