@@ -11,10 +11,10 @@
 lines Game::bothBoardLines() const
 {
     // Init return value to player board output lines
-    lines ret = player->toLineStrings();
+    lines ret = player.toLineStrings();
 
     // The computer board output lines
-    lines computerLines = computer->toLineStrings();
+    lines computerLines = computer.toLineStrings();
 
     // Grab size
     int boardSize = computerLines.size();
@@ -45,7 +45,7 @@ Cell Game::getRandomTarget(const Player &opponent) const
 // Prompt the user for a target
 Cell Game::promptTarget() const
 {
-    Board b = player->getBoard();
+    Board b = player.getBoardConst();
     Cell ret = b.promptCell("Target");
     return ret;
 }
@@ -67,7 +67,7 @@ void Game::runFiring()
         cout << bothBoardLines() << endl;
 
         // Get a target that hasn't been fired at
-        std::vector<Cell> toAvoid = computer->getBoard().getAllShots();
+        std::vector<Cell> toAvoid = computer.getBoard().getAllShots();
         Cell nextTarget = Cell();
         do
         {
@@ -76,8 +76,8 @@ void Game::runFiring()
 
         cout << nextTarget.toString() << endl;
 
-        // Fire it at the computer
-        player->fireShot(nextTarget, *computer);
+        // Fire the shot at the computer, store the result in the player
+        player.fireShot(nextTarget, computer);
 
         // artificially end the game - TODO REMOVE
         //gameState = GameState::GameOver;
@@ -90,8 +90,8 @@ void Game::runPlacement()
     std::cout << std::endl
               << "Stage your battlefield!" << std::endl
               << std::endl;
-    player->runPlacement();
-    computer->runPlacement();
+    player.runPlacement();
+    computer.runPlacement();
 }
 
 //
@@ -100,16 +100,9 @@ void Game::runPlacement()
 
 Game::Game(int boardSize)
 {
-    player = new Player(boardSize);
-    computer = new Computer(boardSize);
+    player = Player(boardSize);
+    computer = Computer(boardSize);
     gameState = GameState::Placement;
-}
-
-// Destructor
-Game::~Game()
-{
-    delete player;
-    delete computer;
 }
 
 // Run the game
@@ -124,5 +117,5 @@ void Game::run()
 // Getter for board size
 int Game::size() const
 {
-    return player->getBoard().size();
+    return player.getBoardConst().size();
 }

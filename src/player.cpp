@@ -227,11 +227,11 @@ Player::Player(int boardSize)
     unassignedShips = {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
 }
 
-// Fire a shot.  Records in opponents Board and attacker's Player - do we need to store locally too?
+// Record the result of a shit
 // True indicates a hit, false a miss
 void Player::fireShot(Cell target, Player &opponent)
 {
-    if (opponent.getBoard().receiveFire(target))
+    if (opponent.receiveShot(target))
     {
         // Hit
         hits.push_back(target);
@@ -249,7 +249,7 @@ std::vector<Cell> Player::getAllShots() const
     return board.getAllShots();
 }
 
-// Getter for the board
+// Getter for the board -- TODO should the caller just use const_cast?
 Board Player::getBoard()
 {
     return board;
@@ -276,6 +276,12 @@ lines Player::toLineStrings() const
     lines boardLines = board.toLineStrings(true);
     ret.insert(ret.end(), boardLines.begin(), boardLines.end());
     return ret;
+}
+
+// Receive a shot
+bool Player::receiveShot(Cell target)
+{
+    return board.receiveShot(target);
 }
 
 // Run the placement loop to prompt user for ship locations
@@ -310,7 +316,7 @@ outer:
 
         // Prompt user for origin
         Cell origin = getOrigin(shipChoice);
-        cout << origin.toString() << endl;
+        cout << origin << endl;
 
         // get direction - default to Left arbitrarily
         Direction d = Direction::Left;
@@ -371,18 +377,6 @@ outer:
             }
         }
 
-        // Pretty-print direction string
-        std::string directionString = "";
-        if (d == Direction::Left)
-        {
-            directionString.append("Left");
-        }
-        else
-        {
-            // only one other option...
-            directionString.append("Down");
-        }
-
         // Confirm triple
 
         char confirmChoice = 'x';
@@ -392,15 +386,10 @@ outer:
             //TODO first, show the board with the ship placed - a Board::removeShip method would be good
             // not urgent
 
-            // build origin string
-            std::string originStr = "";
-            originStr.push_back(origin.col);
-            originStr.append(std::to_string(origin.row));
-
             // display all three choices
-            cout << "Origin: " << originStr << endl
+            cout << "Origin: " << origin << endl
                  << "Class: " << shipChoice << " (Length: " << shipChoice.size() << ")" << endl
-                 << "Direction: " << directionString << endl
+                 << "Direction: " << d << endl
                  << "Confirm? (Y/N)> ";
             cin >> confirmChoice;
             confirmChoice = toupper(confirmChoice);

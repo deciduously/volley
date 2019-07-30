@@ -22,7 +22,6 @@ void pushCharCell(std::string &s, char contents)
 Board::Board(int boardSize)
 {
     dimension = boardSize; // All boards are 10, hardcoded in "game.h" (A-J)
-    ships = {};
 }
 
 // Check if a shipPlacement would fit on the board before creating a Ship
@@ -205,12 +204,13 @@ std::vector<Cell> Board::getAllShots() const
     return receivedShots;
 }
 
-// Take a shot at a cell, return true if it's a hit
-bool Board::receiveFire(Cell target)
+// Receive a shot at a cell, return true if it's a hit
+bool Board::receiveShot(Cell target)
 {
+    std::cout << "Taking a hit at " << target << "!" << std::endl;
     char result = getCharAt(target, true);
     receivedShots.push_back(target);
-    return result != '.' && result != 'O';
+    return result != '.';
 }
 
 // Getter for board dimension

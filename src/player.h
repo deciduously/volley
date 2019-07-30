@@ -31,6 +31,7 @@ public:
     Board getBoard();
     Board getBoardConst() const;
     lines toLineStrings() const;
+    bool receiveShot(Cell target);
     void runPlacement();
 };
 

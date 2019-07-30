@@ -17,8 +17,8 @@
 
 class Game
 {
-    Player *player;
-    Computer *computer;
+    Player player;
+    Computer computer;
     GameState gameState;
     lines bothBoardLines() const;
     Cell getRandomTarget(const Player &opponent) const;
@@ -28,7 +28,6 @@ class Game
 
 public:
     Game(int boardSize = BOARD_SIZE);
-    ~Game();
     void run();
     int size() const;
 };

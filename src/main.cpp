@@ -22,7 +22,7 @@ int main()
     srand(time(0));
 
     // Instantiate game object
-    Game *game = new Game();
+    Game game = Game();
 
     // Display header
     int headerWidth = 25;
@@ -31,10 +31,7 @@ int main()
          << endl;
 
     // run game loop
-    game->run();
-
-    // Cleanup
-    delete game;
+    game.run();
 
     // quit the process, which does all the proper stdlib cleanup
     std::exit(0);

@@ -22,7 +22,7 @@ public:
     Cell promptCell(const std::string &promptStr) const;
     void pushShip(Ship s);
     std::vector<Cell> getAllShots() const;
-    bool receiveFire(Cell target);
+    bool receiveShot(Cell target);
     int size() const;
     lines toLineStrings(bool showShips) const;
 };

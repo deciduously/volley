@@ -17,7 +17,7 @@ lines Computer::toLineStrings() const
     ret.push_back(headerLine);
     ret.push_back("");
     // insert board line strings
-    lines boardLines = board.toLineStrings(true);
+    lines boardLines = board.toLineStrings(false);
     ret.insert(ret.end(), boardLines.begin(), boardLines.end());
     return ret;
 }
