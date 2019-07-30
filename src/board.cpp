@@ -207,10 +207,17 @@ std::vector<Cell> Board::getAllShots() const
 // Receive a shot at a cell, return true if it's a hit
 bool Board::receiveShot(Cell target)
 {
-    std::cout << "Taking a hit at " << target << "!" << std::endl;
     char result = getCharAt(target, true);
     receivedShots.push_back(target);
-    return result != '.';
+    bool ret = result != '.';
+    // record hit if true
+    if (ret)
+    {
+        // std::find_if chipClass.char == result
+        // then increment that ships hits
+        // then add stuff to Ship to display when it's sunk
+    }
+    return ret;
 }
 
 // Getter for board dimension

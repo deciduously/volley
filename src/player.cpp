@@ -234,11 +234,13 @@ void Player::fireShot(Cell target, Player &opponent)
     if (opponent.receiveShot(target))
     {
         // Hit
+        std::cout << "It's a hit!" << std::endl;
         hits.push_back(target);
     }
     else
     {
         // Miss
+        std::cout << "It's a miss." << std::endl;
         misses.push_back(target);
     }
 }
