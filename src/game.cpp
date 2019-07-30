@@ -70,7 +70,6 @@ void Game::runFiring()
         // run player turn
 
         // Get a target that hasn't been fired at
-        std::vector<Cell> toAvoidComputer = computer.getBoard().getAllShots();
         Cell nextTarget = promptTarget();
         cout << nextTarget.toString() << endl;
 
@@ -79,7 +78,7 @@ void Game::runFiring()
 
         // run computer turn
         Cell randomTarget = player.getBoard().getRandomTarget();
-        cout << "Opponent fires " << randomTarget << endl;
+        cout << "Opponent fires at: " << randomTarget << endl;
         computer.fireShot(randomTarget, player);
 
         // artificially end the game - TODO REMOVE
