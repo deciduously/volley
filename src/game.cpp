@@ -61,23 +61,26 @@ void Game::runFiring()
          << endl;
     while (gameState == GameState::Firing)
     {
-        // Run turns until someone wins
+        // Run turns until someone wins - TODO refactor
+        // Board::getRandomTarget? - that builds in the avoiding check
 
         // Display both boards
         cout << bothBoardLines() << endl;
 
-        // Get a target that hasn't been fired at
-        std::vector<Cell> toAvoid = computer.getBoard().getAllShots();
-        Cell nextTarget = Cell();
-        do
-        {
-            nextTarget = promptTarget();
-        } while (std::find(toAvoid.begin(), toAvoid.end(), nextTarget) != toAvoid.end());
+        // run player turn
 
+        // Get a target that hasn't been fired at
+        std::vector<Cell> toAvoidComputer = computer.getBoard().getAllShots();
+        Cell nextTarget = promptTarget();
         cout << nextTarget.toString() << endl;
 
         // Fire the shot at the computer, store the result in the player
         player.fireShot(nextTarget, computer);
+
+        // run computer turn
+        Cell randomTarget = player.getBoard().getRandomTarget();
+        cout << "Opponent fires " << randomTarget << endl;
+        computer.fireShot(randomTarget, player);
 
         // artificially end the game - TODO REMOVE
         //gameState = GameState::GameOver;

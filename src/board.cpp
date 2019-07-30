@@ -114,6 +114,17 @@ Cell Board::getRandomCell() const
     return Cell(row, colNum);
 }
 
+// Get a random cell on the board that doesn't appear in receivedShots
+Cell Board::getRandomTarget() const
+{
+    Cell ret = Cell();
+    do
+    {
+        ret = getRandomCell();
+    } while (std::find(receivedShots.begin(), receivedShots.end(), ret) != receivedShots.end());
+    return ret;
+}
+
 // Method to prompt the user for a cell, ensuring its a valid spot on this board
 // Returning a default cell indicates 'R', or random
 Cell Board::promptCell(const std::string &promptStr) const
@@ -135,7 +146,7 @@ Cell Board::promptCell(const std::string &promptStr) const
         if (originStr.size() == 1 && toupper(originStr[0]) == 'R')
         {
             cout << "Rolling the dice..." << endl;
-            return getRandomCell();
+            return getRandomTarget();
         }
 
         // try to get a tuple from the input

@@ -19,6 +19,7 @@ public:
     bool doesFit(ShipPlacement sp) const;
     char getCharAt(Cell c, bool showShips) const;
     Cell getRandomCell() const;
+    Cell getRandomTarget() const;
     Cell promptCell(const std::string &promptStr) const;
     void pushShip(Ship s);
     std::vector<Cell> getAllShots() const;
