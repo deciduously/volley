@@ -238,7 +238,7 @@ bool Board::receiveShot(Cell target)
 }
 
 // get how many ships still have health
-int Board::remainingShips() const
+int Board::remainingShipsCount() const
 {
     // Before we've started, there are no ships
     // This means we're in Placement, return the total number of ships
@@ -252,6 +252,27 @@ int Board::remainingShips() const
         if (ships[i].getHits() > 0)
         {
             ret++;
+        }
+    }
+    return ret;
+}
+
+// Return all the remaining alive ship classes
+std::vector<ShipClass> Board::remainingShips() const
+{
+    // Before we've started, there are no ships
+    // This means we're in Placement, return the total number of ships
+    // I don't intend to ever call this but here it is
+    int shipsLen = ships.size();
+    if (shipsLen == 0)
+        return {ShipClass(AircraftCarrier), ShipClass(Battleship), ShipClass(Cruiser), ShipClass(Destroyer), ShipClass(UBoat)};
+
+    std::vector<ShipClass> ret = {};
+    for (int i = 0; i < shipsLen; i++)
+    {
+        if (ships[i].getHits() > 0)
+        {
+            ret.push_back(ships[i].getShipClass());
         }
     }
     return ret;

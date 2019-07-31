@@ -15,7 +15,7 @@ class Computer : public Player
 public:
     Computer(int boardSize = BOARD_SIZE) : Player(boardSize){};
     void runPlacement();
-    lines toLineStrings() const;
+    lines toLineStrings(const GameState gs = GameState::Firing) const;
 };
 
 #endif

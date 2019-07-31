@@ -4,35 +4,6 @@
 #include "player.h"
 
 //
-// HELPER FUNCTIONS
-//
-
-// Helper function to pretty-print the vector of shipclasses
-std::string shipClassString(std::vector<ShipClass> scs)
-{
-    using std::string;
-    using std::to_string;
-
-    // Open string with a bracket
-    string ret = "{ ";
-
-    // Iterate through the unassigned ships, adding them to the output
-    int unassignedShipsSize = scs.size();
-    for (int i = 0; i < unassignedShipsSize; i++)
-    {
-        ShipClass sc = scs[i];
-        ret.push_back(sc.toChar());
-        ret.push_back(':');
-        ret.push_back(to_string(sc.size())[0]);
-        ret.push_back(' ');
-    }
-
-    // Add closing brace and return result
-    ret.push_back('}');
-    return ret;
-}
-
-//
 // PRIVATE METHODS
 //
 
@@ -127,7 +98,7 @@ ShipClass Player::getShipClass() const
             return unassignedShips[0];
         }
 
-        cout << "\n\nWhich ship do you want to add?\nSelect letter, or 'R' to place all the rest randomly: " << shipClassString(unassignedShips) << "> ";
+        cout << "\n\nWhich ship do you want to add?\nSelect letter, or 'R' to place all the rest randomly: " << remainingShipsStr(GameState::Placement) << "> ";
 
         cin >> shipTypeInput;
         // it was a character, check if it was an option
@@ -216,9 +187,51 @@ void Player::randomlyPlaceShips()
     }
 }
 
-int Player::remainingShips() const
+int Player::remainingShipsCount() const
 {
-    return board.remainingShips();
+    return board.remainingShipsCount();
+}
+
+// Helper function to pretty-print the vector of shipclasses
+std::string Player::remainingShipsStr(const GameState gs) const
+{
+    using std::string;
+    using std::to_string;
+
+    // grab which ship vector to use
+    std::vector<ShipClass> toShow;
+
+    switch (gs)
+    {
+    case GameState::Placement:
+        toShow = unassignedShips;
+        break;
+    case GameState::Firing:
+        toShow = getBoardConst().remainingShips();
+        break;
+    case GameState::GameOver:
+        std::cerr << "Something weird and unexpected has happened" << std::endl;
+        std::exit(1);
+        break;
+    }
+
+    // Open string with a bracket
+    string ret = "{ ";
+
+    // Iterate through the unassigned ships, adding them to the output
+    int vecSize = toShow.size();
+    for (int i = 0; i < vecSize; i++)
+    {
+        ShipClass sc = toShow[i];
+        ret.push_back(sc.toChar());
+        ret.push_back(':');
+        ret.push_back(to_string(sc.size())[0]);
+        ret.push_back(' ');
+    }
+
+    // Add closing brace and return result
+    ret.push_back('}');
+    return ret;
 }
 
 //
@@ -269,15 +282,17 @@ Board Player::getBoardConst() const
 }
 
 // Return the board output as a vector of strings, one per line
-lines Player::toLineStrings() const
+// TODO make COmputer more able to reuse this somehow
+lines Player::toLineStrings(GameState gs) const
 {
-    // add "Player"  - or "Computer" ? -  header
+    // add "Player"  - or "Computer" -  header
     lines ret = {};
 
     ret.push_back("                Player           ");
-    std::string shipsRemainLine = "            Ships alive: ";
-    shipsRemainLine.append(std::to_string(remainingShips()));
-    ret.push_back(shipsRemainLine);
+    ret.push_back("Ships alive:                        ");
+    std::string base = remainingShipsStr(gs);
+    base.append("                     ");
+    ret.push_back(base);
     ret.push_back("");
     // insert board line strings
     lines boardLines = board.toLineStrings(true);
@@ -307,7 +322,7 @@ outer:
     while (unassignedShips.size() > 0)
     {
         // display board
-        cout << toLineStrings();
+        cout << toLineStrings(GameState::Placement);
 
         // Prompt user for which ship to place
         ShipClass shipChoice = getShipClass();
