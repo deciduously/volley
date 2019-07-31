@@ -187,11 +187,6 @@ void Player::randomlyPlaceShips()
     }
 }
 
-int Player::remainingShipsCount() const
-{
-    return board.remainingShipsCount();
-}
-
 // Helper function to pretty-print the vector of shipclasses
 std::string Player::remainingShipsStr(const GameState gs) const
 {
@@ -249,11 +244,13 @@ Player::Player(int boardSize)
 // True indicates a hit, false a miss
 void Player::fireShot(Cell target, Player &opponent)
 {
+    // store pre-shot ships
     if (opponent.receiveShot(target))
     {
         // Hit
         std::cout << "It's a hit!" << std::endl;
         hits.push_back(target);
+        // check if it sank anything
     }
     else
     {
@@ -304,6 +301,11 @@ lines Player::toLineStrings(GameState gs) const
 bool Player::receiveShot(Cell target)
 {
     return board.receiveShot(target);
+}
+
+int Player::remainingShipsCount() const
+{
+    return board.remainingShipsCount();
 }
 
 // Run the placement loop to prompt user for ship locations

@@ -23,7 +23,6 @@ protected:
     Board board;
     std::vector<ShipClass> unassignedShips;
     void randomlyPlaceShips();
-    int remainingShipsCount() const;
     std::string remainingShipsStr(const GameState gs) const;
 
 public:
@@ -34,6 +33,7 @@ public:
     Board getBoardConst() const;
     lines toLineStrings(const GameState gs = GameState::Firing) const;
     bool receiveShot(Cell target);
+    int remainingShipsCount() const;
     void runPlacement();
 };
 

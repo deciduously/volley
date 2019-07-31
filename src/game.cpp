@@ -50,9 +50,18 @@ Cell Game::promptTarget() const
     return ret;
 }
 
-// Run the fire loop until someone wins
-void Game::runFiring()
+// Reset a completed game to play again
+void Game::resetGame()
 {
+    player = Player();
+    computer = Computer();
+    gameState = GameState::Firing;
+}
+
+// Run the fire loop until someone wins
+bool Game::runFiring()
+{
+    using std::cin;
     using std::cout;
     using std::endl;
 
@@ -76,14 +85,41 @@ void Game::runFiring()
         // Fire the shot at the computer, store the result in the player
         player.fireShot(nextTarget, computer);
 
+        // check if you won
+        if (computer.remainingShipsCount() == 0)
+        {
+            gameState = GameState::GameOver;
+            char playAgain;
+            cout << "You have won the game!  Congratulations.  Play again? (Y/N)> ";
+            cin >> playAgain;
+
+            if (toupper(playAgain) == 'Y')
+                return true;
+            else
+                return false;
+        }
+
         // run computer turn
         Cell randomTarget = player.getBoard().getRandomTarget();
         cout << "Opponent fires at: " << randomTarget << endl;
         computer.fireShot(randomTarget, player);
 
-        // artificially end the game - TODO REMOVE
-        //gameState = GameState::GameOver;
+        // check if the computer just won
+        if (player.remainingShipsCount() == 0)
+        {
+            gameState = GameState::GameOver;
+            char playAgain;
+            cout << "The computer has won the game.  You should be ashamed.  Play again? (Y/N)> ";
+            cin >> playAgain;
+
+            if (toupper(playAgain) == 'Y')
+                return true;
+            else
+                return false;
+        }
     }
+    // This is unreachable - someone will always win
+    return true;
 }
 
 // Run ship placement for both players
@@ -110,9 +146,18 @@ Game::Game(int boardSize)
 // Run the game
 void Game::run()
 {
-    runPlacement();
-    gameState = GameState::Firing;
-    runFiring();
+    bool playAgain = true;
+
+    while (playAgain)
+    {
+        runPlacement();
+        gameState = GameState::Firing;
+        playAgain = runFiring();
+
+        // cleanup if needed
+        if (playAgain)
+            resetGame();
+    }
     std::cout << "Game over!" << std::endl;
 }
 

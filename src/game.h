@@ -23,7 +23,8 @@ class Game
     lines bothBoardLines() const;
     Cell getRandomTarget(const Player &opponent) const;
     Cell promptTarget() const;
-    void runFiring();
+    void resetGame();
+    bool runFiring();
     void runPlacement();
 
 public:
