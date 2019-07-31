@@ -121,7 +121,7 @@ Cell Board::getRandomTarget() const
     do
     {
         ret = getRandomCell();
-    } while (std::find(receivedShots.begin(), receivedShots.end(), ret) != receivedShots.end());
+    } while (std::find(getAllShots().begin(), getAllShots().end(), ret) != getAllShots().end());
     return ret;
 }
 
@@ -197,8 +197,18 @@ Cell Board::promptCell(const std::string &promptStr) const
         }
         else
         {
-            // if it fits, return it
-            return Cell(row, col);
+            Cell ret = Cell(row, col);
+            // if it fits, check if it's taken
+            if (std::find(getAllShots().begin(), getAllShots().end(), ret) != getAllShots().end())
+            {
+                cout << "That's taken!" << endl;
+                clearCin();
+                continue;
+            }
+            else
+            {
+                return Cell(row, col);
+            }
         }
     }
 }
