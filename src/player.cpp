@@ -278,25 +278,6 @@ Board Player::getBoardConst() const
     return board;
 }
 
-// Return the board output as a vector of strings, one per line
-// TODO make COmputer more able to reuse this somehow
-lines Player::toLineStrings(GameState gs) const
-{
-    // add "Player"  - or "Computer" -  header
-    lines ret = {};
-
-    ret.push_back("                Player           ");
-    ret.push_back("Ships alive:                        ");
-    std::string base = remainingShipsStr(gs);
-    base.append("                     ");
-    ret.push_back(base);
-    ret.push_back("");
-    // insert board line strings
-    lines boardLines = board.toLineStrings(true);
-    ret.insert(ret.end(), boardLines.begin(), boardLines.end());
-    return ret;
-}
-
 // Receive a shot
 bool Player::receiveShot(Cell target)
 {
@@ -404,7 +385,6 @@ outer:
         // Confirm triple
 
         char confirmChoice = 'x';
-        bool startOver = false;
         for (;;)
         {
             //TODO first, show the board with the ship placed - a Board::removeShip method would be good
@@ -426,22 +406,36 @@ outer:
                 // remove ship and add it back to the options
                 board.removeShip(shipChoice);
                 unassignedShips.push_back(shipChoice);
-                // jump back to the top
+                // jump back to the very top
                 goto outer;
             }
             else
             {
-                cout << "Confirmed!" << endl;
+                cout << "Confirmed!  Saving ship location..." << endl;
                 break;
             }
-        }
-
-        // If the user didn't hit Y, start over
-        if (startOver)
-            break;
-
-        // Otherwise place ship
-        cout << "Placing ship..." << endl;
-        
+        }   
     }
+}
+
+// Return the board output as a vector of strings, one per line
+// TODO make Computer more able to reuse this somehow
+lines Player::toLineStrings(GameState gs) const
+{
+    // add "Player"  - or "Computer" -  header
+    lines ret = {};
+
+    ret.push_back("                Player           ");
+    if (gs == GameState::Firing)
+    {
+        ret.push_back("Ships alive:                        ");
+        std::string base = remainingShipsStr(gs);
+        base.append("                     ");
+        ret.push_back(base);
+        ret.push_back("");
+    }
+    // insert board line strings
+    lines boardLines = board.toLineStrings(true);
+    ret.insert(ret.end(), boardLines.begin(), boardLines.end());
+    return ret;
 }
