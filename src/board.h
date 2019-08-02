@@ -25,6 +25,7 @@ public:
     bool receiveShot(Cell target);
     int remainingShipsCount() const;
     std::vector<ShipClass> remainingShips() const;
+    void removeShip(ShipClass sc);
     int size() const;
     lines toLineStrings(bool showShips) const;
 };

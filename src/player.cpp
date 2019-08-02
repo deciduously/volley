@@ -21,7 +21,7 @@ Cell Player::getOrigin(ShipClass sc) const
         {
             ret = b.getRandomCell();
         }
-    } while (!board.doesFit(ShipPlacement(ret, Direction::Left, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
+    } while (!board.doesFit(ShipPlacement(ret, Direction::Right, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
 
     return ret;
 }
@@ -29,14 +29,14 @@ Cell Player::getOrigin(ShipClass sc) const
 // Return a random direction for the given origin and shipclass that fit - it's already ensured at least one of the two does
 Direction Player::getRandomDirection(Cell origin, ShipClass sc) const
 {
-    bool fitsLeft = getBoardConst().doesFit(ShipPlacement(origin, Direction::Left, sc));
+    bool fitsRight = getBoardConst().doesFit(ShipPlacement(origin, Direction::Right, sc));
     bool fitsDown = board.doesFit(ShipPlacement(origin, Direction::Down, sc));
     // don't bother doing the check for if neither work, getRandomOrigin checked it until one or the other did
-    if (fitsLeft && !fitsDown)
+    if (fitsRight && !fitsDown)
     {
-        return Direction::Left;
+        return Direction::Right;
     }
-    else if (!fitsLeft && fitsDown)
+    else if (!fitsRight && fitsDown)
     {
         return Direction::Down;
     }
@@ -46,7 +46,7 @@ Direction Player::getRandomDirection(Cell origin, ShipClass sc) const
         int dirChoice = rand() % 2;
         if (dirChoice == 1)
         {
-            return Direction::Left;
+            return Direction::Right;
         }
         else
         {
@@ -65,7 +65,7 @@ Cell Player::getRandomOrigin(ShipClass sc) const
     {
         ret = board.getRandomCell();
         // move on if it fits either way - placement will handle choosing a direction
-    } while (!board.doesFit(ShipPlacement(ret, Direction::Left, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
+    } while (!board.doesFit(ShipPlacement(ret, Direction::Right, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
 
     return ret;
 }
@@ -91,10 +91,10 @@ ShipClass Player::getShipClass() const
     string shipTypeInput;
     for (;;)
     {
-        // if there's only one left, autoselect it
+        // if there's only one Right, autoselect it
         if (unassignedShips.size() == 1)
         {
-            cout << "One ship left: placing " << unassignedShips[0].toString() << endl;
+            cout << "One ship Right: placing " << unassignedShips[0].toString() << endl;
             return unassignedShips[0];
         }
 
@@ -237,7 +237,7 @@ std::string Player::remainingShipsStr(const GameState gs) const
 Player::Player(int boardSize)
 {
     board = Board(boardSize);
-    unassignedShips = {AircraftCarrier, Battleship, Cruiser, Destroyer, UBoat};
+    unassignedShips = {ShipClassType::AircraftCarrier, ShipClassType::Battleship, ShipClassType::Cruiser, ShipClassType::Destroyer, ShipClassType::UBoat};
 }
 
 // Destructor
@@ -319,7 +319,7 @@ void Player::runPlacement()
     // <string>
     using std::string;
 
-// Continually prompt to place ships until there are none left
+// Continually prompt to place ships until there are none Right
 outer:
     while (unassignedShips.size() > 0)
     {
@@ -342,30 +342,30 @@ outer:
         Cell origin = getOrigin(shipChoice);
         cout << origin << endl;
 
-        // get direction - default to Left arbitrarily
-        Direction d = Direction::Left;
+        // get direction - default to Right arbitrarily
+        Direction d = Direction::Right;
 
         // Check if the ship fits either way
         // If it fits one way or the other, set the direction automatically
         // If both work, prompt to choose
-        bool fitsLeft = board.doesFit(ShipPlacement(origin, Direction::Left, shipChoice));
+        bool fitsRight = board.doesFit(ShipPlacement(origin, Direction::Right, shipChoice));
         bool fitsDown = board.doesFit(ShipPlacement(origin, Direction::Down, shipChoice));
-        if (!fitsLeft && !fitsDown)
+        if (!fitsRight && !fitsDown)
         {
             // Can't possibly place with that origin
-            // Tell them it's gonna be left or down, try again
+            // Tell them it's gonna be Right or down, try again
             cout << "Cannot place " << shipChoice << " at that location." << endl
-                 << "You will orient Left or Down from the origin.  Please pick a new origin." << endl;
+                 << "You will orient Right or Down from the origin.  Please pick a new origin." << endl;
             continue;
         }
-        else if (fitsLeft && !fitsDown)
+        else if (fitsRight && !fitsDown)
         {
-            // must be Left - inform the user
-            cout << shipChoice << " only fits left.  Saving..." << endl;
-            // technically no need to set, it should be Left already, but just in case
-            d = Direction::Left;
+            // must be Right - inform the user
+            cout << shipChoice << " only fits Right.  Saving..." << endl;
+            // technically no need to set, it should be Right already, but just in case
+            d = Direction::Right;
         }
-        else if (!fitsLeft && fitsDown)
+        else if (!fitsRight && fitsDown)
         {
             // must be Down - inform the user
             cout << shipChoice << " only fits down.  Saving..." << endl;
@@ -377,14 +377,14 @@ outer:
             char directionChoice = 'x';
             for (;;)
             {
-                cout << "(L)eft or (D)own> ";
+                cout << "(R)ight or (D)own> ";
                 cin >> directionChoice;
                 directionChoice = toupper(directionChoice);
-                if (directionChoice == 'L' || directionChoice == 'D')
+                if (directionChoice == 'R' || directionChoice == 'D')
                 {
-                    if (directionChoice == 'L')
+                    if (directionChoice == 'R')
                     {
-                        d = Direction::Left;
+                        d = Direction::Right;
                         break;
                     }
                     else if (directionChoice == 'D')
@@ -395,7 +395,7 @@ outer:
                 }
                 else
                 {
-                    cout << "Please enter \"L\" or \"D\"." << endl;
+                    cout << "Please enter \"R\" or \"D\"." << endl;
                     continue;
                 }
             }
@@ -408,7 +408,10 @@ outer:
         for (;;)
         {
             //TODO first, show the board with the ship placed - a Board::removeShip method would be good
-            // not urgent
+            
+             //  Place the given triple
+            placeShip(ShipPlacement(origin, d, shipChoice));
+            cout << "PREVIEW:" << endl << endl << toLineStrings() << endl;
 
             // display all three choices
             cout << "Origin: " << origin << endl
@@ -420,6 +423,10 @@ outer:
             if (confirmChoice != 'Y')
             {
                 cout << "Starting over!" << endl;
+                // remove ship and add it back to the options
+                board.removeShip(shipChoice);
+                unassignedShips.push_back(shipChoice);
+                // jump back to the top
                 goto outer;
             }
             else
@@ -435,6 +442,6 @@ outer:
 
         // Otherwise place ship
         cout << "Placing ship..." << endl;
-        placeShip(ShipPlacement(origin, d, shipChoice));
+        
     }
 }

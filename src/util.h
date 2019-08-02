@@ -18,16 +18,16 @@ const int BOARD_SIZE = 10;
 
 // A Ship can be either horizontal or vertical
 // The occupied cells are extrapolated from an origin and a Direction
-enum Direction
+enum class Direction
 {
-    Left,
+    Right,
     Down
 };
 
 // ostream overload for Direction
 std::ostream &operator<<(std::ostream &stream, const Direction &d);
 
-enum GameState
+enum class GameState
 {
     Firing,
     GameOver,
@@ -61,7 +61,7 @@ std::ostream &operator<<(std::ostream &stream, const Cell &c);
 
 // ShipClass
 
-enum ShipClassType
+enum class ShipClassType
 {
     AircraftCarrier,
     Battleship,

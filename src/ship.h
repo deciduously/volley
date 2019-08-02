@@ -12,7 +12,7 @@
 typedef struct ShipPlacement
 {
     Cell cell;
-    Direction direction = Direction::Left;
+    Direction direction = Direction::Right;
     ShipClass shipClass = ShipClass();
     ShipPlacement();
     ShipPlacement(Cell c, Direction d, ShipClass sc);

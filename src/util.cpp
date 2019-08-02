@@ -15,9 +15,9 @@ void clearCin()
 // ostream overload for Direction
 std::ostream &operator<<(std::ostream &stream, const Direction &d)
 {
-    if (d == Direction::Left)
+    if (d == Direction::Right)
     {
-        return stream << "Left";
+        return stream << "Right";
     }
     else
     {
@@ -39,7 +39,7 @@ std::ostream &operator<<(std::ostream &stream, const lines &l)
 // Cell
 //
 
-// Default to top left corner
+// Default to top Right corner
 Cell::Cell()
 {
 }
@@ -131,22 +131,22 @@ int ShipClass::size() const
 {
     switch (sct)
     {
-    case AircraftCarrier:
+    case ShipClassType::AircraftCarrier:
         return 5;
         break;
-    case Battleship:
+    case ShipClassType::Battleship:
         return 4;
         break;
-    case Cruiser:
+    case ShipClassType::Cruiser:
         return 3;
         break;
-    case Destroyer:
+    case ShipClassType::Destroyer:
         return 2;
         break;
-    case UBoat:
+    case ShipClassType::UBoat:
         return 3;
         break;
-    case Unknown:
+    case ShipClassType::Unknown:
         return 0;
         break;
     }
@@ -160,22 +160,22 @@ char ShipClass::toChar() const
 {
     switch (sct)
     {
-    case AircraftCarrier:
+    case ShipClassType::AircraftCarrier:
         return 'A';
         break;
-    case Battleship:
+    case ShipClassType::Battleship:
         return 'B';
         break;
-    case Cruiser:
+    case ShipClassType::Cruiser:
         return 'C';
         break;
-    case Destroyer:
+    case ShipClassType::Destroyer:
         return 'D';
         break;
-    case UBoat:
+    case ShipClassType::UBoat:
         return 'U';
         break;
-    case Unknown:
+    case ShipClassType::Unknown:
         return 'E';
     }
     // if we got past the switch, something bad happened because it's exhaustive for that enum
@@ -188,22 +188,22 @@ std::string ShipClass::toString() const
 {
     switch (sct)
     {
-    case AircraftCarrier:
+    case ShipClassType::AircraftCarrier:
         return "Aircraft Carrier";
         break;
-    case Battleship:
+    case ShipClassType::Battleship:
         return "Battleship";
         break;
-    case Cruiser:
+    case ShipClassType::Cruiser:
         return "Cruiser";
         break;
-    case Destroyer:
+    case ShipClassType::Destroyer:
         return "Destroyer";
         break;
-    case UBoat:
+    case ShipClassType::UBoat:
         return "U-Boat";
         break;
-    case Unknown:
+    case ShipClassType::Unknown:
         return "Unknown Ship Class";
         break;
     }

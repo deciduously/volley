@@ -25,7 +25,7 @@ Origin: 9B // accepts either RowCol or ColRow: A1 or 1A
 Unable to place carrier ship there.  // each ship has a display name as well as a board name
 Change (d)irection or (o)rigin? D
 
-Placing Left instead:
+Placing Right instead:
       A  B  C   D  E   F  G   H   I   J
 1    _   _   _   _   _   _   _   _   _   _                      Ships remain: {5:A 4:B 3:C 3:U 2:D}
 2    _   _   _   _   _   _   _   _   _   _
@@ -49,7 +49,7 @@ After all ships have been place the game begins:
 
 ```
                        YOU                                                         THEM
-                   Ships left: 5                                              Ships left: 5
+                   Ships Right: 5                                              Ships Right: 5
 
       A  B   C   D   E   F   G   H   I   J                        A   B   C   D   E   F   G   H   I   J
 1    _   _   _   _   _   _   _   _   _   D                   1    _   _   _   _   _   _   _   _   _   _
@@ -71,7 +71,7 @@ They fire at D4...it’s a hit!
 
 
                        YOU                                                         THEM
-                   Ships left: 5                                              Ships left: 5
+                   Ships Right: 5                                              Ships Right: 5
 
       A  B   C   D   E   F   G   H   I   J                        A   B   C   D   E   F   G   H   I   J
 1    _   _   _   _   _   _   _   _   _   D                   1    _   _   _   _   _   _   _   _   _   _
@@ -108,11 +108,11 @@ This project involves several classes:
 * Board
   * `ships: std::vector<Ship>`
   * `bool occupied(std::tuple(int, int))`
-  * `void addShip(Ship, origin: int, enum {Left, Down})`
+  * `void addShip(Ship, origin: int, enum {Right, Down})`
   * Default constructor will start empty
 * Ship
   * `origin: std::tuple(int, int)` // D2 = (4,2)`
-  * `direction: enum {Left, Down}`
+  * `direction: enum {Right, Down}`
   * `hits: int`
   * `type: enum { AircraftCarrier, Battleship, Destroyer, U-Boat, Cruiser }`
   * `int getLength(void) // lengths are hardcoded for each type`

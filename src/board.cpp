@@ -277,7 +277,7 @@ std::vector<ShipClass> Board::remainingShips() const
     // I don't intend to ever call this but here it is
     int shipsLen = ships.size();
     if (shipsLen == 0)
-        return {ShipClass(AircraftCarrier), ShipClass(Battleship), ShipClass(Cruiser), ShipClass(Destroyer), ShipClass(UBoat)};
+        return {ShipClass(ShipClassType::AircraftCarrier), ShipClass(ShipClassType::Battleship), ShipClass(ShipClassType::Cruiser), ShipClass(ShipClassType::Destroyer), ShipClass(ShipClassType::UBoat)};
 
     std::vector<ShipClass> ret = {};
     for (int i = 0; i < shipsLen; i++)
@@ -288,6 +288,20 @@ std::vector<ShipClass> Board::remainingShips() const
         }
     }
     return ret;
+}
+
+// Remove the ship with the given ship class if found, otherwise do nothing
+// Used to build a "preview" board during placement - could also use if a ship hits zero i guess? no need really
+void Board::removeShip(ShipClass sc)
+{
+    int shipsSize = ships.size();
+    for (int i = 0; i < shipsSize; i++)
+    {
+        if (ships[i].getShipClass() == sc)
+        {
+            ships.erase(ships.begin() + i);
+        }
+    }
 }
 
 // Getter for board dimension

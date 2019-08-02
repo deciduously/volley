@@ -24,7 +24,7 @@ std::vector<Cell> ShipPlacement::containedCells() const
     {
         switch (direction)
         {
-        case Direction::Left:
+        case Direction::Right:
             // de-letter it
             ret.push_back(Cell(cell.row, cell.col + i - 64));
             break;
