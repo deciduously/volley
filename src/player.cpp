@@ -11,17 +11,17 @@
 Cell Player::getOrigin(ShipClass sc) const
 {
     Cell ret = Cell();
-    Board b = getBoardConst();
+    Board *b = getBoardConst();
 
     // Ensure what they pick fits at least one way
     do
     {
-        ret = board.promptCell("Origin");
-        if (ret == Cell(b.size() + 1, b.size() + 1))
+        ret = board->promptCell("Origin");
+        if (ret == Cell(b->size() + 1, b->size() + 1))
         {
-            ret = b.getRandomCell();
+            ret = b->getRandomCell();
         }
-    } while (!board.doesFit(ShipPlacement(ret, Direction::Right, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
+    } while (!board->doesFit(ShipPlacement(ret, Direction::Right, sc)) && !board->doesFit(ShipPlacement(ret, Direction::Down, sc)));
 
     return ret;
 }
@@ -29,8 +29,8 @@ Cell Player::getOrigin(ShipClass sc) const
 // Return a random direction for the given origin and shipclass that fit - it's already ensured at least one of the two does
 Direction Player::getRandomDirection(Cell origin, ShipClass sc) const
 {
-    bool fitsRight = getBoardConst().doesFit(ShipPlacement(origin, Direction::Right, sc));
-    bool fitsDown = board.doesFit(ShipPlacement(origin, Direction::Down, sc));
+    bool fitsRight = getBoardConst()->doesFit(ShipPlacement(origin, Direction::Right, sc));
+    bool fitsDown = board->doesFit(ShipPlacement(origin, Direction::Down, sc));
     // don't bother doing the check for if neither work, getRandomOrigin checked it until one or the other did
     if (fitsRight && !fitsDown)
     {
@@ -63,9 +63,9 @@ Cell Player::getRandomOrigin(ShipClass sc) const
 
     do
     {
-        ret = board.getRandomCell();
+        ret = board->getRandomCell();
         // move on if it fits either way - placement will handle choosing a direction
-    } while (!board.doesFit(ShipPlacement(ret, Direction::Right, sc)) && !board.doesFit(ShipPlacement(ret, Direction::Down, sc)));
+    } while (!board->doesFit(ShipPlacement(ret, Direction::Right, sc)) && !board->doesFit(ShipPlacement(ret, Direction::Down, sc)));
 
     return ret;
 }
@@ -143,7 +143,7 @@ void Player::placeShip(ShipPlacement sp)
     // This function does not validate whether it can first!
     // The input function should have done that.
     // Push it to the board
-    board.pushShip(Ship(sp));
+    board->pushShip(Ship(sp));
     // Remove it from unassignedShips
     // find the idx
     int toDelIdx = unassignedShips.size();
@@ -202,7 +202,7 @@ std::string Player::remainingShipsStr(const GameState gs) const
         toShow = unassignedShips;
         break;
     case GameState::Firing:
-        toShow = getBoardConst().remainingShips();
+        toShow = getBoardConst()->remainingShips();
         break;
     case GameState::GameOver:
         std::cerr << "Something weird and unexpected has happened" << std::endl;
@@ -236,14 +236,14 @@ std::string Player::remainingShipsStr(const GameState gs) const
 // Constructor
 Player::Player(int boardSize)
 {
-    board = Board(boardSize);
+    board = new Board(boardSize);
     unassignedShips = {ShipClassType::AircraftCarrier, ShipClassType::Battleship, ShipClassType::Cruiser, ShipClassType::Destroyer, ShipClassType::UBoat};
 }
 
 // Destructor
 Player::~Player()
 {
-//    delete board;
+    delete board;
 }
 
 // Record the result of a shit
@@ -267,13 +267,13 @@ void Player::fireShot(Cell target, Player &opponent)
 }
 
 // Getter for the board -- TODO should the caller just use const_cast?
-Board Player::getBoard()
+Board *Player::getBoard()
 {
     return board;
 }
 
 // Const Getter for the board
-Board Player::getBoardConst() const
+Board *Player::getBoardConst() const
 {
     return board;
 }
@@ -281,12 +281,12 @@ Board Player::getBoardConst() const
 // Receive a shot
 bool Player::receiveShot(Cell target)
 {
-    return board.receiveShot(target);
+    return board->receiveShot(target);
 }
 
 int Player::remainingShipsCount() const
 {
-    return board.remainingShipsCount();
+    return board->remainingShipsCount();
 }
 
 // Run the placement loop to prompt user for ship locations
@@ -329,8 +329,8 @@ outer:
         // Check if the ship fits either way
         // If it fits one way or the other, set the direction automatically
         // If both work, prompt to choose
-        bool fitsRight = board.doesFit(ShipPlacement(origin, Direction::Right, shipChoice));
-        bool fitsDown = board.doesFit(ShipPlacement(origin, Direction::Down, shipChoice));
+        bool fitsRight = board->doesFit(ShipPlacement(origin, Direction::Right, shipChoice));
+        bool fitsDown = board->doesFit(ShipPlacement(origin, Direction::Down, shipChoice));
         if (!fitsRight && !fitsDown)
         {
             // Can't possibly place with that origin
@@ -404,7 +404,7 @@ outer:
             {
                 cout << "Starting over!" << endl;
                 // remove ship and add it back to the options
-                board.removeShip(shipChoice);
+                board->removeShip(shipChoice);
                 unassignedShips.push_back(shipChoice);
                 // jump back to the very top
                 goto outer;
@@ -435,7 +435,7 @@ lines Player::toLineStrings(GameState gs) const
         ret.push_back("");
     }
     // insert board line strings
-    lines boardLines = board.toLineStrings(true);
+    lines boardLines = getBoardConst()->toLineStrings(true);
     ret.insert(ret.end(), boardLines.begin(), boardLines.end());
     return ret;
 }

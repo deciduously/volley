@@ -17,7 +17,7 @@ lines Computer::toLineStrings(const GameState gs) const
     ret.push_back(remainingShipsStr(gs));
     ret.push_back("");
     // insert board line strings
-    lines boardLines = board.toLineStrings(false);
+    lines boardLines = board->toLineStrings(false);
     ret.insert(ret.end(), boardLines.begin(), boardLines.end());
     return ret;
 }
