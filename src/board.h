@@ -22,7 +22,6 @@ public:
     Cell getRandomTarget() const;
     Cell promptCell(const std::string &promptStr) const;
     void pushShip(Ship s);
-    std::vector<Cell> getAllShots() const;
     bool receiveShot(Cell target);
     int remainingShipsCount() const;
     std::vector<ShipClass> remainingShips() const;

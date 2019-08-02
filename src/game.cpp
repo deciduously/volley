@@ -31,22 +31,15 @@ lines Game::bothBoardLines() const
 // Pick a random target avoiding a specific board's recorded hits and misses
 Cell Game::getRandomTarget(const Player &opponent) const
 {
-    Cell ret = Cell();
-    std::vector<Cell> cellsToAvoid = opponent.getAllShots();
-    do
-    {
-        ret = opponent.getBoardConst()->getRandomCell();
-        // Check if the opponent's board contains this cell
-    } while (std::find(cellsToAvoid.begin(), cellsToAvoid.end(), ret) != cellsToAvoid.end());
-
-    return ret;
+    return opponent.getBoardConst().getRandomTarget();
 }
 
 // Prompt the user for a target
 Cell Game::promptTarget() const
 {
-    Board *b = player->getBoardConst();
-    Cell ret = b->promptCell("Target");
+    // TODO this will have to change if we support hotseat
+    Board b = computer->getBoardConst();
+    Cell ret = b.promptCell("Target");
     return ret;
 }
 
@@ -100,7 +93,7 @@ bool Game::runFiring()
         }
 
         // run computer turn
-        Cell randomTarget = player->getBoard()->getRandomTarget();
+        Cell randomTarget = player->getBoardConst().getRandomTarget();
         cout << "Opponent fires at: " << randomTarget << endl;
         computer->fireShot(randomTarget, *player);
 
@@ -172,5 +165,5 @@ void Game::run()
 // Getter for board size
 int Game::size() const
 {
-    return player->getBoardConst()->size();
+    return player->getBoardConst().size();
 }

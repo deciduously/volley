@@ -121,7 +121,7 @@ Cell Board::getRandomTarget() const
     do
     {
         ret = getRandomCell();
-    } while (std::find(getAllShots().begin(), getAllShots().end(), ret) != getAllShots().end());
+    } while (std::find(receivedShots.begin(), receivedShots.end(), ret) != receivedShots.end());
     return ret;
 }
 
@@ -134,6 +134,12 @@ Cell Board::promptCell(const std::string &promptStr) const
     using std::cout;
     using std::endl;
     using std::string;
+
+    // TODO - accept both RowCol and ColRow
+    // check the first char
+    // if it's a number, see if the second char is a 0 to handle 10
+    // if it's not, make sure it's a letter.
+    // if it's a letter, the below works and can be reused
 
     for (;;)
     {
@@ -199,16 +205,18 @@ Cell Board::promptCell(const std::string &promptStr) const
         {
             Cell ret = Cell(row, col);
             // if it fits, check if it's taken
-            if (std::find(getAllShots().begin(), getAllShots().end(), ret) != getAllShots().end())
+            // only run this if we're prompting for a target
+            
+            if (promptStr == "Target"){
+            if (std::find(receivedShots.begin(), receivedShots.end(), ret) != receivedShots.end())
             {
                 cout << "That's taken!" << endl;
                 clearCin();
                 continue;
-            }
-            else
-            {
-                return Cell(row, col);
-            }
+            }}
+            
+            // If we made it through all checks, it's a valid choice.  Return it.
+            return Cell(row, col);
         }
     }
 }
@@ -217,12 +225,6 @@ Cell Board::promptCell(const std::string &promptStr) const
 void Board::pushShip(Ship s)
 {
     ships.push_back(s);
-}
-
-// Get all recorded hits and misses
-std::vector<Cell> Board::getAllShots() const
-{
-    return receivedShots;
 }
 
 // Receive a shot at a cell, return true if it's a hit
