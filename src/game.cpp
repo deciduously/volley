@@ -11,10 +11,10 @@
 lines Game::bothBoardLines() const
 {
     // Init return value to player board output lines
-    lines ret = player.toLineStrings();
+    lines ret = player->toLineStrings();
 
     // The computer board output lines
-    lines computerLines = computer.toLineStrings();
+    lines computerLines = computer->toLineStrings();
 
     // Grab size
     int boardSize = computerLines.size();
@@ -35,7 +35,7 @@ Cell Game::getRandomTarget(const Player &opponent) const
     std::vector<Cell> cellsToAvoid = opponent.getAllShots();
     do
     {
-        ret = opponent.getBoardConst().getRandomCell();
+        ret = opponent.getBoardConst()->getRandomCell();
         // Check if the opponent's board contains this cell
     } while (std::find(cellsToAvoid.begin(), cellsToAvoid.end(), ret) != cellsToAvoid.end());
 
@@ -45,16 +45,16 @@ Cell Game::getRandomTarget(const Player &opponent) const
 // Prompt the user for a target
 Cell Game::promptTarget() const
 {
-    Board b = player.getBoardConst();
-    Cell ret = b.promptCell("Target");
+    Board *b = player->getBoardConst();
+    Cell ret = b->promptCell("Target");
     return ret;
 }
 
 // Reset a completed game to play again
 void Game::resetGame()
 {
-    player = Player();
-    computer = Computer();
+    player = new Player();
+    computer = new Computer();
     gameState = GameState::Firing;
 }
 
@@ -83,10 +83,10 @@ bool Game::runFiring()
         cout << nextTarget.toString() << endl;
 
         // Fire the shot at the computer, store the result in the player
-        player.fireShot(nextTarget, computer);
+        player->fireShot(nextTarget, *computer);
 
         // check if you won
-        if (computer.remainingShipsCount() == 0)
+        if (computer->remainingShipsCount() == 0)
         {
             gameState = GameState::GameOver;
             char playAgain;
@@ -100,12 +100,12 @@ bool Game::runFiring()
         }
 
         // run computer turn
-        Cell randomTarget = player.getBoard().getRandomTarget();
+        Cell randomTarget = player->getBoard()->getRandomTarget();
         cout << "Opponent fires at: " << randomTarget << endl;
-        computer.fireShot(randomTarget, player);
+        computer->fireShot(randomTarget, *player);
 
         // check if the computer just won
-        if (player.remainingShipsCount() == 0)
+        if (player->remainingShipsCount() == 0)
         {
             gameState = GameState::GameOver;
             char playAgain;
@@ -128,19 +128,27 @@ void Game::runPlacement()
     std::cout << std::endl
               << "Stage your battlefield!" << std::endl
               << std::endl;
-    player.runPlacement();
-    computer.runPlacement();
+    player->runPlacement();
+    computer->runPlacement();
 }
 
 //
 // PUBLIC METHODS
 //
 
+// Constructor
 Game::Game(int boardSize)
 {
-    player = Player(boardSize);
-    computer = Computer(boardSize);
+    player = new Player(boardSize);
+    computer = new Computer(boardSize);
     gameState = GameState::Placement;
+}
+
+// Destructor
+Game::~Game()
+{
+    delete player;
+    delete computer;
 }
 
 // Run the game
@@ -164,5 +172,5 @@ void Game::run()
 // Getter for board size
 int Game::size() const
 {
-    return player.getBoardConst().size();
+    return player->getBoardConst()->size();
 }
