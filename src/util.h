@@ -26,6 +26,7 @@ enum class Direction
 // ostream overload for Direction
 std::ostream &operator<<(std::ostream &stream, const Direction &d);
 
+// The three possible gamestates
 enum class GameState
 {
     Firing,
@@ -60,6 +61,7 @@ std::ostream &operator<<(std::ostream &stream, const Cell &c);
 
 // ShipClass
 
+// Each possible type, or Unknown for error or hit detection
 enum class ShipClassType
 {
     AircraftCarrier,
@@ -70,21 +72,29 @@ enum class ShipClassType
     Unknown
 };
 
+// Struct for ergonomic ShipClassType getters
 typedef struct ShipClass
 {
     ShipClassType sct = ShipClassType::Unknown;
     // Constructors
+    // Default constructor
     ShipClass();
+    // Construct a ShipClass from a char
     ShipClass(char c);
+    // Construct a ShipClass from ShipClassType
     ShipClass(ShipClassType sc);
 
     // Overload
     bool operator==(const ShipClass &other) const;
 
     // Getters
+    // Get the corresponding length for each ShipClass variant
     int size() const;
+    // Get the corresponding char for each ShipClass variant
     char toChar() const;
+    // Pretty-print the ShipClass enum in long-form text
     std::string toString() const;
+    // Getter for ShipClassType
     ShipClassType type() const;
 } ShipClass;
 

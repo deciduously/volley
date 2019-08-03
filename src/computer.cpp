@@ -6,6 +6,7 @@ void Computer::runPlacement()
     randomlyPlaceShips();
 }
 
+// Return the board as a vector of strings, one per line
 lines Computer::toLineStrings(const GameState gs) const
 {
     // add "Player"  - or "Computer" ? -  header

@@ -50,7 +50,7 @@ Ship::Ship(ShipPlacement sp)
     hits = placement.shipClass.size();
 }
 
-// Getter for contained cells, for convenience
+// Getter for ShipPlacement::ContainedCells(), for convenience
 std::vector<Cell> Ship::containedCells() const
 {
     return placement.containedCells();

@@ -263,7 +263,7 @@ void Player::fireShot(Cell target, Player &opponent)
         // check if it sank
         if (opponent.remainingShipsCount() < shipsLeftBefore)
         {
-            std::cout << getName() << " sank " << opponent << "'s " << result << "!" << std::endl;
+            std::cout << getName() << " sank " << opponent.getName() << "'s " << result << "!" << std::endl;
         }
     }
     else
@@ -298,6 +298,7 @@ ShipClass Player::receiveShot(Cell target)
     return board->receiveShot(target);
 }
 
+// Returns the number of ships with a positive number of hits
 int Player::remainingShipsCount() const
 {
     return board->remainingShipsCount();
@@ -452,9 +453,4 @@ lines Player::toLineStrings(GameState gs) const
     lines boardLines = getBoardConst()->toLineStrings(true);
     ret.insert(ret.end(), boardLines.begin(), boardLines.end());
     return ret;
-}
-
-std::ostream &operator<<(std::ostream &stream, const Player &p)
-{
-    return stream << p.getName();
 }
