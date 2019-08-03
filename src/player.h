@@ -26,7 +26,9 @@ class Player
     void placeShip(ShipPlacement sp);
 
 protected:
+    // Pointer to the board  
     Board *board;
+    // Any ships allocated to the player that have not been placed on the board
     std::vector<ShipClass> unassignedShips;
     // Randomly choose placements for all remaining unassigned ships
     // Computer always uses this, player is given the option at each ship placement to do for the rest

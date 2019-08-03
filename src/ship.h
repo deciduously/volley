@@ -11,8 +11,11 @@
 // An absolute ship location on the board
 typedef struct ShipPlacement
 {
+    // The origin cell
     Cell cell;
+    // The direction from the origin: Right | Down
     Direction direction = Direction::Right;
+    // The class of ship
     ShipClass shipClass = ShipClass();
     // ShipPlacement default constructor
     ShipPlacement();
@@ -22,9 +25,12 @@ typedef struct ShipPlacement
     std::vector<Cell> containedCells() const;
 } ShipPlacement;
 
+// A placement that keeps track of health
 class Ship
 {
+    // This ship's position
     ShipPlacement placement;
+    // The number of hits this ship can take
     int hits;
 
 public:

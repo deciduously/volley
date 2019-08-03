@@ -17,8 +17,11 @@
 
 class Game
 {
+    // Pointer to the Player object
     Player *player;
+    // Pointer to the Computer object
     Computer *computer;
+    // One of Placement | Firing | GameOver
     GameState gameState;
     // Return a vector of strings containing both boards side by side
     lines bothBoardLines() const;

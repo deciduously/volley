@@ -13,6 +13,7 @@
 
 class Computer : public Player
 {
+    // When seeking, the un-hit cells around cells we have hit to pull from
     std::vector<Cell> neighborhood;
 
 public:

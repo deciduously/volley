@@ -1,5 +1,8 @@
 #include "computer.h"
 
+// will keep track of total hits found and compare if it sank any
+//if there's a mismatch, keep seeking until you hit again, then drop the neighborhood and start  hitting that direction
+
 // Automatically place all ships
 void Computer::runPlacement()
 {

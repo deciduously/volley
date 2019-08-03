@@ -44,6 +44,8 @@ Cell Game::promptTarget() const
 // Reset a completed game to play again
 void Game::resetGame()
 {
+    delete player;
+    delete computer;
     player = new Player();
     computer = new Computer();
     gameState = GameState::Firing;

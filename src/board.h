@@ -10,8 +10,11 @@
 
 class Board
 {
+    // Board is a square, this many on a side
     int dimension;
+    // Cells that have been fired at
     std::vector<Cell> receivedShots;
+    // The ships this board stores
     std::vector<Ship> ships;
 
 public:
