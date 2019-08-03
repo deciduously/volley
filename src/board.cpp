@@ -4,14 +4,13 @@
 #include "board.h"
 
 // Helper function to determine if a char is a letter
-bool isLetter(char c)
+inline bool isLetter(char c)
 {
-    // 65 = 'A', 90 = 'z'
     return (c >= 'A' && c <= 'z');
 }
 
 // Helper function to add a cell to a string with padding from a char
-void pushCharCell(std::string &s, char contents)
+inline void pushCharCell(std::string &s, char contents)
 {
     s.push_back(' ');
     s.push_back(contents);
@@ -155,8 +154,8 @@ Cell Board::promptCell(const std::string &promptStr) const
             return getRandomTarget();
         }
 
-        // try to get a tuple from the input
-        // if we fail - it's not an int and a char in either order - loop again
+        // try to get a Cell from the input
+        // if we fail - it's not an int and a char in either order (for now the right order) - loop again
         int row = 0;
         char col = 'Z';
         if (originStr.size() > 3 || originStr.size() < 2)
@@ -228,7 +227,7 @@ void Board::pushShip(Ship s)
 }
 
 // Receive a shot at a cell, return true if it's a hit
-bool Board::receiveShot(Cell target)
+ShipClass Board::receiveShot(Cell target)
 {
     char result = getCharAt(target, true);
     receivedShots.push_back(target);
@@ -246,7 +245,8 @@ bool Board::receiveShot(Cell target)
             }
         }
     }
-    return ret;
+    // TODO this is a little roundabout - a direct char->shipClassType is probably better?
+    return ShipClass(result);
 }
 
 // get how many ships still have health

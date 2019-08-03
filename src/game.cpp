@@ -38,8 +38,7 @@ Cell Game::getRandomTarget(const Player &opponent) const
 Cell Game::promptTarget() const
 {
     // TODO this will have to change if we support hotseat
-    Board *b = computer->getBoardConst();
-    return b->promptCell("Target");
+    return computer->getBoardConst()->promptCell("Target");
 }
 
 // Reset a completed game to play again
@@ -131,8 +130,8 @@ void Game::runPlacement()
 // Constructor
 Game::Game(int boardSize)
 {
-    player = new Player(boardSize);
-    computer = new Computer(boardSize);
+    player = new Player("The Player", boardSize);
+    computer = new Computer("The Computer", boardSize);
     gameState = GameState::Placement;
 }
 

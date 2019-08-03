@@ -217,3 +217,9 @@ std::ostream &operator<<(std::ostream &stream, const ShipClass &sc)
 {
     return stream << sc.toString();
 }
+
+// Getter for ShipClassType
+ShipClassType ShipClass::type() const
+{
+    return sct;
+}

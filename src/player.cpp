@@ -234,9 +234,10 @@ std::string Player::remainingShipsStr(const GameState gs) const
 //
 
 // Constructor
-Player::Player(int boardSize)
+Player::Player(std::string n, int boardSize)
 {
     board = new Board(boardSize);
+    name = n;
     unassignedShips = {ShipClassType::AircraftCarrier, ShipClassType::Battleship, ShipClassType::Cruiser, ShipClassType::Destroyer, ShipClassType::UBoat};
 }
 
@@ -250,13 +251,20 @@ Player::~Player()
 // True indicates a hit, false a miss
 void Player::fireShot(Cell target, Player &opponent)
 {
-    // store pre-shot ships
-    if (opponent.receiveShot(target))
+    // get the number of ships opponent has left
+    int shipsLeftBefore = opponent.remainingShipsCount();
+    // fire the shot
+    ShipClass result = opponent.receiveShot(target);
+    if (result.type() != ShipClassType::Unknown)
     {
         // Hit
         std::cout << "It's a hit!" << std::endl;
         hits.push_back(target);
-        // check if it sank anything
+        // check if it sank
+        if (opponent.remainingShipsCount() < shipsLeftBefore)
+        {
+            std::cout << getName() << " sank " << opponent << "'s " << result << "!" << std::endl;
+        }
     }
     else
     {
@@ -278,8 +286,14 @@ Board *Player::getBoardConst() const
     return board;
 }
 
+// Getter for name
+std::string Player::getName() const
+{
+    return name;
+}
+
 // Receive a shot
-bool Player::receiveShot(Cell target)
+ShipClass Player::receiveShot(Cell target)
 {
     return board->receiveShot(target);
 }
@@ -438,4 +452,9 @@ lines Player::toLineStrings(GameState gs) const
     lines boardLines = getBoardConst()->toLineStrings(true);
     ret.insert(ret.end(), boardLines.begin(), boardLines.end());
     return ret;
+}
+
+std::ostream &operator<<(std::ostream &stream, const Player &p)
+{
+    return stream << p.getName();
 }

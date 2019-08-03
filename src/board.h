@@ -22,7 +22,7 @@ public:
     Cell getRandomTarget() const;
     Cell promptCell(const std::string &promptStr) const;
     void pushShip(Ship s);
-    bool receiveShot(Cell target);
+    ShipClass receiveShot(Cell target);
     int remainingShipsCount() const;
     std::vector<ShipClass> remainingShips() const;
     void removeShip(ShipClass sc);

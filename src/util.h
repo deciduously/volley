@@ -7,7 +7,6 @@
 #define __UTIL_H_INCLUDED
 
 #include <string>
-#include <tuple>
 #include <vector>
 
 // Helper function to clear out cin to loop for input again
@@ -86,6 +85,7 @@ typedef struct ShipClass
     int size() const;
     char toChar() const;
     std::string toString() const;
+    ShipClassType type() const;
 } ShipClass;
 
 // Stream overload

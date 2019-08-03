@@ -17,6 +17,7 @@ class Player
     ShipClass getShipClass() const;
     std::vector<Cell> hits;
     std::vector<Cell> misses;
+    std::string name;
     void placeShip(ShipPlacement sp);
 
 protected:
@@ -26,15 +27,18 @@ protected:
     std::string remainingShipsStr(const GameState gs) const;
 
 public:
-    Player(int boardSize = BOARD_SIZE);
+    Player(std::string name = "The Player", int boardSize = BOARD_SIZE);
     ~Player();
     void fireShot(Cell target, Player &opponent);
     Board *getBoard();
     Board *getBoardConst() const;
+    std::string getName() const;
     lines toLineStrings(const GameState gs = GameState::Firing) const;
-    bool receiveShot(Cell target);
+    ShipClass receiveShot(Cell target);
     int remainingShipsCount() const;
     void runPlacement();
 };
 
+// stream override
+std::ostream &operator<<(std::ostream &stream, const Player &p);
 #endif
