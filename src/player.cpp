@@ -249,7 +249,7 @@ Player::~Player()
 
 // Record the result of a shit
 // True indicates a hit, false a miss
-void Player::fireShot(Cell target, Player &opponent)
+bool Player::fireShot(Cell target, Player &opponent)
 {
     // get the number of ships opponent has left
     int shipsLeftBefore = opponent.remainingShipsCount();
@@ -265,12 +265,14 @@ void Player::fireShot(Cell target, Player &opponent)
         {
             std::cout << getName() << " sank " << opponent.getName() << "'s " << result << "!" << std::endl;
         }
+        return true;
     }
     else
     {
         // Miss
         std::cout << "It's a miss." << std::endl;
         misses.push_back(target);
+        return false;
     }
 }
 

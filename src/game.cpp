@@ -76,6 +76,7 @@ bool Game::runFiring()
         cout << nextTarget.toString() << endl;
 
         // Fire the shot at the computer, store the result in the player
+        // fireShot returns a boolean, used in the computer's seeking function - unused here
         player->fireShot(nextTarget, *computer);
 
         // check if you won
@@ -93,9 +94,7 @@ bool Game::runFiring()
         }
 
         // run computer turn
-        Cell randomTarget = player->getBoardConst()->getRandomTarget();
-        cout << "Opponent fires at: " << randomTarget << endl;
-        computer->fireShot(randomTarget, *player);
+        computer->executeFire(*player);
 
         // check if the computer just won
         if (player->remainingShipsCount() == 0)

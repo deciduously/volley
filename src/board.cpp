@@ -40,6 +40,12 @@ bool Board::doesFit(ShipPlacement sp) const
     return true;
 }
 
+// Return a vector of all shots this board has received
+std::vector<Cell> Board::getAllShots() const
+{
+    return receivedShots;
+}
+
 // Returns the corresponding cell character
 // Pass true to show ship locations, false to only show hits/misses
 char Board::getCharAt(Cell c, bool showShips) const

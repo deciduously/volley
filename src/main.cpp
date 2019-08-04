@@ -39,6 +39,6 @@ int main()
     // quit the process, which does all the proper stdlib cleanup
     std::exit(0);
 
-    // Return success (?)
+    // Return success - unnecessary?  std::exit(0) is where execution completes
     return 0;
 }

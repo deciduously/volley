@@ -19,8 +19,7 @@ class Player
     Cell getRandomOrigin(ShipClass sc) const;
     // Helper method to prompt user a single ship input
     ShipClass getShipClass() const;
-    std::vector<Cell> hits;
-    std::vector<Cell> misses;
+    std::vector<Cell> misses; // TODO - remove?  unused
     std::string name;
     // Places a ship
     void placeShip(ShipPlacement sp);
@@ -28,6 +27,8 @@ class Player
 protected:
     // Pointer to the board  
     Board *board;
+    // Stored successful shots this player has made
+    std::vector<Cell> hits;
     // Any ships allocated to the player that have not been placed on the board
     std::vector<ShipClass> unassignedShips;
     // Randomly choose placements for all remaining unassigned ships
@@ -43,7 +44,7 @@ public:
     ~Player();
     // Record the result of a shit
     // True indicates a hit, false a miss
-    void fireShot(Cell target, Player &opponent);
+    bool fireShot(Cell target, Player &opponent);
     // Getter for the board -- TODO should the caller just use const_cast?
     Board *getBoard();
     // Const Getter for the board

@@ -1,7 +1,129 @@
+#include <algorithm>
+#include <iostream>
+
 #include "computer.h"
 
 // will keep track of total hits found and compare if it sank any
 //if there's a mismatch, keep seeking until you hit again, then drop the neighborhood and start  hitting that direction
+
+// Return the cells above, below, left, and right of the given cell
+// Performs bounds checking - if a neighbor is off the board, it is not returned
+std::vector<Cell> getNeighborhood(Cell c, int boardSize)
+{
+    std::vector<Cell> ret = {};
+    // up
+    if (c.row > 1)
+        ret.push_back(Cell(c.row - 1, c.col));
+    // down
+    if (c.row < boardSize)
+        ret.push_back(Cell(c.row + 1, c.col));
+    // left
+    if (c.col > 1)
+        ret.push_back(Cell(c.row, static_cast<char>(c.col - 1)));
+    // right
+    if (c.col < boardSize)
+        ret.push_back(Cell(c.row, static_cast<char>(c.col + 1)));
+    return ret;
+}
+
+// Choose a target on the given opponent and fire a shot at it
+void Computer::executeFire(Player &opponent)
+{
+    Board *opponentBoard = opponent.getBoardConst();
+    std::vector<Cell> allShots = opponentBoard->getAllShots();
+    int shipsBefore = opponentBoard->remainingShipsCount();
+    bool didHit = false;
+    Cell chosenTarget = Cell();
+    if (isSeeking)
+    {
+        // SEEK
+        // Get the size of the neighborhood, pick a random idx to fire at
+        // remove that cell from the neighboorhood
+        // if the neighborhood is empty, something has gone wrong
+        // there should always be one when seeking
+        int numOptions = neighborhood.size();
+        int randomIdx = 0; // init to zero - totally fine to use
+        // choose a target that has not been fired at yet
+        do
+        {
+            int randomIdx = rand() % numOptions; // random between 0 and size-1
+            chosenTarget = neighborhood[randomIdx];
+        } while (std::find(allShots.begin(), allShots.end(), chosenTarget) != allShots.end());
+        neighborhood.erase(neighborhood.begin() + randomIdx);
+    }
+    else
+    {
+        // Otherwise, just fire randomly
+        chosenTarget = opponentBoard->getRandomTarget();
+    }
+
+    std::cout << "Computer fires at: " << chosenTarget << std::endl;
+    didHit = fireShot(chosenTarget, opponent);
+
+    // if not seeking and it was a hit, enable seeking
+    if (didHit)
+    {
+        if (!isSeeking)
+        {
+            // switch on seeking mode
+            isSeeking = true;
+
+            // populate neighborhood
+            neighborhood = getNeighborhood(chosenTarget, board->size());
+        }
+        else
+        {
+            // if it did hit and it is seeking, update the neighborhood
+            // Add the new cell to try
+            // Drop cells in the wrong direction
+            // Grab the most recent hit
+            Cell lastHit = hits[hits.size() - 1];
+            // check which direction we hit from there
+            if (lastHit.row == chosenTarget.row)
+            {
+                // horizontal
+                // prune neighborhood of any cells that aren't in this row
+                neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c)
+                { 
+                    return c.row != chosenTarget.row;
+                }), neighborhood.end());
+                // add the next cell
+                if (lastHit.col > chosenTarget.col)
+                {
+                    neighborhood.push_back(Cell(chosenTarget.row, static_cast<char>(chosenTarget.col - 1)));
+                }
+                else
+                {
+                    neighborhood.push_back(Cell(chosenTarget.row, static_cast<char>(chosenTarget.col + 1)));
+                }
+            }
+            else
+            {
+                // vertical
+                // prune neighborhood of any cells that aren't in this column
+                neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c)
+                { 
+                    return c.col != chosenTarget.col;
+                }), neighborhood.end());
+                // add the next cell
+                if (lastHit.row > chosenTarget.row)
+                {
+                    neighborhood.push_back(Cell(chosenTarget.row - 1, chosenTarget.col));
+                }
+                else
+                {
+                    neighborhood.push_back(Cell(chosenTarget.row + 1, chosenTarget.col));
+                }
+            }
+        }
+    }
+
+    // if a ship sank, turn seeking off.
+    if (opponent.getBoardConst()->remainingShipsCount() < shipsBefore)
+    {
+        isSeeking = false;
+    }
+}
 
 // Automatically place all ships
 void Computer::runPlacement()

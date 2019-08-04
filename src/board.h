@@ -22,6 +22,8 @@ public:
     Board(int boardSize = BOARD_SIZE);
     // Check if a shipPlacement would fit on the board before creating a Ship
     bool doesFit(ShipPlacement sp) const;
+    // Return a vector of all shots this board has received
+    std::vector<Cell> getAllShots() const;
     // Returns the corresponding cell character
     // Pass true to show ship locations, false to only show hits/misses
     char getCharAt(Cell c, bool showShips) const;
