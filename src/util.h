@@ -101,4 +101,7 @@ typedef struct ShipClass
 // Stream overload
 std::ostream &operator<<(std::ostream &stream, const ShipClass &sc);
 
+// One of each
+const std::vector<ShipClass> ALL_SHIP_CLASSES = {ShipClass(ShipClassType::AircraftCarrier), ShipClass(ShipClassType::Battleship), ShipClass(ShipClassType::Cruiser), ShipClass(ShipClassType::Destroyer), ShipClass(ShipClassType::UBoat)};
+
 #endif

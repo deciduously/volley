@@ -25,7 +25,7 @@ class Player
     void placeShip(ShipPlacement sp);
 
 protected:
-    // Pointer to the board  
+    // Pointer to the board
     Board *board;
     // Stored successful shots this player has made
     std::vector<Cell> hits;
@@ -38,8 +38,10 @@ protected:
     std::string remainingShipsStr(const GameState gs) const;
 
 public:
+    //Default Constructor
+    Player();
     // Constructor
-    Player(std::string name = "The Player", int boardSize = BOARD_SIZE);
+    Player(int boardSize, std::string n = "The Player");
     // Destructor
     ~Player();
     // Record the result of a shit

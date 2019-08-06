@@ -38,7 +38,9 @@ class Game
 
 public:
     // Constructor
-    Game(int boardSize = BOARD_SIZE);
+    Game();
+    // COnstructor specifying board size
+    Game(int boardSize);
     // Destructor
     ~Game();
     // Run the game

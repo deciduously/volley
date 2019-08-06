@@ -24,7 +24,8 @@ class Computer : public Player
 
 public:
     // Inherits Player constructor with different default name
-    Computer(std::string name = "The Computer", int boardSize = BOARD_SIZE) : Player(name, boardSize){
+    Computer(int boardSize = BOARD_SIZE) : Player(boardSize, "The Computer")
+    {
         isSeeking = false;
     };
     // Choose a target on the given opponent and fire a shot at it

@@ -233,12 +233,20 @@ std::string Player::remainingShipsStr(const GameState gs) const
 // PUBLIC METHODS
 //
 
+// Default Constructor
+Player::Player()
+{
+    board = new Board(BOARD_SIZE);
+    name = "The Player";
+    unassignedShips = ALL_SHIP_CLASSES;
+}
+
 // Constructor
-Player::Player(std::string n, int boardSize)
+Player::Player(int boardSize, std::string n)
 {
     board = new Board(boardSize);
     name = n;
-    unassignedShips = {ShipClassType::AircraftCarrier, ShipClassType::Battleship, ShipClassType::Cruiser, ShipClassType::Destroyer, ShipClassType::UBoat};
+    unassignedShips = ALL_SHIP_CLASSES;
 }
 
 // Destructor
@@ -405,10 +413,12 @@ outer:
         for (;;)
         {
             //TODO first, show the board with the ship placed - a Board::removeShip method would be good
-            
-             //  Place the given triple
+
+            //  Place the given triple
             placeShip(ShipPlacement(origin, d, shipChoice));
-            cout << "PREVIEW:" << endl << endl << toLineStrings() << endl;
+            cout << "PREVIEW:" << endl
+                 << endl
+                 << toLineStrings() << endl;
 
             // display all three choices
             cout << "Origin: " << origin << endl
@@ -431,7 +441,7 @@ outer:
                 cout << "Confirmed!  Saving ship location..." << endl;
                 break;
             }
-        }   
+        }
     }
 }
 

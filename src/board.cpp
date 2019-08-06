@@ -211,15 +211,17 @@ Cell Board::promptCell(const std::string &promptStr) const
             Cell ret = Cell(row, col);
             // if it fits, check if it's taken
             // only run this if we're prompting for a target
-            
-            if (promptStr == "Target"){
-            if (std::find(receivedShots.begin(), receivedShots.end(), ret) != receivedShots.end())
+
+            if (promptStr == "Target")
             {
-                cout << "That's taken!" << endl;
-                clearCin();
-                continue;
-            }}
-            
+                if (std::find(receivedShots.begin(), receivedShots.end(), ret) != receivedShots.end())
+                {
+                    cout << "That's taken!" << endl;
+                    clearCin();
+                    continue;
+                }
+            }
+
             // If we made it through all checks, it's a valid choice.  Return it.
             return Cell(row, col);
         }

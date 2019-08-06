@@ -83,10 +83,10 @@ void Computer::executeFire(Player &opponent)
             {
                 // horizontal
                 // prune neighborhood of any cells that aren't in this row
-                neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c)
-                { 
-                    return c.row != chosenTarget.row;
-                }), neighborhood.end());
+                neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c) {
+                                       return c.row != chosenTarget.row;
+                                   }),
+                                   neighborhood.end());
                 // add the next cell
                 if (lastHit.col > chosenTarget.col)
                 {
@@ -101,10 +101,10 @@ void Computer::executeFire(Player &opponent)
             {
                 // vertical
                 // prune neighborhood of any cells that aren't in this column
-                neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c)
-                { 
-                    return c.col != chosenTarget.col;
-                }), neighborhood.end());
+                neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c) {
+                                       return c.col != chosenTarget.col;
+                                   }),
+                                   neighborhood.end());
                 // add the next cell
                 if (lastHit.row > chosenTarget.row)
                 {

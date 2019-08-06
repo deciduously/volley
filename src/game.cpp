@@ -129,10 +129,18 @@ void Game::runPlacement()
 //
 
 // Constructor
+Game::Game()
+{
+    player = new Player();
+    computer = new Computer();
+    gameState = GameState::Placement;
+}
+
+// Constructor specifying board size
 Game::Game(int boardSize)
 {
-    player = new Player("The Player", boardSize);
-    computer = new Computer("The Computer", boardSize);
+    player = new Player(boardSize);
+    computer = new Computer(boardSize);
     gameState = GameState::Placement;
 }
 
