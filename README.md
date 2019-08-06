@@ -16,33 +16,33 @@ If an 'E' shows up on the board, something is wrong. That's used to signify an E
 ```
 Enter Target.  Enter 'R' for random.  (ColRow, e.g. "A1" or "a1")> r
 Rolling the dice...
-Row: 9 Col: D
-It's a hit!
-Opponent fires Row: 7 Col: D
+Row: 10 Col: A
+It's a miss.
+Computer fires at: Row: 6 Col: G
 It's a miss.
                 Player                                   Computer
-            Ships alive: 5                          Ships alive: 5
+Ships alive:                                 Ships alive:
+{ A:5 B:4 C:3 D:2 U:3 }                              { A:5 B:4 C:3 D:2 U:3 }
 
     A  B  C  D  E  F  G  H  I  J              A  B  C  D  E  F  G  H  I  J
 
- 1  .  .  .  .  .  .  .  .  D  D           1  .  .  .  .  .  .  .  .  .  .
+ 1  .  .  .  .  .  .  .  .  O  O           1  O  .  .  O  .  .  .  .  .  .
 
- 2  .  .  .  .  .  .  .  .  .  .           2  .  .  .  .  .  .  .  O  .  .
+ 2  .  .  .  .  .  .  B  B  B  B           2  .  .  .  .  .  .  .  O  O  .
 
- 3  .  .  .  .  A  .  U  U  U  .           3  .  .  .  .  .  .  .  .  .  .
+ 3  .  .  .  O  .  .  O  .  .  .           3  .  .  .  .  X  .  O  .  .  .
 
- 4  .  .  .  .  A  .  .  .  O  .           4  .  .  .  .  .  .  O  .  .  .
+ 4  .  .  O  O  .  .  .  O  O  .           4  .  .  .  .  .  .  .  O  O  .
 
- 5  O  .  .  .  A  .  .  .  .  .           5  .  .  O  .  .  .  .  .  .  .
+ 5  O  O  .  .  .  X  O  .  .  .           5  .  O  .  .  O  O  .  .  .  .
 
- 6  .  .  .  .  A  .  .  .  .  .           6  .  .  .  .  .  .  .  .  .  .
+ 6  .  .  .  .  .  X  O  O  O  .           6  .  .  .  .  .  .  .  .  .  .
 
- 7  .  .  .  O  A  .  .  .  .  .           7  .  .  .  .  .  .  .  .  .  .
+ 7  .  D  D  .  .  U  .  .  .  .           7  .  .  .  .  .  .  X  .  O  .
 
- 8  .  B  B  B  B  .  C  .  .  .           8  .  .  .  .  .  .  .  .  .  .
+ 8  .  .  O  .  .  A  A  A  A  A           8  .  .  .  .  .  .  O  .  O  O
 
- 9  .  .  .  .  .  .  C  O  .  .           9  .  .  .  X  .  .  .  .  .  .
+ 9  .  .  O  .  .  .  .  O  O  .           9  O  .  .  .  .  .  .  .  O  .
 
-10  .  .  .  .  .  .  C  .  .  .          10  .  .  .  .  .  .  .  .  .  .
-
+10  C  C  C  .  .  .  .  .  O  .          10  O  O  .  .  .  .  .  O  .  .
 ```
