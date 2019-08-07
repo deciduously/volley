@@ -30,7 +30,6 @@ std::vector<Cell> getNeighborhood(Cell c, int boardSize)
 void Computer::executeFire(Player &opponent)
 {
     Board *opponentBoard = opponent.getBoardConst();
-    std::vector<Cell> allShots = opponentBoard->getAllShots();
     int shipsBefore = opponentBoard->remainingShipsCount();
     bool didHit = false;
     Cell chosenTarget = Cell();
@@ -56,7 +55,7 @@ void Computer::executeFire(Player &opponent)
             randomIdx = rand() % numOptions; // random between 0 and size-1
             chosenTarget = neighborhood[randomIdx];
             runs--;
-        } while (std::find(allShots.begin(), allShots.end(), chosenTarget) != allShots.end());
+        } while (opponentBoard->hasReceived(chosenTarget));
 
         if (runs != 0)
         {

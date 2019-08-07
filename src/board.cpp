@@ -24,7 +24,7 @@ Board::Board(int boardSize)
 }
 
 // Check if a shipPlacement would fit on the board before creating a Ship
-bool Board::doesFit(ShipPlacement sp) const
+bool Board::doesFit(const ShipPlacement sp) const
 {
     // check each cell the ship would occupy
     // build the hypthetical ship and store its contained cells
@@ -40,15 +40,9 @@ bool Board::doesFit(ShipPlacement sp) const
     return true;
 }
 
-// Return a vector of all shots this board has received
-std::vector<Cell> Board::getAllShots() const
-{
-    return receivedShots;
-}
-
 // Returns the corresponding cell character
 // Pass true to show ship locations, false to only show hits/misses
-char Board::getCharAt(Cell c, bool showShips) const
+char Board::getCharAt(const Cell c, bool showShips) const
 {
     using std::find;
     using std::vector;
@@ -82,7 +76,7 @@ char Board::getCharAt(Cell c, bool showShips) const
     }
 
     // Overlay hits and misses
-    if (find(receivedShots.begin(), receivedShots.end(), c) != receivedShots.end())
+    if (hasReceived(c))
     {
         if (ret == '.')
         {
@@ -126,8 +120,14 @@ Cell Board::getRandomTarget() const
     do
     {
         ret = getRandomCell();
-    } while (std::find(receivedShots.begin(), receivedShots.end(), ret) != receivedShots.end());
+    } while (hasReceived(ret));
     return ret;
+}
+
+// Return whether or not a given cell has already received fire
+bool Board::hasReceived(const Cell c) const
+{
+    return (std::find(receivedShots.begin(), receivedShots.end(), c) != receivedShots.end());
 }
 
 // Method to prompt the user for a cell, ensuring its a valid spot on this board
@@ -214,7 +214,7 @@ Cell Board::promptCell(const std::string &promptStr) const
 
             if (promptStr == "Target")
             {
-                if (std::find(receivedShots.begin(), receivedShots.end(), ret) != receivedShots.end())
+                if (hasReceived(ret))
                 {
                     cout << "That's taken!" << endl;
                     clearCin();
@@ -229,13 +229,13 @@ Cell Board::promptCell(const std::string &promptStr) const
 }
 
 // Add a ship to the board
-void Board::pushShip(Ship s)
+void Board::pushShip(const Ship s)
 {
     ships.push_back(s);
 }
 
 // Receive a shot at a cell, return true if it's a hit
-ShipClass Board::receiveShot(Cell target)
+ShipClass Board::receiveShot(const Cell target)
 {
     char result = getCharAt(target, true);
     receivedShots.push_back(target);
@@ -300,7 +300,7 @@ std::vector<ShipClass> Board::remainingShips() const
 
 // Remove the ship with the given ship class if found, otherwise do nothing
 // Used to build a "preview" board during placement - could also use if a ship hits zero i guess? no need really
-void Board::removeShip(ShipClass sc)
+void Board::removeShip(const ShipClass sc)
 {
     int shipsSize = ships.size();
     for (int i = 0; i < shipsSize; i++)
