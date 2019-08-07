@@ -15,13 +15,13 @@ std::vector<Cell> getNeighborhood(Cell c, int boardSize)
     if (c.row > 1)
         ret.push_back(Cell(c.row - 1, c.col));
     // down
-    if (c.row < boardSize)
+    if (c.row < boardSize - 1)
         ret.push_back(Cell(c.row + 1, c.col));
     // left
     if (c.col > 1)
         ret.push_back(Cell(c.row, static_cast<char>(c.col - 1)));
     // right
-    if (c.col < boardSize)
+    if (c.col < boardSize - 1)
         ret.push_back(Cell(c.row, static_cast<char>(c.col + 1)));
     return ret;
 }
@@ -44,12 +44,25 @@ void Computer::executeFire(Player &opponent)
         int numOptions = neighborhood.size();
         int randomIdx = 0; // init to zero - totally fine to use
         // choose a target that has not been fired at yet
+        int runs = numOptions;
         do
         {
-            int randomIdx = rand() % numOptions; // random between 0 and size-1
+            if (runs == 0)
+            {
+                // we tried them all, but all had already received fire.
+                chosenTarget = opponentBoard->getRandomTarget();
+                break;
+            }
+            randomIdx = rand() % numOptions; // random between 0 and size-1
             chosenTarget = neighborhood[randomIdx];
+            runs--;
         } while (std::find(allShots.begin(), allShots.end(), chosenTarget) != allShots.end());
-        neighborhood.erase(neighborhood.begin() + randomIdx);
+
+        if (runs != 0)
+        {
+            // only clear the neighborhood if we actually found one
+            neighborhood.erase(neighborhood.begin() + randomIdx);
+        }
     }
     else
     {
