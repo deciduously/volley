@@ -447,7 +447,6 @@ outer:
 }
 
 // Return the board output as a vector of strings, one per line
-// TODO make Computer more able to reuse this somehow
 lines Player::toLineStrings(GameState gs) const
 {
     // add "Player"  - or "Computer" -  header
@@ -458,7 +457,16 @@ lines Player::toLineStrings(GameState gs) const
     {
         ret.push_back("Ships alive:                        ");
         std::string base = remainingShipsStr(gs);
-        base.append("                     ");
+
+        // first, add the base padding - 21 spaces
+        base.append("                    ");
+        // then add 4 spaces for each sunk ship
+        int sunkShips = ALL_SHIP_CLASSES.size() - remainingShipsCount();
+        for (int i = 0; i < sunkShips; i++)
+        {
+            base.append("    ");
+        }
+
         ret.push_back(base);
         ret.push_back("");
     }

@@ -160,7 +160,15 @@ lines Computer::toLineStrings(const GameState gs) const
     // 15 spaces in
     ret.push_back("               Computer");
     ret.push_back("Ships alive:");
-    ret.push_back(remainingShipsStr(gs));
+    // add 4 spaces for each sunk ship
+    int sunkShips = ALL_SHIP_CLASSES.size() - remainingShipsCount();
+    std::string shipLine = "";
+    for (int i = 0; i < sunkShips; i++)
+    {
+        shipLine.append("    ");
+    }
+    shipLine.append(remainingShipsStr(gs));
+    ret.push_back(shipLine);
     ret.push_back("");
     // insert board line strings
     lines boardLines = board->toLineStrings(false);
