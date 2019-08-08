@@ -112,6 +112,8 @@ void Computer::executeFire(Player &opponent)
         int runs = numOptions;
         do
         {
+            // TODO it seems like sometimes the second-to-last shot of a ship ends up firing randomly
+            // but then it still knows to come back for it??
             if (runs == 0)
             {
                 // we tried them all, but all had already received fire.
