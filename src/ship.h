@@ -20,7 +20,7 @@ typedef struct ShipPlacement
     // ShipPlacement default constructor
     ShipPlacement();
     // Should always use explicit constructor
-    ShipPlacement(Cell c, Direction d, ShipClass sc);
+    ShipPlacement(const Cell c, const Direction d, const ShipClass sc);
     // Return a vector containing each cell this ship occupies
     std::vector<Cell> containedCells() const;
 } ShipPlacement;
@@ -35,7 +35,7 @@ class Ship
 
 public:
     // Ship constructor
-    Ship(ShipPlacement sp);
+    Ship(const ShipPlacement sp);
     // Getter for ShipPlacement::ContainedCells(), for convenience
     std::vector<Cell> containedCells() const;
     // Getter for Hits

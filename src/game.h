@@ -39,7 +39,7 @@ class Game
 public:
     // Constructor
     Game();
-    // COnstructor specifying board size
+    // Constructor specifying board size
     Game(int boardSize);
     // Destructor
     ~Game();

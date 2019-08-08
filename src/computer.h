@@ -8,13 +8,6 @@
 
 #include "player.h"
 
-// SEEKING
-// When a hit is found, toggle a boolean isSeeking and populate the neighborhood
-// This vector will hold cells above, below, left, and right of the hit
-// If seeking, instead of choosing random cells, pick from the neighborhood
-// DECIDE - when we find the next hit, should we drop the cells going the wrong way?
-// Once a ship comes back "Sunk", revert to random fire
-
 class Computer : public Player
 {
     // When seeking, the un-hit cells around cells we have hit to pull from

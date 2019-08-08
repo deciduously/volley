@@ -54,7 +54,7 @@ public:
     // Getter for name
     std::string getName() const;
     // Receive a shot
-    ShipClass receiveShot(Cell target);
+    ShipClass receiveShot(const Cell target);
     // Returns the number of ships with a positive number of hits
     int remainingShipsCount() const;
     // Run the placement loop to prompt user for ship locations

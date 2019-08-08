@@ -1,3 +1,8 @@
+/*
+* computer.cpp
+* Inherits from Player, represents the automated computer opponent in Battleship
+* Benjamin Lovy
+ */
 #include <algorithm>
 #include <iostream>
 
@@ -15,16 +20,22 @@ std::vector<Cell> getNeighborhood(Cell c, int boardSize)
     if (c.row > 1)
         ret.push_back(Cell(c.row - 1, c.col));
     // down
-    if (c.row < boardSize - 1)
+    if (c.row < boardSize)
         ret.push_back(Cell(c.row + 1, c.col));
     // left
-    if (c.col > 1)
+    if (c.col > 'A')
         ret.push_back(Cell(c.row, static_cast<char>(c.col - 1)));
     // right
-    if (c.col < boardSize - 1)
+    if (c.col < boardSize + 64)
         ret.push_back(Cell(c.row, static_cast<char>(c.col + 1)));
     return ret;
 }
+
+// SEEKING
+// When a hit is found, toggle a boolean isSeeking and populate the neighborhood
+// This vector will hold cells above, below, left, and right of the hit
+// If seeking, instead of choosing random cells, pick from the neighborhood
+// Once a ship comes back "Sunk", revert to random fire
 
 // Choose a target on the given opponent and fire a shot at it
 void Computer::executeFire(Player &opponent)
@@ -85,11 +96,18 @@ void Computer::executeFire(Player &opponent)
         }
         else
         {
+            // first check if something sank.  We can skip everything else if so
+            if (opponent.getBoardConst()->remainingShipsCount() < shipsBefore)
+            {
+                isSeeking = false;
+                return;
+            }
+
             // if it did hit and it is seeking, update the neighborhood
             // Add the new cell to try
             // Drop cells in the wrong direction
-            // Grab the most recent hit
-            Cell lastHit = hits[hits.size() - 1];
+            // Grab the most recent hit - it's one before the one we just fired
+            Cell lastHit = hits[hits.size() - 2];
             // check which direction we hit from there
             if (lastHit.row == chosenTarget.row)
             {
@@ -102,11 +120,13 @@ void Computer::executeFire(Player &opponent)
                 // add the next cell
                 if (lastHit.col > chosenTarget.col)
                 {
-                    neighborhood.push_back(Cell(chosenTarget.row, static_cast<char>(chosenTarget.col - 1)));
+                    if (chosenTarget.col > 1)
+                        neighborhood.push_back(Cell(chosenTarget.row, static_cast<char>(chosenTarget.col - 1)));
                 }
                 else
                 {
-                    neighborhood.push_back(Cell(chosenTarget.row, static_cast<char>(chosenTarget.col + 1)));
+                    if (chosenTarget.col < opponentBoard->size())
+                        neighborhood.push_back(Cell(chosenTarget.row, static_cast<char>(chosenTarget.col + 1)));
                 }
             }
             else
@@ -120,20 +140,16 @@ void Computer::executeFire(Player &opponent)
                 // add the next cell
                 if (lastHit.row > chosenTarget.row)
                 {
-                    neighborhood.push_back(Cell(chosenTarget.row - 1, chosenTarget.col));
+                    if (chosenTarget.row > 1)
+                        neighborhood.push_back(Cell(chosenTarget.row - 1, chosenTarget.col));
                 }
                 else
                 {
-                    neighborhood.push_back(Cell(chosenTarget.row + 1, chosenTarget.col));
+                    if (chosenTarget.row < opponentBoard->size())
+                        neighborhood.push_back(Cell(chosenTarget.row + 1, chosenTarget.col));
                 }
             }
         }
-    }
-
-    // if a ship sank, turn seeking off.
-    if (opponent.getBoardConst()->remainingShipsCount() < shipsBefore)
-    {
-        isSeeking = false;
     }
 }
 
