@@ -183,6 +183,7 @@ Cell Board::promptCell(const std::string &promptStr) const
         // if we fail - it's not an int and a char in either order (for now the right order) - loop again
         int row = 0;
         char col = 'Z';
+        // TODO I think this check is unnecessary - the regex rejects inputs outside of this
         if (originStr.size() > 3 || originStr.size() < 2)
         {
             cerr << "Please only enter two - three characters, a letter column and an integer row" << endl;
