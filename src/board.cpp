@@ -234,6 +234,7 @@ Cell Board::promptCell(const std::string &promptStr) const
         }
 
         // ensure it's a valid spot on the board
+        // TODO pretty sure we can get rid of both of these checks - the regex handles it!
         if (row < 1 || row > size())
         {
             cerr << "Invalid row!" << endl;
@@ -323,6 +324,7 @@ std::vector<ShipClass> Board::remainingShips() const
     // I don't intend to ever call this but here it is
     size_t shipsLen = ships.size();
     if (shipsLen == 0)
+        // TODO use ALL_THIP_TYPES from Util
         return {ShipClass(ShipClassType::AircraftCarrier), ShipClass(ShipClassType::Battleship), ShipClass(ShipClassType::Cruiser), ShipClass(ShipClassType::Destroyer), ShipClass(ShipClassType::UBoat)};
 
     std::vector<ShipClass> ret = {};
