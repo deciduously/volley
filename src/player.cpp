@@ -176,7 +176,8 @@ void Player::placeShip(ShipPlacement sp)
 // Computer always uses this, player is given the option at each ship placement to do for the rest
 void Player::randomlyPlaceShips()
 {
-    for (size_t i = 0; i < unassignedShips.size(); i++)
+    int shipsLeft = unassignedShips.size();
+    for (int i = 0; i < shipsLeft; i++)
     {
         // always act on unassignedShips[0]
         // placeShip will remove it, so the next time through it will be a new ship
