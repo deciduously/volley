@@ -127,8 +127,7 @@ ShipClass Player::getShipClass() const
 
         // First, build a std::vector of the char representations of the ships available
         vector<char> unassignedShipLettersVec = {};
-        int unassignedShipsLen = unassignedShips.size();
-        for (int i = 0; i < unassignedShipsLen; i++)
+        for (size_t i = 0; i < unassignedShips.size(); i++)
             unassignedShipLettersVec.push_back(unassignedShips[i].toChar());
 
         if (find(unassignedShipLettersVec.begin(), unassignedShipLettersVec.end(), ret) != unassignedShipLettersVec.end())
@@ -177,8 +176,7 @@ void Player::placeShip(ShipPlacement sp)
 // Computer always uses this, player is given the option at each ship placement to do for the rest
 void Player::randomlyPlaceShips()
 {
-    int shipsSize = unassignedShips.size();
-    for (int i = 0; i < shipsSize; i++)
+    for (size_t i = 0; i < unassignedShips.size(); i++)
     {
         // always act on unassignedShips[0]
         // placeShip will remove it, so the next time through it will be a new ship
@@ -220,8 +218,7 @@ std::string Player::remainingShipsStr(const GameState gs) const
     string ret = "{ ";
 
     // Iterate through the unassigned ships, adding them to the output
-    int vecSize = toShow.size();
-    for (int i = 0; i < vecSize; i++)
+    for (size_t i = 0; i < toShow.size(); i++)
     {
         ShipClass sc = toShow[i];
         ret.push_back(sc.toChar());

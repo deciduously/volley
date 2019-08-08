@@ -5,14 +5,9 @@
 */
 #include <algorithm>
 #include <iostream>
+#include <regex>
 
 #include "board.h"
-
-// Helper function to determine if a char is a letter
-inline bool isLetter(char c)
-{
-    return (c >= 'A' && c <= 'z');
-}
 
 // Helper function to add a cell to a string with padding from a char
 inline void pushCharCell(std::string &s, char contents)
@@ -34,8 +29,7 @@ bool Board::doesFit(const ShipPlacement sp) const
     // check each cell the ship would occupy
     // build the hypthetical ship and store its contained cells
     std::vector<Cell> cells = sp.containedCells();
-    int cellsSize = cells.size();
-    for (int i = 0; i < cellsSize; i++)
+    for (size_t i = 0; i < cells.size(); i++)
     {
         if (getCharAt(cells[i], true) != '.')
         {
@@ -63,10 +57,8 @@ char Board::getCharAt(const Cell c, bool showShips) const
 
     // Add the ships
 
-    int shipsSize = ships.size();
-
     // loop through ships
-    for (int i = 0; i < shipsSize; i++)
+    for (size_t i = 0; i < ships.size(); i++)
     {
         Ship ship = ships[i];
         // each ship, loop through the contained cells
@@ -163,6 +155,7 @@ Cell Board::promptCell(const std::string &promptStr) const
     using std::cin;
     using std::cout;
     using std::endl;
+    using std::regex;
     using std::string;
 
     // TODO - accept both RowCol and ColRow
@@ -170,12 +163,13 @@ Cell Board::promptCell(const std::string &promptStr) const
     // if it's a number, see if the second char is a 0 to handle 10
     // if it's not, make sure it's a letter.
     // if it's a letter, the below works and can be reused
+    // nvm use regexes
 
     for (;;)
     {
         //prompt for input
         string originStr;
-        cout << "Enter " << promptStr << ".  Enter 'R' for random.  (ColRow, e.g. \"A1\" or \"a1\")> ";
+        cout << "Enter " << promptStr << ".  'R' for random.  (e.g. \"A1\" | \"a1\" | \"1A\" | \"1a\")> ";
         cin >> originStr;
 
         // catch random
@@ -196,24 +190,45 @@ Cell Board::promptCell(const std::string &promptStr) const
             continue;
         }
 
-        // check if the first one is a letter
-        if (isLetter(originStr[0]))
-            col = toupper(originStr[0]);
+        // Define pattern to match
+        // NOTE - board size is hardcoded here.  If you parameterize, this will have to change
+        regex cellRe("([0-9])([a-jA-J])|(10)([a-jA-J])|([a-jA-J])([a-jA-J])([0-9]{1,2})");
+
+        // Use the flag to match on strings
+        std::smatch m;
+
+        // extract the input if possible
+        if (std::regex_match(originStr, m, cellRe))
+        {
+            // on a successful match, fill in row and col
+            // Skip first go, its the full match
+            for (size_t i = 1; i < m.size(); i++)
+            {
+                std::string sm = m[i].str();
+                if (sm.size() == 0)
+                    // skip empty matches that happen
+                    continue;
+                else if (sm.size() == 1)
+                {
+                    // most will be one in length, store to proper value
+                    if (isalpha(sm[0]))
+                        col = toupper(sm[0]);
+                    else
+                    {
+                        row = stoi(sm);
+                    }
+                }
+                else
+                {
+                    // if the match length is two, we know its a 10, store it as the row
+                    row = 10;
+                }
+            }
+        }
         else
         {
-            cerr << "Please enter a letter as the first character" << endl;
-            clearCin();
-            continue;
-        }
-
-        // store the rest as the number
-        try
-        {
-            row = stoi(originStr.substr(1, originStr.size() - 1));
-        }
-        catch (const std::invalid_argument &ia)
-        {
-            cerr << "Please enter a number as the rest of your input." << endl;
+            // Regex failed to match
+            cerr << "Please enter a cell on the board, either RowCol or Col Row" << endl;
             clearCin();
             continue;
         }
@@ -268,8 +283,7 @@ ShipClass Board::receiveShot(const Cell target)
     // record hit if true
     if (ret)
     {
-        int shipsSize = ships.size();
-        for (int i = 0; i < shipsSize; i++)
+        for (size_t i = 0; i < ships.size(); i++)
         {
             Ship ship = ships[i];
             if (result == ship.getShipClass().toChar())
@@ -287,12 +301,11 @@ int Board::remainingShipsCount() const
 {
     // Before we've started, there are no ships
     // This means we're in Placement, return the total number of ships
-    int shipsLen = ships.size();
-    if (shipsLen == 0)
+    if (ships.size() == 0)
         return 5;
 
     int ret = 0;
-    for (int i = 0; i < shipsLen; i++)
+    for (size_t i = 0; i < ships.size(); i++)
     {
         if (ships[i].getHits() > 0)
         {
@@ -308,12 +321,12 @@ std::vector<ShipClass> Board::remainingShips() const
     // Before we've started, there are no ships
     // This means we're in Placement, return the total number of ships
     // I don't intend to ever call this but here it is
-    int shipsLen = ships.size();
+    size_t shipsLen = ships.size();
     if (shipsLen == 0)
         return {ShipClass(ShipClassType::AircraftCarrier), ShipClass(ShipClassType::Battleship), ShipClass(ShipClassType::Cruiser), ShipClass(ShipClassType::Destroyer), ShipClass(ShipClassType::UBoat)};
 
     std::vector<ShipClass> ret = {};
-    for (int i = 0; i < shipsLen; i++)
+    for (size_t i = 0; i < shipsLen; i++)
     {
         if (ships[i].getHits() > 0)
         {
@@ -327,8 +340,7 @@ std::vector<ShipClass> Board::remainingShips() const
 // Used to build a "preview" board during placement - could also use if a ship hits zero i guess? no need really
 void Board::removeShip(const ShipClass sc)
 {
-    int shipsSize = ships.size();
-    for (int i = 0; i < shipsSize; i++)
+    for (size_t i = 0; i < ships.size(); i++)
     {
         if (ships[i].getShipClass() == sc)
         {

@@ -21,11 +21,8 @@ lines Game::bothBoardLines() const
     // The computer board output lines
     lines computerLines = computer->toLineStrings();
 
-    // Grab size
-    int boardSize = computerLines.size();
-
     // Each line, mash together the player and computer board side by side
-    for (int i = 0; i < boardSize; i++)
+    for (size_t i = 0; i < computerLines.size(); i++)
     {
         ret[i].append("         "); // 10 spaces
         ret[i].append(computerLines[i]);
