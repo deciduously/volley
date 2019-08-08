@@ -192,8 +192,7 @@ Cell Board::promptCell(const std::string &promptStr) const
 
         // Define pattern to match
         // NOTE - board size is hardcoded here.  If you parameterize, this will have to change
-        // NOTE - will match e.g. "d1" from "d11" I think
-        regex cellRe("([0-9])([a-jA-J])|(10)([a-jA-J])|([a-jA-J])(10)|([a-jA-J])([0-9])");
+        regex cellRe("^([0-9])([a-jA-J])$|^(10)([a-jA-J])$|^([a-jA-J])(10)$|^([a-jA-J])([0-9])$");
 
         // Use the flag to match on strings
         std::smatch m;
