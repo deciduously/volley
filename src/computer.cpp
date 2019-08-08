@@ -8,28 +8,83 @@
 
 #include "computer.h"
 
-// will keep track of total hits found and compare if it sank any
-//if there's a mismatch, keep seeking until you hit again, then drop the neighborhood and start  hitting that direction
+//
+// PRIVATE METHODS
+//
 
-// Return the cells above, below, left, and right of the given cell
-// Performs bounds checking - if a neighbor is off the board, it is not returned
-std::vector<Cell> getNeighborhood(Cell c, int boardSize)
+// Handle a hit
+void Computer::registerHit(int shipsBefore, const Cell target, const Player &opponent)
 {
-    std::vector<Cell> ret = {};
-    // up
-    if (c.row > 1)
-        ret.push_back(Cell(c.row - 1, c.col));
-    // down
-    if (c.row < boardSize)
-        ret.push_back(Cell(c.row + 1, c.col));
-    // left
-    if (c.col > 'A')
-        ret.push_back(Cell(c.row, static_cast<char>(c.col - 1)));
-    // right
-    if (c.col < boardSize + 64)
-        ret.push_back(Cell(c.row, static_cast<char>(c.col + 1)));
-    return ret;
+    Board *opponentBoard = opponent.getBoardConst();
+    if (!isSeeking)
+    {
+        // switch on seeking mode
+        isSeeking = true;
+
+        // populate neighborhood
+        neighborhood = opponentBoard->getNeighborhood(target);
+    }
+    else
+    {
+        // first check if something sank.  We can skip everything else if so
+        if (opponentBoard->remainingShipsCount() < shipsBefore)
+        {
+            isSeeking = false;
+            return;
+        }
+
+        // if it did hit and it is seeking, update the neighborhood
+        // Add the new cell to try
+        // Drop cells in the wrong direction
+        // Grab the most recent hit - it's one before the one we just fired
+        Cell lastHit = hits[hits.size() - 2];
+        // check which direction we hit from there
+        if (lastHit.row == target.row)
+        {
+            // horizontal
+            // prune neighborhood of any cells that aren't in this row
+            neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [target](const Cell &c) {
+                                   return c.row != target.row;
+                               }),
+                               neighborhood.end());
+            // add the next cell
+            if (lastHit.col > target.col)
+            {
+                if (target.col > 1)
+                    neighborhood.push_back(Cell(target.row, static_cast<char>(target.col - 1)));
+            }
+            else
+            {
+                if (target.col < opponentBoard->size())
+                    neighborhood.push_back(Cell(target.row, static_cast<char>(target.col + 1)));
+            }
+        }
+        else
+        {
+            // vertical
+            // prune neighborhood of any cells that aren't in this column
+            neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [target](const Cell &c) {
+                                   return c.col != target.col;
+                               }),
+                               neighborhood.end());
+            // add the next cell
+            if (lastHit.row > target.row)
+            {
+                if (target.row > 1)
+                    neighborhood.push_back(Cell(target.row - 1, target.col));
+            }
+            else
+            {
+                if (target.row < opponentBoard->size())
+                    neighborhood.push_back(Cell(target.row + 1, target.col));
+            }
+        }
+    }
 }
+
+//
+// PUBLIC METHODS
+//
 
 // SEEKING
 // When a hit is found, toggle a boolean isSeeking and populate the neighborhood
@@ -83,74 +138,9 @@ void Computer::executeFire(Player &opponent)
     std::cout << "Computer fires at: " << chosenTarget << std::endl;
     didHit = fireShot(chosenTarget, opponent);
 
-    // if not seeking and it was a hit, enable seeking
+    // register the hit if needed
     if (didHit)
-    {
-        if (!isSeeking)
-        {
-            // switch on seeking mode
-            isSeeking = true;
-
-            // populate neighborhood
-            neighborhood = getNeighborhood(chosenTarget, board->size());
-        }
-        else
-        {
-            // first check if something sank.  We can skip everything else if so
-            if (opponent.getBoardConst()->remainingShipsCount() < shipsBefore)
-            {
-                isSeeking = false;
-                return;
-            }
-
-            // if it did hit and it is seeking, update the neighborhood
-            // Add the new cell to try
-            // Drop cells in the wrong direction
-            // Grab the most recent hit - it's one before the one we just fired
-            Cell lastHit = hits[hits.size() - 2];
-            // check which direction we hit from there
-            if (lastHit.row == chosenTarget.row)
-            {
-                // horizontal
-                // prune neighborhood of any cells that aren't in this row
-                neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c) {
-                                       return c.row != chosenTarget.row;
-                                   }),
-                                   neighborhood.end());
-                // add the next cell
-                if (lastHit.col > chosenTarget.col)
-                {
-                    if (chosenTarget.col > 1)
-                        neighborhood.push_back(Cell(chosenTarget.row, static_cast<char>(chosenTarget.col - 1)));
-                }
-                else
-                {
-                    if (chosenTarget.col < opponentBoard->size())
-                        neighborhood.push_back(Cell(chosenTarget.row, static_cast<char>(chosenTarget.col + 1)));
-                }
-            }
-            else
-            {
-                // vertical
-                // prune neighborhood of any cells that aren't in this column
-                neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c) {
-                                       return c.col != chosenTarget.col;
-                                   }),
-                                   neighborhood.end());
-                // add the next cell
-                if (lastHit.row > chosenTarget.row)
-                {
-                    if (chosenTarget.row > 1)
-                        neighborhood.push_back(Cell(chosenTarget.row - 1, chosenTarget.col));
-                }
-                else
-                {
-                    if (chosenTarget.row < opponentBoard->size())
-                        neighborhood.push_back(Cell(chosenTarget.row + 1, chosenTarget.col));
-                }
-            }
-        }
-    }
+        registerHit(shipsBefore, chosenTarget, opponent);
 }
 
 // Automatically place all ships

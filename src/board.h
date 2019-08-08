@@ -25,6 +25,9 @@ public:
     // Returns the corresponding cell character
     // Pass true to show ship locations, false to only show hits/misses
     char getCharAt(const Cell c, bool showShips) const;
+    // Return the cells above, below, left, and right of the given cell
+    // Performs bounds checking - if a neighbor is off the board, it is not returned
+    std::vector<Cell> getNeighborhood(const Cell c) const;
     // Get a random cell on the board
     Cell getRandomCell() const;
     // Get a random cell on the board that doesn't appear in receivedShots

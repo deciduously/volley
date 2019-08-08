@@ -14,6 +14,8 @@ class Computer : public Player
     std::vector<Cell> neighborhood;
     // Store whether or not we are actively seeking for a ship
     bool isSeeking;
+    // Handle a hit
+    void registerHit(int shipsBefore, const Cell target, const Player &opponent);
 
 public:
     // Inherits Player constructor with different default name

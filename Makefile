@@ -1,7 +1,7 @@
 .PHONY: all clean help
 
 CXX=clang++ -std=c++11
-FLAGS=-Wall -Wextra -Werror -pedantic -c -g
+FLAGS=-Wall -Wextra -Werror -pedantic -c -O3
 
 BUILDDIR=build
 SOURCEDIR=src

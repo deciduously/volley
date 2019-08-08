@@ -106,6 +106,26 @@ char Board::getCharAt(const Cell c, bool showShips) const
     return ret;
 }
 
+// Return the cells above, below, left, and right of the given cell
+// Performs bounds checking - if a neighbor is off the board, it is not returned
+std::vector<Cell> Board::getNeighborhood(const Cell c) const
+{
+    std::vector<Cell> ret = {};
+    // up
+    if (c.row > 1)
+        ret.push_back(Cell(c.row - 1, c.col));
+    // down
+    if (c.row < dimension)
+        ret.push_back(Cell(c.row + 1, c.col));
+    // left
+    if (c.col > 'A')
+        ret.push_back(Cell(c.row, static_cast<char>(c.col - 1)));
+    // right
+    if (c.col < dimension + 64)
+        ret.push_back(Cell(c.row, static_cast<char>(c.col + 1)));
+    return ret;
+}
+
 // Get a random cell on the board
 Cell Board::getRandomCell() const
 {
