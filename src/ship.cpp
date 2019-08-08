@@ -1,3 +1,8 @@
+/*
+* ship.cpp
+* Represents a single ship on the battleship game board
+* Benjamin Lovy
+ */
 #include "ship.h"
 
 // ShipPlacement default constructor
@@ -6,7 +11,7 @@ ShipPlacement::ShipPlacement()
 }
 
 // Should always use explicit constructor
-ShipPlacement::ShipPlacement(Cell c, Direction d, ShipClass sc)
+ShipPlacement::ShipPlacement(const Cell c, const Direction d, const ShipClass sc)
 {
     cell = c;
     direction = d;
@@ -43,7 +48,7 @@ std::vector<Cell> ShipPlacement::containedCells() const
 //
 
 // Ship constructor
-Ship::Ship(ShipPlacement sp)
+Ship::Ship(const ShipPlacement sp)
 {
     // set members
     placement = sp;

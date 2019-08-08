@@ -1,3 +1,9 @@
+/*
+* player.cpp
+* Represents a player of a game of Battleship
+* Contains their respective Board
+* Benjamin Lovy
+*/
 #include <algorithm>
 #include <iostream>
 
@@ -303,7 +309,7 @@ std::string Player::getName() const
 }
 
 // Receive a shot
-ShipClass Player::receiveShot(Cell target)
+ShipClass Player::receiveShot(const Cell target)
 {
     return board->receiveShot(target);
 }

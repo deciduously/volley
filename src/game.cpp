@@ -1,3 +1,8 @@
+/*
+* game.cpp
+* Top-level Battleship game object
+* Benjamin Lovy
+*/
 #include <algorithm>
 #include <iostream>
 

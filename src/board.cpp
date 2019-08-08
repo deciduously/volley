@@ -1,3 +1,8 @@
+/*
+* board.cpp
+* Represents a grid-shapes board that holds zero or more Ships
+* Benjamin Lovy
+*/
 #include <algorithm>
 #include <iostream>
 

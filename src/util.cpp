@@ -1,3 +1,8 @@
+/* 
+* util.cpp
+* Various enums and functions that don't belong to a particular class
+* Benjamin Lovy
+*/
 #include <iostream>
 #include <iterator>
 #include <limits>
