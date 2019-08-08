@@ -19,7 +19,7 @@ class Player
     Cell getRandomOrigin(ShipClass sc) const;
     // Helper method to prompt user a single ship input
     ShipClass getShipClass() const;
-    std::vector<Cell> misses; // TODO - remove?  unused
+    // Display name of this player
     std::string name;
     // Places a ship
     void placeShip(ShipPlacement sp);

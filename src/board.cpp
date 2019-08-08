@@ -158,13 +158,7 @@ Cell Board::promptCell(const std::string &promptStr) const
     using std::regex;
     using std::string;
 
-    // TODO - accept both RowCol and ColRow
-    // check the first char
-    // if it's a number, see if the second char is a 0 to handle 10
-    // if it's not, make sure it's a letter.
-    // if it's a letter, the below works and can be reused
-    // nvm use regexes
-
+    // loop forever - will break if successful
     for (;;)
     {
         //prompt for input
@@ -183,18 +177,10 @@ Cell Board::promptCell(const std::string &promptStr) const
         // if we fail - it's not an int and a char in either order (for now the right order) - loop again
         int row = 0;
         char col = 'Z';
-        // TODO I think this check is unnecessary - the regex rejects inputs outside of this
-        if (originStr.size() > 3 || originStr.size() < 2)
-        {
-            cerr << "Please only enter two - three characters, a letter column and an integer row" << endl;
-            clearCin();
-            continue;
-        }
 
         // Define pattern to match
         // NOTE - board size is hardcoded here.  If you parameterize, this will have to change
-        // TODO mark it static - will only compile the regex once per program
-        regex cellRe("^([0-9])([a-jA-J])$|^(10)([a-jA-J])$|^([a-jA-J])(10)$|^([a-jA-J])([0-9])$");
+        static regex cellRe("^([0-9])([a-jA-J])$|^(10)([a-jA-J])$|^([a-jA-J])(10)$|^([a-jA-J])([0-9])$");
 
         // Use the flag to match on strings
         std::smatch m;
@@ -230,44 +216,24 @@ Cell Board::promptCell(const std::string &promptStr) const
         else
         {
             // Regex failed to match
-            cerr << "Please enter a cell on the board, either RowCol or Col Row" << endl;
+            cerr << "Please enter a cell on the board, either RowCol or ColRow." << endl << "Valid rows are 1 through 10, valid columns are A through J." << endl;
             clearCin();
             continue;
         }
-
-        // ensure it's a valid spot on the board
-        // TODO pretty sure we can get rid of both of these checks - the regex handles it!
-        if (row < 1 || row > size())
+        Cell ret = Cell(row, col);
+        // if it fits, check if it's taken
+        // only run this if we're prompting for a target
+        if (promptStr == "Target")
         {
-            cerr << "Invalid row!" << endl;
-            clearCin();
-            continue;
-        }
-        else if (col < 65 || col >= 'A' + size())
-        {
-            cerr << "Invalid column!" << endl;
-            clearCin();
-            continue;
-        }
-        else
-        {
-            Cell ret = Cell(row, col);
-            // if it fits, check if it's taken
-            // only run this if we're prompting for a target
-
-            if (promptStr == "Target")
+            if (hasReceived(ret))
             {
-                if (hasReceived(ret))
-                {
-                    cout << "That's taken!" << endl;
-                    clearCin();
-                    continue;
-                }
+                cout << "That's taken!" << endl;
+                clearCin();
+                continue;
             }
-
-            // If we made it through all checks, it's a valid choice.  Return it.
-            return Cell(row, col);
         }
+        // If we made it through all checks, it's a valid choice.  Return it.
+        return Cell(row, col);
     }
 }
 
@@ -326,8 +292,7 @@ std::vector<ShipClass> Board::remainingShips() const
     // I don't intend to ever call this but here it is
     size_t shipsLen = ships.size();
     if (shipsLen == 0)
-        // TODO use ALL_THIP_TYPES from Util
-        return {ShipClass(ShipClassType::AircraftCarrier), ShipClass(ShipClassType::Battleship), ShipClass(ShipClassType::Cruiser), ShipClass(ShipClassType::Destroyer), ShipClass(ShipClassType::UBoat)};
+        return ALL_SHIP_CLASSES;
 
     std::vector<ShipClass> ret = {};
     for (size_t i = 0; i < shipsLen; i++)

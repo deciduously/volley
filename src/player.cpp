@@ -269,7 +269,7 @@ bool Player::fireShot(Cell target, Player &opponent)
     ShipClass result = opponent.receiveShot(target);
     if (result.type() != ShipClassType::Unknown)
     {
-        // Hit
+        // Hit - record it, check for a sunk ship
         std::cout << "It's a hit!" << std::endl;
         hits.push_back(target);
         // check if it sank
@@ -281,9 +281,8 @@ bool Player::fireShot(Cell target, Player &opponent)
     }
     else
     {
-        // Miss
+        // Miss - nothing to record
         std::cout << "It's a miss." << std::endl;
-        misses.push_back(target);
         return false;
     }
 }
@@ -416,8 +415,6 @@ outer:
         char confirmChoice = 'x';
         for (;;)
         {
-            //TODO first, show the board with the ship placed - a Board::removeShip method would be good
-
             //  Place the given triple
             placeShip(ShipPlacement(origin, d, shipChoice));
             cout << "PREVIEW:" << endl
