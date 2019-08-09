@@ -18,7 +18,7 @@ Row: 8 Col: G
 It's a miss.
 Computer fires at: Row: 5 Col: F
 It's a hit!
-The Computer sank The Player's Cruiser!
+The Computer sank The Player's Cruiser (3)!
                 Player                                   Computer
 Ships alive:                                 Ships alive:
 { A:5 B:4 }                                                 { C:3 D:2 U:3 }
