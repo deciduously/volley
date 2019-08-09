@@ -47,9 +47,9 @@ public:
     // Record the result of a shit
     // True indicates a hit, false a miss
     bool fireShot(Cell target, Player &opponent);
-    // Getter for the board -- TODO should the caller just use const_cast?
+    // Getter for the board
     Board *getBoard();
-    // Const Getter for the board
+    // Const getter for the board
     Board *getBoardConst() const;
     // Getter for name
     std::string getName() const;

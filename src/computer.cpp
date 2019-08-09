@@ -29,7 +29,9 @@ void Computer::registerHit(int shipsBefore, const Cell target, const Player &opp
         // first check if something sank.  We can skip everything else if so
         if (opponentBoard->remainingShipsCount() < shipsBefore)
         {
+            // Reset data
             isSeeking = false;
+            neighborhood = {};
             return;
         }
 
@@ -104,32 +106,25 @@ void Computer::executeFire(Player &opponent)
         // SEEK
         // Get the size of the neighborhood, pick a random idx to fire at
         // remove that cell from the neighboorhood
-        // if the neighborhood is empty, something has gone wrong
+        // if the neighborhood is empty, there were likely adjacent ships
+        // add back the neighborhood from the last hit that we had pruned away
         // there should always be one when seeking
-        int numOptions = neighborhood.size();
-        int randomIdx = 0; // init to zero - totally fine to use
-        // choose a target that has not been fired at yet
-        int runs = numOptions;
-        do
+        // choose a target
+        if (neighborhood.size() == 0)
         {
-            // TODO it seems like sometimes the second-to-last shot of a ship ends up firing randomly
-            // but then it still knows to come back for it??
-            if (runs == 0)
+            // we're out of neighborhood but didn't sink a ship
+            // add back the neighborhood from the last hit
+            std::vector<Cell> hxNeighborhood = opponentBoard->getNeighborhood(hits[hits.size() - 1]);
+            for (auto c : hxNeighborhood)
             {
-                // we tried them all, but all had already received fire.
-                chosenTarget = opponentBoard->getRandomTarget();
-                break;
+                // make sure we haven't already tried it
+                if (!opponentBoard->hasReceived(c))
+                    neighborhood.push_back(c);
             }
-            randomIdx = rand() % numOptions; // random between 0 and size-1
-            chosenTarget = neighborhood[randomIdx];
-            runs--;
-        } while (opponentBoard->hasReceived(chosenTarget));
-
-        if (runs != 0)
-        {
-            // only clear the neighborhood if we actually found one
-            neighborhood.erase(neighborhood.begin() + randomIdx);
         }
+        // pick a target
+        int randomIdx = rand() % neighborhood.size(); // random between 0 and size-1
+        chosenTarget = neighborhood[randomIdx];
     }
     else
     {
@@ -137,8 +132,13 @@ void Computer::executeFire(Player &opponent)
         chosenTarget = opponentBoard->getRandomTarget();
     }
 
+    // Fire the shot
     std::cout << "Computer fires at: " << chosenTarget << std::endl;
     didHit = fireShot(chosenTarget, opponent);
+
+    // Remove it from the neighborhood
+    // remove this cell from the neighborhood
+    neighborhood.erase(std::remove_if(neighborhood.begin(), neighborhood.end(), [chosenTarget](const Cell &c) { return c == chosenTarget; }), neighborhood.end());
 
     // register the hit if needed
     if (didHit)

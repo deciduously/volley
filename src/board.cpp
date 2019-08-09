@@ -216,7 +216,8 @@ Cell Board::promptCell(const std::string &promptStr) const
         else
         {
             // Regex failed to match
-            cerr << "Please enter a cell on the board, either RowCol or ColRow." << endl << "Valid rows are 1 through 10, valid columns are A through J." << endl;
+            cerr << "Please enter a cell on the board, either RowCol or ColRow." << endl
+                 << "Valid rows are 1 through 10, valid columns are A through J." << endl;
             clearCin();
             continue;
         }
