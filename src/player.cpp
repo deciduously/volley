@@ -100,7 +100,7 @@ ShipClass Player::getShipClass() const
         // if there's only one Right, autoselect it
         if (unassignedShips.size() == 1)
         {
-            cout << "One ship Right: placing " << unassignedShips[0].toString() << endl;
+            cout << "One ship remaning: placing " << unassignedShips[0].toString() << endl;
             return unassignedShips[0];
         }
 
@@ -340,10 +340,30 @@ outer:
         // catch for runRandom
         if (shipChoice == 'R')
         {
-            // place the rest of the ships randomly
             randomlyPlaceShips();
-            // skip to next iteration of loop, which should now fail the check
-            continue;
+            //ask to confirm
+            char confirmChoice = 'x';
+            cout << "PREVIEW:"
+                 << endl
+                 << toLineStrings() << endl;
+
+            cout << "Confirm config?  Anything but y will clear all and start over (Y/N)> ";
+            cin >> confirmChoice;
+            confirmChoice = toupper(confirmChoice);
+            if (confirmChoice != 'Y')
+            {
+                cout << "Starting over!" << endl;
+                // remove ship
+                board->removeAllShips();
+                unassignedShips = ALL_SHIP_CLASSES;
+                // jump back to the very top
+                goto outer;
+            }
+            else
+            {
+                cout << "Configuration Confirmed!" << endl;
+                return;
+            }
         }
         cout << "Placing " << shipChoice << "." << endl;
 
@@ -417,7 +437,7 @@ outer:
         {
             //  Place the given triple
             placeShip(ShipPlacement(origin, d, shipChoice));
-            cout << "PREVIEW:" << endl
+            cout << "PREVIEW:"
                  << endl
                  << toLineStrings() << endl;
 
@@ -441,6 +461,33 @@ outer:
             {
                 cout << "Confirmed!  Saving ship location..." << endl;
                 break;
+            }
+        }
+
+        // on the last ship, ask to confirm
+        if (unassignedShips.size() == 0)
+        {
+            confirmChoice = 'x';
+            cout << "PREVIEW:"
+                 << endl
+                 << toLineStrings() << endl;
+
+            cout << "Confirm config?  Anything but y will clear all and start over (Y/N)> ";
+            cin >> confirmChoice;
+            confirmChoice = toupper(confirmChoice);
+            if (confirmChoice != 'Y')
+            {
+                cout << "Starting over!" << endl;
+                // remove ships
+                board->removeAllShips();
+                unassignedShips = ALL_SHIP_CLASSES;
+                // jump back to the very top
+                goto outer;
+            }
+            else
+            {
+                cout << "Configuration Confirmed!" << endl;
+                return;
             }
         }
     }

@@ -272,7 +272,7 @@ int Board::remainingShipsCount() const
     // Before we've started, there are no ships
     // This means we're in Placement, return the total number of ships
     if (ships.size() == 0)
-        return 5;
+        return ALL_SHIP_CLASSES.size();
 
     int ret = 0;
     for (size_t i = 0; i < ships.size(); i++)
@@ -304,6 +304,16 @@ std::vector<ShipClass> Board::remainingShips() const
         }
     }
     return ret;
+}
+
+// Remove the ship with the given ship class if found, otherwise do nothing
+// Used to build a preview
+void Board::removeAllShips()
+{
+    while (ships.size() > 0)
+    {
+        removeShip(ships[0].getShipClass());
+    }
 }
 
 // Remove the ship with the given ship class if found, otherwise do nothing

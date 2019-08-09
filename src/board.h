@@ -46,6 +46,8 @@ public:
     // Return all the remaining alive ship classes
     std::vector<ShipClass> remainingShips() const;
     // Remove the ship with the given ship class if found, otherwise do nothing
+    // Used to build a preview
+    void removeAllShips();
     // Used to build a "preview" board during placement - could also use if a ship hits zero i guess? no need really
     void removeShip(const ShipClass sc);
     // Getter for board dimension
