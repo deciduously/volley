@@ -9,7 +9,7 @@ $ make
 $ build/volley
 ```
 
-If an 'E' shows up on the board, something is wrong. That's used to signify an Error. Valid ships are `A`, `B`, `C`, `D`, and `U`. Empty spaces are `.`, Hits are `X`. Misses are `O`.
+Sample gameplay:
 
 ```
 Enter Target.  'R' for random.  (e.g. "A1" | "a1" | "1A" | "1a")> r
