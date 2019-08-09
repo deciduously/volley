@@ -347,7 +347,7 @@ outer:
                  << endl
                  << toLineStrings() << endl;
 
-            cout << "Confirm config?  Anything but y will clear all and start over (Y/N)> ";
+            cout << "Confirm config?  Anything but Y will clear all and start over (Y/N)> ";
             cin >> confirmChoice;
             confirmChoice = toupper(confirmChoice);
             if (confirmChoice != 'Y')
@@ -472,7 +472,7 @@ outer:
                  << endl
                  << toLineStrings() << endl;
 
-            cout << "Confirm config?  Anything but y will clear all and start over (Y/N)> ";
+            cout << "Confirm config?  Anything but Y will clear all and start over (Y/N)> ";
             cin >> confirmChoice;
             confirmChoice = toupper(confirmChoice);
             if (confirmChoice != 'Y')

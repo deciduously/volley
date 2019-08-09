@@ -123,8 +123,13 @@ void Computer::executeFire(Player &opponent)
             }
         }
         // pick a target
-        int randomIdx = rand() % neighborhood.size(); // random between 0 and size-1
-        chosenTarget = neighborhood[randomIdx];
+        if (neighborhood.size() > 0)
+        {
+            int randomIdx = rand() % neighborhood.size(); // random between 0 and size-1, without dividing by zero
+            chosenTarget = neighborhood[randomIdx];
+        }
+        else
+            chosenTarget = opponentBoard->getRandomTarget();
     }
     else
     {

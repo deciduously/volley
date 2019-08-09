@@ -29,9 +29,9 @@ bool Board::doesFit(const ShipPlacement sp) const
     // check each cell the ship would occupy
     // build the hypthetical ship and store its contained cells
     std::vector<Cell> cells = sp.containedCells();
-    for (size_t i = 0; i < cells.size(); i++)
+    for (auto &c : cells)
     {
-        if (getCharAt(cells[i], true) != '.')
+        if (getCharAt(c, true) != '.')
         {
             return false;
         }
@@ -41,7 +41,7 @@ bool Board::doesFit(const ShipPlacement sp) const
 
 // Returns the corresponding cell character
 // Pass true to show ship locations, false to only show hits/misses
-char Board::getCharAt(const Cell c, bool showShips) const
+char Board::getCharAt(const Cell &c, bool showShips) const
 {
     using std::find;
     using std::vector;
@@ -58,17 +58,16 @@ char Board::getCharAt(const Cell c, bool showShips) const
     // Add the ships
 
     // loop through ships
-    for (size_t i = 0; i < ships.size(); i++)
+    for (auto &s : ships)
     {
-        Ship ship = ships[i];
         // each ship, loop through the contained cells
-        vector<Cell> cells = ship.containedCells();
+        vector<Cell> cells = s.containedCells();
 
         // if any of them are found in cells, set ret to that ship character
         // runPlacement should have avoided any overlaps
         if (find(cells.begin(), cells.end(), c) != cells.end())
         {
-            ret = ship.getShipClass().toChar();
+            ret = s.getShipClass().toChar();
         }
     }
 
@@ -100,7 +99,7 @@ char Board::getCharAt(const Cell c, bool showShips) const
 
 // Return the cells above, below, left, and right of the given cell
 // Performs bounds checking - if a neighbor is off the board, it is not returned
-std::vector<Cell> Board::getNeighborhood(const Cell c) const
+std::vector<Cell> Board::getNeighborhood(const Cell &c) const
 {
     std::vector<Cell> ret = {};
     // up
@@ -142,7 +141,7 @@ Cell Board::getRandomTarget() const
 }
 
 // Return whether or not a given cell has already received fire
-bool Board::hasReceived(const Cell c) const
+bool Board::hasReceived(const Cell &c) const
 {
     return (std::find(receivedShots.begin(), receivedShots.end(), c) != receivedShots.end());
 }
@@ -190,9 +189,9 @@ Cell Board::promptCell(const std::string &promptStr) const
         {
             // on a successful match, fill in row and col
             // Skip first go, its the full match
-            for (size_t i = 1; i < m.size(); i++)
+            for (auto &match : m)
             {
-                std::string sm = m[i].str();
+                std::string sm = match.str();
                 if (sm.size() == 0)
                     // skip empty matches that happen
                     continue;
@@ -253,12 +252,11 @@ ShipClass Board::receiveShot(const Cell target)
     // record hit if true
     if (ret)
     {
-        for (size_t i = 0; i < ships.size(); i++)
+        for (auto &s : ships)
         {
-            Ship ship = ships[i];
-            if (result == ship.getShipClass().toChar())
+            if (result == s.getShipClass().toChar())
             {
-                ships[i].takeHit();
+                s.takeHit();
             }
         }
     }
@@ -275,9 +273,9 @@ int Board::remainingShipsCount() const
         return ALL_SHIP_CLASSES.size();
 
     int ret = 0;
-    for (size_t i = 0; i < ships.size(); i++)
+    for (auto &s : ships)
     {
-        if (ships[i].getHits() > 0)
+        if (s.getHits() > 0)
         {
             ret++;
         }
@@ -291,16 +289,15 @@ std::vector<ShipClass> Board::remainingShips() const
     // Before we've started, there are no ships
     // This means we're in Placement, return the total number of ships
     // I don't intend to ever call this but here it is
-    size_t shipsLen = ships.size();
-    if (shipsLen == 0)
+    if (ships.size() == 0)
         return ALL_SHIP_CLASSES;
 
     std::vector<ShipClass> ret = {};
-    for (size_t i = 0; i < shipsLen; i++)
+    for (auto &s : ships)
     {
-        if (ships[i].getHits() > 0)
+        if (s.getHits() > 0)
         {
-            ret.push_back(ships[i].getShipClass());
+            ret.push_back(s.getShipClass());
         }
     }
     return ret;

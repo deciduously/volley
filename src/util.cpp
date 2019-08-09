@@ -194,19 +194,19 @@ std::string ShipClass::toString() const
     switch (sct)
     {
     case ShipClassType::AircraftCarrier:
-        return "Aircraft Carrier";
+        return "Aircraft Carrier (5)";
         break;
     case ShipClassType::Battleship:
-        return "Battleship";
+        return "Battleship (4)";
         break;
     case ShipClassType::Cruiser:
-        return "Cruiser";
+        return "Cruiser (3)";
         break;
     case ShipClassType::Destroyer:
-        return "Destroyer";
+        return "Destroyer (2)";
         break;
     case ShipClassType::UBoat:
-        return "U-Boat";
+        return "U-Boat (3)";
         break;
     case ShipClassType::Unknown:
         return "Unknown Ship Class";

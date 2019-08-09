@@ -24,16 +24,16 @@ public:
     bool doesFit(const ShipPlacement sp) const;
     // Returns the corresponding cell character
     // Pass true to show ship locations, false to only show hits/misses
-    char getCharAt(const Cell c, bool showShips) const;
+    char getCharAt(const Cell &c, bool showShips) const;
     // Return the cells above, below, left, and right of the given cell
     // Performs bounds checking - if a neighbor is off the board, it is not returned
-    std::vector<Cell> getNeighborhood(const Cell c) const;
+    std::vector<Cell> getNeighborhood(const Cell &c) const;
     // Get a random cell on the board
     Cell getRandomCell() const;
     // Get a random cell on the board that doesn't appear in receivedShots
     Cell getRandomTarget() const;
     // Return whether or not a given cell has already received fire
-    bool hasReceived(const Cell c) const;
+    bool hasReceived(const Cell &c) const;
     // Method to prompt the user for a cell, ensuring its a valid spot on this board
     // Returning a default cell indicates 'R', or random
     Cell promptCell(const std::string &promptStr) const;
