@@ -1,6 +1,6 @@
 # volley
 
-A CLI game of Battleship implemented in C++ for one player against a ship-seeking computer opponent.
+A CLI game of Battleship implemented in C++ for one player against a ship-seeking computer opponent.  Contrary to my planning document's prediction, it doesn't get confused by adjacent ships...much.  I *addressed* that.  Take that, past Ben.
 
 ## Usage
 
